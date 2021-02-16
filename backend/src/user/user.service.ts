@@ -11,7 +11,7 @@ export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Student) private readonly studentRepo: Repository<Student>,
-    @InjectRepository(Employer) private readonly employeRepo: Repository<Employer>,
+    @InjectRepository(Employer) private readonly employerRepo: Repository<Employer>,
   ) {}
 
   findById(id: number): Promise<User> {
