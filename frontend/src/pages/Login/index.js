@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./style.scss";
-import Welcome from "../../assets/logo/welcome_logo.png"
+import Welcome from "../../assets/logo/welcome_logo.png";
+
 export default function Login() {
   const initFormData = {
     username: "",
@@ -10,6 +10,7 @@ export default function Login() {
   };
   const [formData, setFormData] = useState(initFormData);
   console.log("form obj", formData);
+  
   return (
     <div>
       Login
