@@ -4,6 +4,7 @@ import { User, UserType } from 'src/entities/user.entity';
 import { UserService } from './user/user.service';
 import { compare, hash } from 'bcryptjs';
 
+
 @Injectable()
 export class AppService {
   constructor(private readonly userService: UserService) {}
@@ -30,11 +31,8 @@ export class AppService {
         },
       ])
       .execute();
+
+      
     console.log('user added');
-    const isValid = await compare('test', pw);
-    console.log(pw);
-    console.log('compare : ' + isValid);
-    const user = await this.userService.findByUsername('test2');
-    console.log('user pw : ' + user.password);
   }
 }
