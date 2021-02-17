@@ -4,6 +4,7 @@ import { User, UserType } from 'src/entities/user.entity';
 import { UserService } from './user/user.service';
 import { compare, hash } from 'bcryptjs';
 import { Student } from './entities/student.entity';
+import { Employer } from './entities/employer.entity';
 
 @Injectable()
 export class AppService {
@@ -14,14 +15,14 @@ export class AppService {
   }
 
   async initializeDB() {
-    const pw = await hash('xxx', 10);
+    const pw = await hash('test', 10);
     await getConnection()
       .createQueryBuilder()
       .insert()
       .into(User)
       .values([
         {
-          username: 'xxx',
+          username: 'test',
           password: pw,
           type: UserType.EMPLOYER,
           email: 'test@example.com',
@@ -31,8 +32,13 @@ export class AppService {
         },
       ])
       .execute();
+
     console.log('user added');
-    const user = await this.userService.findByUsername('xxx');
+
+    const user = await this.userService.findByUsername('test');
+
+    console.log('user id :', user.id);
+    /*
     await getConnection()
       .createQueryBuilder()
       .insert()
@@ -40,7 +46,7 @@ export class AppService {
       .values([
           {
             sid : Number(user.id),
-            birthDate: "11/11/1999",
+            birthDate: "_",
             university : "Chula",
             degree: "Bachelor",
             faculty : "Eng",
@@ -51,5 +57,22 @@ export class AppService {
       .execute(); 
 
     console.log('student added');
+  }
+*/
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(Employer)
+      .values([
+        {
+          company: '_',
+          user : user,
+          position: '_',
+          fields_of_work: '_',
+        },
+      ])
+      .execute();
+
+    console.log('employer added');
   }
 }
