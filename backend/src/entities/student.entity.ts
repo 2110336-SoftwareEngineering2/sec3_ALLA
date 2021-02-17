@@ -27,7 +27,7 @@ export class Student {
   faculty: string;
 
   @Column()
-  departmennt: string;
+  department: string;
 
   @Column()
   fields_of_work: string;
