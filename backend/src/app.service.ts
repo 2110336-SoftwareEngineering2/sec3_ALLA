@@ -15,14 +15,14 @@ export class AppService {
   }
 
   async initializeDB() {
-    const pw = await hash('test2', 10);
+    const pw = await hash('test', 10);
     await getConnection()
       .createQueryBuilder()
       .insert()
       .into(User)
       .values([
         {
-          username: 'test2',
+          username: 'test',
           password: pw,
           type: UserType.EMPLOYER,
           email: 'test@example.com',
@@ -32,13 +32,13 @@ export class AppService {
         },
       ])
       .execute();
-    
+
     console.log('user added');
-    
-    const user = await this.userService.findByUsername('test2');
-    
+
+    const user = await this.userService.findByUsername('test');
+
     console.log('user id :', user.id);
-/*
+    /*
     await getConnection()
       .createQueryBuilder()
       .insert()
@@ -59,19 +59,19 @@ export class AppService {
     console.log('student added');
   }
 */
-await getConnection()
+    await getConnection()
       .createQueryBuilder()
       .insert()
       .into(Employer)
       .values([
-          {
-            eid : Number(user.id),
-            company: "_",
-            position: '_',
-            fields_of_work: '_'
+        {
+          company: '_',
+          user : user,
+          position: '_',
+          fields_of_work: '_',
         },
       ])
-      .execute(); 
+      .execute();
 
     console.log('employer added');
   }

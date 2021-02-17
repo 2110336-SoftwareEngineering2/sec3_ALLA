@@ -1,4 +1,10 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { Student } from './student.entity';
 
 export enum UserType {
@@ -8,6 +14,7 @@ export enum UserType {
 }
 
 @Entity()
+@Unique(['username'])
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,7 +25,7 @@ export class User {
   @Column()
   password: string;
 
-  @Column('enum', { enum: UserType, default: UserType.STUDENT})
+  @Column('enum', { enum: UserType, default: UserType.STUDENT })
   type: UserType;
 
   @Column()

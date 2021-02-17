@@ -5,14 +5,19 @@ import {
   OneToMany,
   OneToOne,
   PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
 export class Student {
-  @OneToOne((type) => User, { primary: true })
-  @JoinColumn({ name: 'id' })
+
+  @PrimaryGeneratedColumn()
   sid: number;
+
+  @OneToOne(() => User, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
+  @JoinColumn()
+  user : User;
 
   @Column()
   birthDate: string;
