@@ -9,5 +9,6 @@ import { EmployerService } from './employer.service';
   imports: [TypeOrmModule.forFeature([Employer]), UserModule],
   controllers: [EmployerController],
   providers: [EmployerService],
+  exports: [EmployerService]
 })
 export class EmployerModule {}

@@ -11,4 +11,27 @@ export class EmployerService {
     @InjectRepository(Employer) private readonly repo: Repository<Employer>,
     private readonly userService: UserService,
   ) {}
+
+  async create(dto: Omit<Employer, 'eid'>): Promise<Employer> {
+    const employer = { ...new Employer(), ...dto };
+    return this.repo.save(employer);
+  }
+  
+  //for querying
+  findById(eid: number): Promise<Employer> {
+    return this.repo.findOne(eid);
+  }
+
+  async update(eid: number, dto: Partial<Omit<Employer, 'eid'>>): Promise<Employer> {
+    const employer = { ...(await this.findById(eid)), ...dto };
+    return this.repo.save(employer);
+  }
+
+  async delete(eid: number) {
+    const employer = await this.findById(eid);
+    await this.repo.remove(employer);
+    return employer;
+  }
+
+
 }
