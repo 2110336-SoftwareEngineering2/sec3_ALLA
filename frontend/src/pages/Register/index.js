@@ -3,7 +3,7 @@ import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "./style.scss";
 import DatePicker from "react-datepicker";
-import Select from "react-dropdown-select";
+//import Select from "react-dropdown-select";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -17,7 +17,7 @@ export default function Register() {
         email: "",
         birthdate: "",
         isStudent: true,
-        startDate: new Date()
+        Dateofbirth: new Date()
     };
 
     const initStudent = {
@@ -38,6 +38,7 @@ export default function Register() {
 
     const [student, setStudent] = useState(initStudent);
     const [formData, setFormData] = useState(initFormData);
+    const [employer, setEmployer] = useState(initEmployer);
 
     useEffect(() => {
         console.log(formData);
@@ -76,7 +77,7 @@ export default function Register() {
                         onChange={(e) => setFormData({ ...formData, fname: e.target.value })}
                         value={formData.fname}
                         placeholder="First Name"
-                        disabled={true}
+                        
                     ></input>
                 </div>
 
@@ -119,15 +120,10 @@ export default function Register() {
 
                 <label className="d-block">Date of Birth</label>
                 <div class="input-group">
-                    <div class="input-group-prepend">
+                    {/* <div class="input-group-prepend">
                         <i class="fa fa-calendar input-group-text" aria-hidden="true"></i>
-                    </div>
-                    <DatePicker
-                        className="d-block form-control"
-                        selected={formData.birthdate}
-                        onChange={(e) => setFormData({ ...formData, birthdate: e.target.value })}
-                        placeholder="dd/mm/yyyy"
-                    />
+                    </div> */}
+                    <input type="date" onChange={(e) => setFormData({ ...formData, Dateofbirth: e.target.value })}></input>
                 </div>
             </div>
             <div className="d-flex justify-content-left">
@@ -228,7 +224,7 @@ export default function Register() {
                                 <input
                                     type="text"
                                     class="form-control"
-                                    onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                                    onChange={(e) => setEmployer({ ...formData, company: e.target.value })}
                                     placeholder="Company"
                                 ></input>
                             </div>
@@ -237,7 +233,7 @@ export default function Register() {
                                 <input
                                     type="text"
                                     class="form-control"
-                                    onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+                                    onChange={(e) => setEmployer({ ...formData, position: e.target.value })}
                                     placeholder="Position"
                                 ></input>
                             </div>
@@ -248,7 +244,7 @@ export default function Register() {
                                 <input
                                     type="text"
                                     class="form-control"
-                                    onChange={(e) => setFormData({ ...formData, fieldofwor: e.target.value })}
+                                    onChange={(e) => setEmployer({ ...formData, fieldofwork: e.target.value })}
                                     placeholder="Field of works"
                                 ></input>
                             </div>
