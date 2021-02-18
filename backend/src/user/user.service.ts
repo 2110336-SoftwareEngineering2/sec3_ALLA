@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserType } from 'src/entities/user.entity';
+<<<<<<< HEAD
 import { Repository, SimpleConsoleLogger } from 'typeorm';
+=======
+import { Repository } from 'typeorm';
+>>>>>>> 01e3bd7... Create user, employer, student, and basic get
 import { hash } from 'bcryptjs';
 import { Student } from 'src/entities/student.entity';
 import { Employer } from 'src/entities/employer.entity';
@@ -15,6 +19,17 @@ export class UserService {
     private readonly studentService: StudentService,
     private readonly employerService: EmployerService,
   ) {}
+
+  get_all(){
+    return this.userRepo.find();
+  }
+
+  async get_type(id:number){
+    const x = await this.findById(id);
+    console.log(x);
+    return x['type']
+  }
+
 
   findById(id: number): Promise<User> {
     return this.userRepo.findOne(id);

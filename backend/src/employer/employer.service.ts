@@ -1,12 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Employer } from 'src/entities/employer.entity';
+<<<<<<< HEAD
 import { User } from 'src/entities/user.entity';
+=======
+import { User, UserType } from 'src/entities/user.entity';
+import { UserService } from 'src/user/user.service';
+>>>>>>> 01e3bd7... Create user, employer, student, and basic get
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class EmployerService {
   constructor(
+<<<<<<< HEAD
     @InjectRepository(Employer) private readonly repo: Repository<Employer>,
   ) {}
 
@@ -39,4 +45,34 @@ export class EmployerService {
     await this.repo.remove(employer);
     return employer;
   }
+=======
+    @InjectRepository(Employer) private readonly employer_repo: Repository<Employer>,
+    private readonly userService: UserService,
+  ) {}
+
+  get_all(){
+    return this.employer_repo.find()
+  }
+
+  findById(id:number){
+    return  this.employer_repo.findOne(id);
+  }
+
+  async create(dto: Employer){
+    if(await this.userService.get_type(dto.eid)!="EMPLOYER"){
+      return "Invalid Role"
+    }
+    if(this.userService.findById(dto.eid)){
+      const employer = { ...new Employer(), ...dto};
+      this.employer_repo.save(employer);
+      console.log(`eid ${employer.eid} is registered`);
+      return employer
+    }
+    else{
+      throw new BadRequestException("Invalid eid");
+    }
+  }
+
+
+>>>>>>> 01e3bd7... Create user, employer, student, and basic get
 }
