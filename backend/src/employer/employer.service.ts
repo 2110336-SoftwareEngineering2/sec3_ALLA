@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Employer } from 'src/entities/employer.entity';
 import { User } from 'src/entities/user.entity';
@@ -15,28 +15,30 @@ export class EmployerService {
     return this.repo.save(employer);
   }
 
-  //for querying
-  findById(eid: number): Promise<Employer> {
-    return this.repo.findOne(eid);
+  async findById(eid: number): Promise<Employer> {
+    const employer = await this.repo.findOne(eid);
+    if (employer === undefined) throw new NotFoundException("Employer ID not found");
+    else return employer;
   }
 
+  // handled in user service, guarantee able to find
   findByUser(user: User): Promise<Employer> {
     return this.repo.findOne({ user });
   }
 
-  async update(
-    user: User,
-    dto: Partial<Omit<Employer, 'eid'>>,
-  ): Promise<Employer> {
+  // handled in user service, guarantee able to update
+  async update(user: User, dto: Partial<Omit<Employer, 'eid'>>): Promise<Employer> {
     const employer = { ...(await this.findByUser(user)), ...dto };
-    console.log(employer);
     return this.repo.save(employer);
   }
 
+  // do not need?
+  /*
   async delete(user: User) {
     const employer = await this.findByUser(user);
     console.log(employer);
     await this.repo.remove(employer);
     return employer;
   }
+  */
 }
