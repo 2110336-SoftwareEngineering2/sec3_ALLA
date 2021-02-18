@@ -8,10 +8,6 @@ import { StudentService } from './student.service';
   imports: [TypeOrmModule.forFeature([Student])],
   controllers: [StudentController],
   providers: [StudentService],
-<<<<<<< HEAD
   exports: [StudentService]
-=======
-  exports:[]
->>>>>>> 01e3bd7... Create user, employer, student, and basic get
 })
 export class StudentModule {}
