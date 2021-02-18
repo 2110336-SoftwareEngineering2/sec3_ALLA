@@ -1,7 +1,9 @@
 import React from "react";
 import "./style.scss";
 import inbox_image from "../../assets/nav_photo/inbox.png";
-import profile_image from "../../assets/nav_photo/user.png";
+import profile_image from "../../assets/nav_photo/profile.png";
+import nisiter_logo from "../../assets/nav_photo/N.png";
+import nisiter_logo_1 from "../../assets/nav_photo/N_1.png";
 
 export default function Navigation() {
   //return <div><div className="nav-container">NAV</div><div className="nav-spacer"></div></div>;
@@ -9,7 +11,7 @@ export default function Navigation() {
     <nav class="navbar navbar-dark  justify-content-space-between position-sticky nav-style">
       <div className="d-flex justify-content-between align-items-center nav-container ">
         <div className="d-flex pr-10">
-          <a className="navbar-brand" href="/">NISITER</a>
+          <a className="navbar-brand" href="/"><img src={nisiter_logo} width="35" /><span className = "pl-2"><img src={nisiter_logo_1} width="50" /> </span></a>
         </div>
         <div className="d-flex justify-content-around ">
           <input
