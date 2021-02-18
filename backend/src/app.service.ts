@@ -15,14 +15,14 @@ export class AppService {
   }
 
   async initializeDB() {
-    const pw = await hash('test', 10);
+    const pw = await hash('testt1', 10);
     await getConnection()
       .createQueryBuilder()
       .insert()
       .into(User)
       .values([
         {
-          username: 'test',
+          username: 'testt1',
           password: pw,
           type: UserType.EMPLOYER,
           email: 'test@example.com',
@@ -33,19 +33,48 @@ export class AppService {
       ])
       .execute();
 
-    console.log('user added');
+    console.log('user 1 added (employer)');
 
-    const user = await this.userService.findByUsername('test');
+    const user1 = await this.userService.findByUsername('testt1');
 
-    console.log('user id :', user.id);
-    /*
+    console.log('user 1 id :', user1.id);
+
+    // ------------------
+
+    const pw2 = await hash('testt2', 10);
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(User)
+      .values([
+        {
+          username: 'testt2',
+          password: pw2,
+          type: UserType.STUDENT,
+          email: 'test@example.com',
+          firstName: 'fname',
+          lastName: 'lname',
+          phoneNumber: '+66999999999',
+        },
+      ])
+      .execute();
+
+    console.log('user 2 added (student)');
+
+    const user2 = await this.userService.findByUsername('testt2');
+
+    console.log('user 2 id :', user2.id);
+    
+    // ------------------
+    
     await getConnection()
       .createQueryBuilder()
       .insert()
       .into(Student)
       .values([
           {
-            sid : Number(user.id),
+            sid : Number(user2.id),
+            user : user2,
             birthDate: "_",
             university : "Chula",
             degree: "Bachelor",
@@ -57,8 +86,9 @@ export class AppService {
       .execute(); 
 
     console.log('student added');
-  }
-*/
+  
+    // ------------------
+
     await getConnection()
       .createQueryBuilder()
       .insert()
@@ -66,7 +96,7 @@ export class AppService {
       .values([
         {
           company: '_',
-          user : user,
+          user : user1,
           position: '_',
           fields_of_work: '_',
         },

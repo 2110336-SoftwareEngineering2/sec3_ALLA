@@ -7,14 +7,17 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { Employer } from 'src/entities/employer.entity';
+import { AuthGuard } from 'src/guard/auth.guard';
 import { EmployerService } from './employer.service';
 
 @Controller('employer')
 export class EmployerController {
   constructor(private readonly service: EmployerService) {}
 
+  @UseGuards(AuthGuard)
   @Get(':eid')
   findById(@Param('eid', new ParseIntPipe()) eid: number): Promise<Employer> {
     return this.service.findById(eid);
