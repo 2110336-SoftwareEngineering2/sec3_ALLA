@@ -31,10 +31,32 @@ export class UserService {
   }
 
   //TODO : SAM
-  async create(dto: Omit<User, 'id'>): Promise<User> {
-    const password = await hash(dto.password, 10);
-    const user = { ...new User(), ...dto, password };
-    return this.userRepo.save(user);
+  async create(dto:any): Promise<any> {
+    const user_type = dto.type;
+    var user_dto = {};
+    var sub_dto = {};
+    const userprops = ['username','password','type','email','firstName','lastName','phoneNumber',];
+    const studentprops = ['birthDate','university','degree','faculty','department','fields_of_work'];
+    const employerprops = ['company', 'position','fields_of_work'];
+
+    for (const [key, value] of Object.entries(dto)) {
+      console.log(key + ' ' + value);
+      if (userprops.includes(key)) user_dto[key] = value;
+      else if (user_type === UserType.STUDENT && studentprops.includes(key)) sub_dto[key] = value;
+      else if (user_type === UserType.EMPLOYER && employerprops.includes(key)) sub_dto[key] = value;
+      else throw new NotAcceptableException('Some fields are not defined');
+    }
+
+    if (user_type == UserType.STUDENT){ 
+      const student = {...new Student(), ...sub_dto}
+      student.user = {...new User(), ...user_dto}
+      return this.studentService.create(student);
+    }
+    else if (user_type == UserType.EMPLOYER){
+      const employer = {...new Employer(), ...sub_dto}
+      employer.user = {...new User(), ...user_dto}
+      return this.employerService.create(employer);
+    } 
   }
 
   // own guard
