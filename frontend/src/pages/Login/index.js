@@ -1,16 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./style.scss";
 import Welcome from "../../assets/logo/welcome_logo.png";
-import {useSelector,useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function Login() {
-  //const dispatch = useDispatch()
-  const data= useSelector(state => state.Auth);
-  //const dispatch = useDispatch();
-  console.log('before test')
-  //dispatch({type:"TEST"})
-  console.log('username',data)
-  console.log('after test')
+const Login =   () => {
+  const d = useSelector(state => state.Auth);
+  console.log('USERNAME',d)
   const initFormData = {
     username: "",
     password: "",
@@ -18,14 +13,14 @@ export default function Login() {
   };
   const [formData, setFormData] = useState(initFormData);
   //console.log("form obj", formData);
-  
+
   return (
     <div>
       Login
       <div className="form-container border border-dark Login_backgroud">
         <div className="p-5">
           <header class="d-flex justify-content-center pb-2 font-header">
-            
+
             <img src={Welcome} alt="Logo" className="photo_size"></img>
           </header>
           <form>
@@ -99,3 +94,4 @@ export default function Login() {
     </div>
   );
 }
+export default Login;
