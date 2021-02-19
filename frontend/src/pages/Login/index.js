@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./style.scss";
-import Welcome from "../../assets/logo/welcome_logo.png";
+import Nisiter from "../../assets/nav_photo/Nisiter.png";
 import { useSelector, useDispatch } from 'react-redux';
 
 const Login =   () => {
@@ -20,12 +20,12 @@ const Login =   () => {
       <div className="form-container border border-dark Login_backgroud">
         <div className="p-5">
           <header class="d-flex justify-content-center pb-2 font-header">
-
-            <img src={Welcome} alt="Logo" className="photo_size"></img>
+            
+            <img src={Nisiter} alt="Logo" className="photo_size"></img>
           </header>
           <form>
             <div class="form-group">
-              <label for="inputEmail4">Username</label>
+              <label for="inputEmail4" className = "font-login">Username</label>
               <input
                 type="email"
                 class="form-control"
@@ -38,7 +38,7 @@ const Login =   () => {
               ></input>
             </div>
             <div class="form-group ">
-              <label for="inputPassword4">Password</label>
+              <label for="inputPassword4" className = "font-login">Password</label>
               <input
                 type="password"
                 class="form-control"
@@ -58,17 +58,17 @@ const Login =   () => {
                   type="checkbox"
                   id="gridCheck"
                 ></input>
-                <label class="form-check-label" for="gridCheck">
+                <label class="form-check-label font-login" for="gridCheck">
                   Keep me sign in
                 </label>
               </div>
             </div>
             <div class="d-flex flex-column justify-content-center pb-5">
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-success">
                 Sign in
               </button>
             </div>
-            <div class="d-flex justify-content-center pt-5  font-newhere">
+            <div class="d-flex justify-content-center pt-5 font-newhere">
               {" "}
               New Here?
               <a href="/register" class="pl-2 font-signup">

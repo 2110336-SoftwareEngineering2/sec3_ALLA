@@ -140,7 +140,7 @@ export default function Register() {
                 </li>
                 <li className="list-item">
                     <a
-                        className={`nav-link ${!formData.isStudent ? "bg-success text-white" : ""}`}
+                        className={`nav-link ${!formData.isStudent ? "active" : ""}`}
                         onClick={(e) => setFormData({ ...formData, isStudent: false })}
                     >
                         Employer
@@ -252,8 +252,8 @@ export default function Register() {
                         </div>
                     </div>
                 )}
-            <button type="submit" class="btn btn-primary">
-                Sign in
+            <button type="submit" class="btn btn-success">
+                Create account
       </button>
         </form>
     );
