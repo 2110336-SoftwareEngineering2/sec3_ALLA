@@ -13,7 +13,7 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'mysql',
-    host: 'localhost',
+    host: 'mysql',
     port: 3306,
     username: 'user',
     password: 'password',

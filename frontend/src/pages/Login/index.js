@@ -1,16 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./style.scss";
-import Welcome from "../../assets/logo/welcome_logo.png";
-import {useSelector,useDispatch} from 'react-redux';
+import Nisiter from "../../assets/nav_photo/Nisiter.png";
+import { useSelector, useDispatch } from 'react-redux';
 
-export default function Login() {
-  //const dispatch = useDispatch()
-  const data= useSelector(state => state.Auth);
-  //const dispatch = useDispatch();
-  console.log('before test')
-  //dispatch({type:"TEST"})
-  console.log('username',data)
-  console.log('after test')
+const Login =   () => {
+  const d = useSelector(state => state.Auth);
+  console.log('USERNAME',d)
   const initFormData = {
     username: "",
     password: "",
@@ -18,7 +13,7 @@ export default function Login() {
   };
   const [formData, setFormData] = useState(initFormData);
   //console.log("form obj", formData);
-  
+
   return (
     <div>
       Login
@@ -99,3 +94,4 @@ export default function Login() {
     </div>
   );
 }
+export default Login;
