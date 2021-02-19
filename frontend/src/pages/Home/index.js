@@ -4,7 +4,7 @@ import "./style.scss";
 export default function Home() {
     const initFormData = {
         username: "",
-        KuyMac:"small"
+        KuMac:"small"
     }
     
     return (
