@@ -51,34 +51,24 @@ const initialState = {
 
 
 /// REDUCER (update or modify state)
-const AuthReducer = async (state = initialState, action) => {
+const AuthReducer =  (state = initialState, action) => {
     switch (action.type) {
         case 'TEST':
             console.log('in test Auth Reducer');
             return 'testAction'
         case 'LOGIN':
             try {
-                const response = await axios.get('/loginapi?ID=12345', {
-                    params: {
-                        ID: 12345
-                    }
-                });
-                response.then(ret => { console.log(ret) })
-                // runInAction(() => {
-                //     // Data access
-                //     const res = data.data?.rewards;
-                //     // state.username = ;
-                //     // state.password = ;
-                //     // (rewards?.data as Array<RewardModel>).forEach(item => {
-                //     //     this.myReward.push(keysToCamelCase(item))
-                //     // });
-
+                // const response = await axios.get('/loginapi?ID=12345', {
+                //     params: {
+                //         ID: 12345
+                //     }
                 // });
-                // console.log(response);
+                return 'login test'
             } catch (error) {
                 console.error(error);
+                return 'error'
             }
-            return 'logged-in'
+            
         default: return state
     }
 }
