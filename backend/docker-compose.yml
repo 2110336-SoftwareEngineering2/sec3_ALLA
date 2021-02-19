@@ -1,6 +1,7 @@
 version: '3.7'
 
 services:
+
   mysql:
     image: mysql:5.7
     volumes:
@@ -12,6 +13,23 @@ services:
       MYSQL_PASSWORD: password
     ports:
       - '3306:3306'
+  
+  main:
+    container_name: backend
+    build:
+      context: .
+      target: development
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "8300:8300"
+    command: npm run start:dev
+    restart: always
+    depends_on:
+      - mysql
 
 volumes:
   mysql_data:
+  
+
