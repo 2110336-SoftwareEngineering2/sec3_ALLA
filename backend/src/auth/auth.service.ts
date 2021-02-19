@@ -5,8 +5,8 @@ import { User } from 'src/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 
 export interface loginLayout {
-  username : string
-  password : string;
+  username: string;
+  password: string;
 }
 
 @Injectable()
@@ -17,20 +17,19 @@ export class AuthService {
   ) {}
 
   async login({ username, password }: loginLayout) {
-    console.log('login : ' +username+password)
     const user = await this.userService.findByUsername(username);
-    console.log('user : ' + user)
     if (!user) {
-      console.log('login : user not found')
       throw new BadRequestException('Invalid username/password');
     }
     const isValid = await compare(password, user.password);
-    console.log('pw : ' + password + ' ' + user.password);
     if (!isValid) {
-      console.log('login : password is not valid');
       throw new BadRequestException('Invalid username/password');
     }
-    return this.jwtService.sign({ uid: user.id }); 
+    const token = this.jwtService.sign({ uid: user.id });
+    return {
+      id: user.id,
+      token: token,
+    };
   }
 
   verifyToken(token: string): { uid: number } {
