@@ -6,12 +6,31 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserType } from 'src/entities/user.entity';
-import { Not, Repository, SimpleConsoleLogger } from 'typeorm';
-import { compare, hash } from 'bcryptjs';
+import { Repository } from 'typeorm';
+import { hash } from 'bcryptjs';
 import { Student } from 'src/entities/student.entity';
 import { Employer } from 'src/entities/employer.entity';
 import { StudentService } from 'src/student/student.service';
 import { EmployerService } from 'src/employer/employer.service';
+
+const userprops = [
+  'username',
+  'password',
+  'type',
+  'email',
+  'firstName',
+  'lastName',
+  'phoneNumber',
+];
+const studentprops = [
+  'birthDate',
+  'university',
+  'degree',
+  'faculty',
+  'department',
+  'fields_of_work',
+];
+const employerprops = ['company', 'position', 'fields_of_work'];
 
 @Injectable()
 export class UserService {
@@ -21,12 +40,10 @@ export class UserService {
     private readonly employerService: EmployerService,
   ) {}
 
-
-  async validUsername(username : string) : Promise<Boolean>{
-    const user = await this.userRepo.findOne(username);
-    return user === undefined;
+  async validUsername(username: string): Promise<Boolean> {
+    const user = await this.userRepo.findOne({username});
+    return user !== undefined;
   }
-
 
   async findById(id: number): Promise<any> {
     const user = await this.userRepo.findOne(id);
@@ -35,8 +52,9 @@ export class UserService {
       user.type == UserType.STUDENT
         ? await this.studentService.findByUser(user)
         : await this.employerService.findByUser(user);
+    const { ['username']: un, ['password']: pw, ...rest } = user;
     return {
-      ...user,
+      ...rest,
       ...subUser,
     };
   }
@@ -52,29 +70,10 @@ export class UserService {
     const user_type = dto.type;
     var user_dto = {};
     var sub_dto = {};
-    const userprops = [
-      'username',
-      'password',
-      'type',
-      'email',
-      'firstName',
-      'lastName',
-      'phoneNumber',
-    ];
-    const studentprops = [
-      'birthDate',
-      'university',
-      'degree',
-      'faculty',
-      'department',
-      'fields_of_work',
-    ];
-    const employerprops = ['company', 'position', 'fields_of_work'];
 
     dto.password = await hash(dto.password, 10);
 
     for (const [key, value] of Object.entries(dto)) {
-      console.log(key + ' ' + value);
       if (userprops.includes(key)) user_dto[key] = value;
       else if (user_type === UserType.STUDENT && studentprops.includes(key))
         sub_dto[key] = value;
@@ -86,36 +85,27 @@ export class UserService {
     if (user_type == UserType.STUDENT) {
       const student = { ...new Student(), ...sub_dto };
       student.user = { ...new User(), ...user_dto };
-      const ret = await this.studentService.create(student);
+      const {['user'] : user, ...ret_student} = await this.studentService.create(student);
+      const {['username'] : un, ['password'] : pw, ...rest_user} = user;
+      return {
+        ...rest_user,
+        ...ret_student
+      }
     } else if (user_type == UserType.EMPLOYER) {
       const employer = { ...new Employer(), ...sub_dto };
       employer.user = { ...new User(), ...user_dto };
-      return this.employerService.create(employer);
+      const {['user'] : user, ...ret_employer} = await this.employerService.create(employer);
+      const {['username'] : un, ['password'] : pw, ...rest_user} = user;
+      return {
+        ...rest_user,
+        ...ret_employer
+      }
     }
   }
-
 
   async update(id: number, dto: any): Promise<any> {
     var user_dto = {};
     var sub_dto = {};
-    const userprops = [
-      'username',
-      'password',
-      'type',
-      'email',
-      'firstName',
-      'lastName',
-      'phoneNumber',
-    ];
-    const studentprops = [
-      'birthDate',
-      'university',
-      'degree',
-      'faculty',
-      'department',
-      'fields_of_work',
-    ];
-    const employerprops = ['company', 'position', 'fields_of_work'];
 
     if (dto.password) {
       dto.password = await hash(dto.password, 10);
@@ -124,7 +114,6 @@ export class UserService {
     const user_type = (await this.findById(id)).type;
 
     for (const [key, value] of Object.entries(dto)) {
-      console.log(key + ' ' + value);
       if (userprops.includes(key)) user_dto[key] = value;
       else if (user_type === UserType.STUDENT && studentprops.includes(key))
         sub_dto[key] = value;
@@ -132,9 +121,6 @@ export class UserService {
         sub_dto[key] = value;
       else throw new NotAcceptableException('Some fields are not defined');
     }
-
-    console.log(user_dto);
-    console.log(sub_dto);
 
     // cannot change type
     if (dto.type)
@@ -153,9 +139,11 @@ export class UserService {
         : await this.employerService.update(user, sub_dto);
     console.log('subuser updated');
 
+    const { ['username']: un, ['password']: pw, ...rest_user } = ret_user;
+
     return {
-      user: ret_user,
-      subUser: ret_subUser,
+      ...rest_user,
+      ...ret_subUser,
     };
   }
 
