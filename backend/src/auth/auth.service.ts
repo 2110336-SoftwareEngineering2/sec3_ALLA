@@ -4,6 +4,11 @@ import { compare } from 'bcryptjs';
 import { User } from 'src/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 
+export interface loginLayout {
+  username: string;
+  password: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -11,7 +16,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login({ username, password }: Omit<User, 'id'>) {
+  async login({ username, password }: loginLayout) {
     const user = await this.userService.findByUsername(username);
     if (!user) {
       throw new BadRequestException('Invalid username/password');
@@ -20,7 +25,11 @@ export class AuthService {
     if (!isValid) {
       throw new BadRequestException('Invalid username/password');
     }
-    return this.jwtService.sign({ uid: user.id });
+    const token = this.jwtService.sign({ uid: user.id });
+    return {
+      id: user.id,
+      token: token,
+    };
   }
 
   verifyToken(token: string): { uid: number } {

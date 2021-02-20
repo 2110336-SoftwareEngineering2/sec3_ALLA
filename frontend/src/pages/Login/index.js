@@ -1,38 +1,74 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useLocation, useHistory } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
 import "./style.scss";
-import Welcome from "../../assets/logo/welcome_logo.png";
-import {useSelector,useDispatch} from 'react-redux';
+import Nisiter from "../../assets/nav_photo/Nisiter.png";
+import axios from 'axios';
 
 export default function Login() {
-  //const dispatch = useDispatch()
-  const data= useSelector(state => state.Auth);
-  //const dispatch = useDispatch();
-  console.log('before test')
-  //dispatch({type:"TEST"})
-  console.log('username',data)
-  console.log('after test')
+  const location = useLocation();
+  console.log(location)
+  const history = useHistory();
+
+  const dispatch = useDispatch();
+  const AuthState = useSelector(state => state.Auth);
+  
   const initFormData = {
     username: "",
     password: "",
     stayLogin: false,
   };
+
   const [formData, setFormData] = useState(initFormData);
   //console.log("form obj", formData);
-  
+
+  async function onLoginHandler(e) {
+    e.preventDefault();
+    await axios.post('http://127.0.0.1:8300/auth/login', {
+      "username": formData.username,
+      "password": formData.password
+    })
+      .then(response => {
+        //console.log('response', response)
+        if (response.status === 201) {
+          //console.log('Auth State', AuthState)
+          dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id, "token": response.data.token } })
+          if (AuthState.isLogin === true) {
+            history.push('/')
+          }
+        }
+        return response
+      })
+      .catch(error => {
+        alert(error.response.data.message)
+        console.log(error.response)
+        return error
+      });
+  }
+
+  useEffect(() => {
+    console.log('Auth State in useEffect', AuthState)
+    if (AuthState.isLogin === true) {
+      history.push('/')
+    }
+  }, [AuthState.isLogin])
+
+
+
   return (
     <div>
       Login
       <div className="form-container border border-dark Login_backgroud">
         <div className="p-5">
           <header class="d-flex justify-content-center pb-2 font-header">
-            
+
             <img src={Nisiter} alt="Logo" className="photo_size"></img>
           </header>
-          <form>
+          <form onSubmit={onLoginHandler}>
             <div class="form-group">
-              <label for="inputEmail4" className = "font-login">Username</label>
+              <label for="inputEmail4" className="font-login">Username</label>
               <input
-                type="email"
+                type="text"
                 class="form-control"
                 id="inputEmail4"
                 value={formData.username}
@@ -43,7 +79,7 @@ export default function Login() {
               ></input>
             </div>
             <div class="form-group ">
-              <label for="inputPassword4" className = "font-login">Password</label>
+              <label for="inputPassword4" className="font-login">Password</label>
               <input
                 type="password"
                 class="form-control"

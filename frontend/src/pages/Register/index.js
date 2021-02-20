@@ -1,13 +1,21 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useLocation, useHistory } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
 import "./style.scss";
 import DatePicker from "react-datepicker";
+import axios from 'axios';
 //import Select from "react-dropdown-select";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function Register() {
+    const location = useLocation();
+    const history = useHistory();
+    const dispatch = useDispatch();
+    const AuthState = useSelector(state => state.Auth);
+
     const initFormData = {
         username: "",
         password: "",
@@ -34,8 +42,6 @@ export default function Register() {
         fieldofwork: "",
         position: "",
     };
-
-
     const [student, setStudent] = useState(initStudent);
     const [formData, setFormData] = useState(initFormData);
     const [employer, setEmployer] = useState(initEmployer);
@@ -43,6 +49,31 @@ export default function Register() {
     useEffect(() => {
         console.log(formData);
     }, [formData])
+
+
+    async function onRegisterHandler(e) {
+        e.preventDefault();
+        await axios.post('http://127.0.0.1:8300/user', {
+            "username": 'test1',
+            "password": 'test1'
+        })
+            .then(response => {
+                //console.log('response', response)
+                if (response.status === 201) {
+                    //console.log('Auth State', AuthState)
+                    dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id, "token": response.data.token } })
+                    if (AuthState.isLogin === true) {
+                        history.push('/')
+                    }
+                }
+                return response
+            })
+            .catch(error => {
+                alert(error.response.data.message)
+                console.log(error.response)
+                return error
+            });
+    }
     return (
         <form className="form-container">
             <div className="d-flex justify-content-left">
@@ -77,7 +108,7 @@ export default function Register() {
                         onChange={(e) => setFormData({ ...formData, fname: e.target.value })}
                         value={formData.fname}
                         placeholder="First Name"
-                        
+
                     ></input>
                 </div>
 
