@@ -24,7 +24,7 @@ export class UserController {
     return this.service.findById(id);
   }
 
-  @Get('system/check-username')
+  @Post('check-username')
   checkuser(@Body('username') username : string) {
     return this.service.validUsername(username);
   }

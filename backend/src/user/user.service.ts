@@ -40,8 +40,10 @@ export class UserService {
     private readonly employerService: EmployerService,
   ) {}
 
-  async validUsername(username: string): Promise<Boolean> {
+  async validUsername(username: any): Promise<Boolean> {
     const user = await this.userRepo.findOne({username});
+    console.log(String(username));
+    console.log('test : ' + user!==undefined);
     return user !== undefined;
   }
 
