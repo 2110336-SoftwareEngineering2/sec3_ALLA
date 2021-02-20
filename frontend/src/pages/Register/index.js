@@ -54,13 +54,15 @@ export default function Register() {
     async function onRegisterHandler(e) {
         e.preventDefault();
         console.log('before check', formData.username)
-        await axios.get('http://127.0.0.1:8300/user/system/check-username', {
-            "username": formData.username
-        })
+        var validInput = true;
+        await axios.post('http://localhost:8300/user/check-username', {
+               "username" : formData.username
+              })
             .then(response => {
-                console.log('rrrrrrrrrrrrrrrrr', response)
+
                 if (response.data) {
                     alert("Your username is not unique!");
+                    validInput = false; 
                     return;
                 }
 
@@ -68,7 +70,7 @@ export default function Register() {
             .catch(error => {
                 console.log(error)
             });
-
+        if (!validInput) return;
         if
             (formData.isStudent) {
             console.log('before create', formData.username)
