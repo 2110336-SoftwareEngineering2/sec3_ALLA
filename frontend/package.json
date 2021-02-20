@@ -16,6 +16,7 @@
     "react-phone-number-input": "^3.1.15",
     "react-qr-reader": "^2.2.1",
     "react-redux": "^7.2.2",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "react-spinners": "^0.9.0",

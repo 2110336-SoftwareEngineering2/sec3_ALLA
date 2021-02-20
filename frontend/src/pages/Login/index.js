@@ -1,11 +1,34 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useLocation, useHistory } from 'react-router-dom'
 import "./style.scss";
 import Nisiter from "../../assets/nav_photo/Nisiter.png";
 import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
 
-const Login =   () => {
+export default function Login() {
+  const location = useLocation();
+  const history = useHistory()
+  console.log('location', location)
+  async function onLoginHandler(e) {
+    e.preventDefault();
+    axios.post('http://127.0.0.1:8300/auth/login', {
+      "username": formData.username,
+      "password": formData.password
+    })
+      .then(response => {
+        console.log(response)
+        if (response.status === 201) {
+          history.push('/')
+        }
+      })
+      .catch(error => {
+        alert(error.response.data.message)
+        console.log(error.response)
+      });
+  }
   const d = useSelector(state => state.Auth);
-  console.log('USERNAME',d)
+  console.log('USERNAME', d)
+
   const initFormData = {
     username: "",
     password: "",
@@ -20,14 +43,14 @@ const Login =   () => {
       <div className="form-container border border-dark Login_backgroud">
         <div className="p-5">
           <header class="d-flex justify-content-center pb-2 font-header">
-            
+
             <img src={Nisiter} alt="Logo" className="photo_size"></img>
           </header>
-          <form>
+          <form onSubmit={onLoginHandler}>
             <div class="form-group">
-              <label for="inputEmail4" className = "font-login">Username</label>
+              <label for="inputEmail4" className="font-login">Username</label>
               <input
-                type="email"
+                type="text"
                 class="form-control"
                 id="inputEmail4"
                 value={formData.username}
@@ -38,7 +61,7 @@ const Login =   () => {
               ></input>
             </div>
             <div class="form-group ">
-              <label for="inputPassword4" className = "font-login">Password</label>
+              <label for="inputPassword4" className="font-login">Password</label>
               <input
                 type="password"
                 class="form-control"
@@ -94,4 +117,3 @@ const Login =   () => {
     </div>
   );
 }
-export default Login;
