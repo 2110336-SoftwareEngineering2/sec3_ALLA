@@ -53,29 +53,95 @@ export default function Register() {
 
     async function onRegisterHandler(e) {
         e.preventDefault();
-        await axios.post('http://127.0.0.1:8300/user', {
-            "username": 'test1',
-            "password": 'test1'
+        console.log('before check', formData.username)
+        await axios.get('http://127.0.0.1:8300/user/system/check-username', {
+            "username": formData.username
         })
             .then(response => {
-                //console.log('response', response)
-                if (response.status === 201) {
-                    //console.log('Auth State', AuthState)
-                    dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id, "token": response.data.token } })
-                    if (AuthState.isLogin === true) {
-                        history.push('/')
-                    }
+                console.log('rrrrrrrrrrrrrrrrr', response)
+                if (response.data) {
+                    alert("Your username is not unique!");
+                    return;
                 }
-                return response
+
             })
             .catch(error => {
-                alert(error.response.data.message)
-                console.log(error.response)
-                return error
+                console.log(error)
             });
+
+        if
+            (formData.isStudent) {
+            console.log('before create', formData.username)
+            await axios.post('http://127.0.0.1:8300/user', {
+                "username": formData.username,
+                "password": formData.password,
+                "type": "STUDENT",
+                "email": formData.email,
+                "firstName": formData.firstname,
+                "lastName": formData.lastname,
+                "phoneNumber": formData.phone_no,
+                "birthDate": formData.Dateofbirth,
+                "university": student.university,
+                "degree": student.degree,
+                "faculty": student.faculty,
+                "department": student.department,
+                "fields_of_work": student.fieldofwork
+            })
+                .then(response => {
+                    console.log('response', response)
+                    if (response.status === 201) {
+                        //console.log('Auth State', AuthState)
+                        /* if (confirm("Register success!")){
+                            history.push("/login")
+                        }
+                        else {
+                            history.push("/login")
+                        } */
+                    }
+                    return response
+                })
+                .catch(error => {
+                    alert(error.response.data.message)
+                    console.log(error.response)
+                    return error
+                });
+        }
+
+        else {
+            await axios.post('http://127.0.0.1:8300/user', {
+                "username": formData.username,
+                "password": formData.password,
+                "type": "EMPLOYER",
+                "email": formData.email,
+                "firstName": formData.firstname,
+                "lastName": formData.lastname,
+                "phoneNumber": formData.phone_no,
+                "company": employer.company,
+                "position": employer.position,
+                "fields_of_work": employer.fieldofwork
+            })
+                .then(response => {
+                    console.log('response', response)
+                    if (response.status === 201) {
+                        //console.log('Auth State', AuthState)
+                        /* if (confirm("Register success!")){
+                            history.push("/login")
+                        }
+                        else {
+                            history.push("/login")
+                        } */
+                    }
+                    return response
+                })
+                .catch(error => {
+                    alert(error.response.data.message)
+                    console.log(error.response)
+                    return error
+                });
+        }
     }
     return (
-        <form className="form-container">
+        <form className="form-container" onSubmit={onRegisterHandler}>
             <div className="d-flex justify-content-left">
                 <header className=" pb-2"><h1> Register </h1></header>
             </div>
@@ -184,16 +250,16 @@ export default function Register() {
                         <div class="form-group col-md-6">
                             <label for="inputEmail4">Degree</label>
                             <input
-                                type="email"
+                                type="text"
                                 class="form-control"
                                 onChange={(e) => setStudent({ ...student, degree: e.target.value })}
                                 placeholder="Degree"
                             ></input>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="inputPassword4">University</label>
+                            <label>University</label>
                             <input
-                                type="password"
+                                type="text"
                                 class="form-control"
                                 onChange={(e) => setStudent({ ...student, university: e.target.value })}
                                 placeholder="University"
@@ -205,7 +271,6 @@ export default function Register() {
                             <label for="inputFaculty4">Faculty</label>
                             <input
                                 type="text"
-                                value=""
                                 class="form-control"
                                 onChange={(e) => setStudent({ ...student, faculty: e.target.value })}
                                 placeholder="Faculty"

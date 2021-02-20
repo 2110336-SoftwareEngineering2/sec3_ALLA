@@ -12,6 +12,7 @@ export default function MyProfile() {
     phone: "+66862778800",
     resume: "portfolio_url",
     img: "https://picsum.photos/200",
+    isStudent: true
   };
 
   const [profile, setProfile] = useState(initProfile);
@@ -28,7 +29,6 @@ export default function MyProfile() {
             </div>
           </form>
         </div>
-
         <form className="p-5">
           <div className="d-flex justify-content-center p-2 name_font-style">
             <text>
