@@ -1,41 +1,59 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useHistory } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
 import "./style.scss";
 import Nisiter from "../../assets/nav_photo/Nisiter.png";
-import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 
 export default function Login() {
   const location = useLocation();
-  const history = useHistory()
-  console.log('location', location)
-  async function onLoginHandler(e) {
-    e.preventDefault();
-    axios.post('http://127.0.0.1:8300/auth/login', {
-      "username": formData.username,
-      "password": formData.password
-    })
-      .then(response => {
-        console.log(response)
-        if (response.status === 201) {
-          history.push('/')
-        }
-      })
-      .catch(error => {
-        alert(error.response.data.message)
-        console.log(error.response)
-      });
-  }
-  const d = useSelector(state => state.Auth);
-  console.log('USERNAME', d)
+  console.log(location)
+  const history = useHistory();
 
+  const dispatch = useDispatch();
+  const AuthState = useSelector(state => state.Auth);
+  
   const initFormData = {
     username: "",
     password: "",
     stayLogin: false,
   };
+
   const [formData, setFormData] = useState(initFormData);
   //console.log("form obj", formData);
+
+  async function onLoginHandler(e) {
+    e.preventDefault();
+    await axios.post('http://127.0.0.1:8300/auth/login', {
+      "username": formData.username,
+      "password": formData.password
+    })
+      .then(response => {
+        //console.log('response', response)
+        if (response.status === 201) {
+          //console.log('Auth State', AuthState)
+          dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id, "token": response.data.token } })
+          if (AuthState.isLogin === true) {
+            history.push('/')
+          }
+        }
+        return response
+      })
+      .catch(error => {
+        alert(error.response.data.message)
+        console.log(error.response)
+        return error
+      });
+  }
+
+  useEffect(() => {
+    console.log('Auth State in useEffect', AuthState)
+    if (AuthState.isLogin === true) {
+      history.push('/')
+    }
+  }, [AuthState.isLogin])
+
+
 
   return (
     <div>
