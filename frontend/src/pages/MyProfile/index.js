@@ -1,7 +1,38 @@
 import "./style.scss";
 import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+
+async function onLoadHandler(id, token) {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`http://192.168.1.120:8300/user/${id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((error) => {
+        reject(error.message);
+      });
+  });
+}
 
 export default function MyProfile() {
+
+  const userState = useSelector(state => state.Auth);
+  const uid = userState.id;
+  const token = userState.token;
+
+ /*  useEffect(async () => {
+    const data = await onLoadHandler(uid, token);
+    console.log("data is: ", data);
+
+    //set state something
+  }); */
+
   const initProfile = {
     fname: "Supawit",
     lname: "Sutthiboriban",
@@ -25,7 +56,9 @@ export default function MyProfile() {
 
             <div class="d-flex justify-content-center">
               <input type="file" name="file" id="file" class="inputfile" />
-              <label for="file" className = "addPhoto-style">Add or Edit Photo</label>
+              <label for="file" className="addPhoto-style">
+                Add or Edit Photo
+              </label>
             </div>
           </form>
         </div>
