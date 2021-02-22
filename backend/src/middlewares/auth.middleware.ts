@@ -15,7 +15,7 @@ export class AuthMiddleware implements NestMiddleware {
       }
     } catch (err) {
       req.uid = undefined;
-      console.log("token is invalid / hasn't been pasred");
+      console.log("token is invalid / hasn't been parsed");
     }
     next();
   }
