@@ -55,7 +55,7 @@ export default function Register() {
     } else {
       x.type = "password";
     }
-    console.log(x.type)
+    console.log(x.type);
   }
   function validateForm() {
     if (
@@ -76,8 +76,7 @@ export default function Register() {
         student.department == "" ||
         student.fieldofwork == ""
       );
-    } 
-    else {
+    } else {
       return (
         employer.company == "" ||
         employer.fieldofwork == "" ||
@@ -128,12 +127,8 @@ export default function Register() {
           console.log("response", response);
           if (response.status === 201) {
             //console.log('Auth State', AuthState)
-            /* if (confirm("Register success!")){
-                            history.push("/login")
-                        }
-                        else {
-                            history.push("/login")
-                        } */
+            alert("Hello! I am an alert box!!");
+            history.push('/login')
           }
           return response;
         })
