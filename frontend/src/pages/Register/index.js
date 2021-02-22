@@ -47,7 +47,15 @@ export default function Register() {
   useEffect(() => {
     console.log(formData);
   }, [formData]);
-
+  function toggle() {
+    var x = document.getElementById("myPW");
+    if (x.type == "password") {
+      x.type = "text";
+    } else {
+      x.type = "password";
+    }
+    console.log(x.type)
+  }
   function validateForm() {
     if (
       formData.username == "" ||
@@ -189,10 +197,12 @@ export default function Register() {
         </div>
         <div class="form-group col-md-6">
           <label for="inputPassword4">Password</label>
-          <small> ( >=8 lowercase uppercase) </small>
+          <small> ( {">"}=8 lowercase uppercase) </small>
+          <input type="checkbox" onClick={toggle}></input>
           <input
             type="password"
             class="form-control"
+            id="myPW"
             onChange={(e) =>
               setFormData({ ...formData, password: e.target.value })
             }
