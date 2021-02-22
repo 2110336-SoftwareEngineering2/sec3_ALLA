@@ -61,6 +61,11 @@ export class UserService {
     };
   }
 
+  async findByEmail(email : string) {
+    const user = await this.userRepo.findOne({email});
+    return user;
+  }
+
   async findByUsername(username: string): Promise<User> {
     const user = await this.userRepo.findOne({ username });
     /* if (user === undefined) throw new NotFoundException("Username not found");
@@ -103,6 +108,12 @@ export class UserService {
         ...ret_employer
       }
     }
+  }
+
+  async verifyUser(id : number) {
+    const user = await this.findById(id);
+    user.verified = true;
+    return this.userRepo.save(user);
   }
 
   async update(id: number, dto: any): Promise<any> {
