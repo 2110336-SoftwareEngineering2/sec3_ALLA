@@ -5,6 +5,7 @@ import profile_image from "../../assets/nav_photo/profile.png";
 import nisiter_logo from "../../assets/nav_photo/N.png";
 import nisiter_logo_1 from "../../assets/nav_photo/N_1.png";
 import inbox_image_1 from "../../assets/nav_photo/profile_arrow.png";
+import arrow from "../../assets/nav_photo/arrow.png";
 
 export default function Navigation() {
   //return <div><div className="nav-container">NAV</div><div className="nav-spacer"></div></div>;
@@ -48,7 +49,7 @@ export default function Navigation() {
                 class="btn btn-default"
                 onClick={() => setDropdown(!dropDown)}
               >
-                <img src={inbox_image_1} width="30" />
+                <span><img src={profile_image} width="33" className = "pr-1" /><img src={arrow} width="15" /></span>
               </button>
             </div>
             <div className="dropdown-item-container position-relative d-flex flex-row-reverse">
