@@ -6,3 +6,19 @@
 .nav-link{
     cursor: pointer;
 }
+
+input:invalid+span:after {
+    position: absolute; content: '*incorrect format';
+    padding: 5px;
+    color: #8b0000;
+    line-height: 12px;
+    font-size: 10px
+  }
+  
+/* input:valid+span:after {
+    position: absolute;
+    content: '✓';
+    line-height: 12px;
+    padding: 5px;
+    color: #009000;
+  } */

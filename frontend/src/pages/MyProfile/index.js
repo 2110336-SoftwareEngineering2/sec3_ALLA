@@ -1,20 +1,81 @@
 import "./style.scss";
 import React, { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import axios from "axios";
+
 
 export default function MyProfile() {
+
+
+  const userState = useSelector(state => state.Auth);
+  const uid = userState.id;
+  const token = userState.token;
+
   const initProfile = {
-    fname: "Supawit",
-    lname: "Sutthiboriban",
+    firstName: "supawit",
+    lastName: "Sutthiboriban",
     department: "Computer Engineering",
     faculty: "Engineering",
     university: "Chulalongkorn University",
     email: "ssutthiboriban@yahoo.com",
-    phone: "+66862778800",
+    phoneNumber: "+66862778800",
     resume: "portfolio_url",
     img: "https://picsum.photos/200",
+    fields_of_work: "",
+    degree: "",
+    id: 1,
+    sid: 1,
+    birthDate: "2021-02-20T18:59:20.255Z",
+    type: "STUDENT"
+
   };
 
+  //   
+  // firstName: ""
+  // lastName: ""
+  // department: ""
+  // faculty: ""
+  // university: ""
+  // email: ""
+  // phoneNumber: ""
+
+  // fields_of_work: ""
+  // degree: ""
+  // id: 1
+  // sid: 1
+  // birthDate: "2021-02-20T18:59:20.255Z"
+  // type: "STUDENT"
+
   const [profile, setProfile] = useState(initProfile);
+
+  async function onLoadHandler(id, token) {
+    await axios.get(`http://127.0.0.1:8300/user/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then((response) => {
+        console.log('response', response)
+        setProfile({
+          ...response.data,
+          resume: initProfile.resume,
+          img: initProfile.img,
+          fields_of_work: initProfile.fields_of_work
+        })
+        return response
+      })
+      .catch(error => {
+        console.log(error)
+        return error
+      });
+  }
+
+  useEffect(() => {
+    onLoadHandler(uid, token);
+    //set state something
+  }, []);
+
+
   return (
     <div className="d-flex justify-content-around">
       <div class="form-row">
@@ -24,15 +85,16 @@ export default function MyProfile() {
 
             <div class="d-flex justify-content-center">
               <input type="file" name="file" id="file" class="inputfile" />
-              <label for="file" className = "addPhoto-style">Add or Edit Photo</label>
+              <label for="file" className="addPhoto-style">
+                Add or Edit Photo
+              </label>
             </div>
           </form>
         </div>
-
         <form className="p-5">
           <div className="d-flex justify-content-center p-2 name_font-style">
             <text>
-              {profile.fname} {profile.lname}
+              {profile.firstName} {profile.lastName}
             </text>
           </div>
           <div className="d-flex justify-content-left p-2">
@@ -61,8 +123,8 @@ export default function MyProfile() {
           </div>
           <div className="d-flex justify-content-left p-2">
             <text>
-              <span className="font-weight-bold"> Phone Number : </span>{" "}
-              {profile.phone}
+              <span className="font-weight-bold"> Tel : </span>{" "}
+              {profile.phoneNumber}
             </text>
           </div>
           <div className="d-flex justify-content-left p-2">
@@ -76,7 +138,7 @@ export default function MyProfile() {
         {/* <form className="p-5">
           <div className="d-flex justify-content-center">
             <text>
-              {profile.fname} {profile.lname}
+              {profile.firstName} {profile.lastName}
             </text>
           </div>
           <div className="d-flex justify-content-center">
