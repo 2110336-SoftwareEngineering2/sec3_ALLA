@@ -53,6 +53,24 @@ const AuthReducer = (state = initialState, action) => {
                 token: action.payload.token,
                 id: action.payload.id
             }
+        case 'GET_ACCESS_TOKEN':
+            //localStorage.getItem('accessToken');
+            return {
+                ...state,
+                token: localStorage.getItem('accessToken'),
+            }
+        case 'GET_UID':
+            //localStorage.getItem('accessToken');
+            return {
+                ...state,
+                id: localStorage.getItem('uid'),
+            }
+        case 'SET_ACCESS_TOKEN':
+            localStorage.setItem('accessToken', action.payload.token);
+            return state
+        case 'SET_UID':
+            localStorage.setItem('uid', action.payload.id);
+            return state
         default: return state
     }
 }
