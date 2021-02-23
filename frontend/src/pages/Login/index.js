@@ -29,7 +29,7 @@ export default function Login() {
       "password": formData.password
     })
       .then(response => {
-        console.log('response', response)
+        //console.log('response', response)
         if (response.status === 201) {
           console.log('Auth State', AuthState)
           //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
@@ -40,6 +40,7 @@ export default function Login() {
         return response
       })
       .catch(error => {
+        if(error.response)alert(error.response.data.message)
         console.log(error.response)
         return error
       });
