@@ -45,15 +45,15 @@ export class AuthService {
     if (!user) return false;
     const user_email = user.email;
     const transporter = nodemailer.createTransport({
-      service: 'hotmail',
+      service: 'gmail',
       auth: {
-        user: 'nisiter.system@hotmail.com', // your email
+        user: 'nisiter.system@gmail.com', // your email
         pass: 'Nisiter123' // your email password
       }
     })
     const token = this.jwtService.sign({ uid: user.id });
     let mailOptions = {
-      from: 'nisiter.system@hotmail.com', 
+      from: 'nisiter.system@gmail.com', 
       to: user_email, // list of receivers (separated by ,)
       subject: 'Account Verification', 
       text: 'Account Verification', 

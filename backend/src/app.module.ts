@@ -9,7 +9,7 @@ import { EmployerModule } from './employer/employer.module';
 import { StudentModule } from './student/student.module';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 
-
+ 
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'mysql',

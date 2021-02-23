@@ -29,7 +29,7 @@ export default function Login() {
       "password": formData.password
     })
       .then(response => {
-        //console.log('response', response)
+        console.log('response', response)
         if (response.status === 201) {
           console.log('Auth State', AuthState)
           //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
@@ -56,9 +56,7 @@ export default function Login() {
 
 
   return (
-    <div>
-      
-      Login
+    <div className="login-container">
       <div className="form-container border border-dark Login_backgroud">
         <div className="p-5">
           <header class="d-flex justify-content-center pb-2 font-header">

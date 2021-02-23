@@ -22,12 +22,7 @@ const Routes = () => {
                         />
                     )} />
                 <Route exact path="/login" component={Login} />
-                <Route exact path="/register" component={(props) => (
-                    <RequireAuth
-                        {...props}
-                        Component={Register}
-                    />
-                )} />
+                <Route exact path="/register" component={Register} />
                 <Route exact path="/myprofile" component={(props) => (
                     <RequireAuth
                         {...props}
