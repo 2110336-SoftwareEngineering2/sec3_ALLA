@@ -25,8 +25,13 @@ export class UserController {
   }
 
   @Post('check-username')
-  checkuser(@Body('username') username : string) {
+  checkUser(@Body('username') username : string) {
     return this.service.validUsername(username);
+  }
+
+  @Post('check-email')
+  checkEmail(@Body('email') email : string){
+    return this.service.validEmail(email);
   }
 
   @Post()
@@ -44,5 +49,5 @@ export class UserController {
   @Delete(':id')
   delete(@Param('id', new ParseIntPipe()) id: number): {} {
     return this.service.delete(id);
-  }
+  } 
 }
