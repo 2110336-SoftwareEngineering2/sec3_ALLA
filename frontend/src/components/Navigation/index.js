@@ -42,7 +42,7 @@ export default function Navigation() {
               <img src={profile_image} width="30" />
             </button>
           </a> */}
-          <div className="bigg-container ">
+          <div className="dropdown-container ">
             <div>
               <button
                 class="btn btn-default"
@@ -51,21 +51,20 @@ export default function Navigation() {
                 <img src={inbox_image_1} width="30" />
               </button>
             </div>
-            <div className="position-relative">
+            <div className="dropdown-item-container position-relative d-flex flex-row-reverse">
               {dropDown ? (
                 <div
-                  className="popup position-absolute mt-2 border"
-                  id="dropdown"
+                  className="dropdown-item position-absolute mt-2 p-3 "
+
                 >
-                  <ul>
-                    <a href="/myprofile" >my profile</a><br>
-                    </br>
-                    <a href="/login" >log out</a>
+                  <ul className='menu-list d-flex flex-column'>
+                    <li><a href="/myprofile" >my profile</a></li>
+                    <li><a href="/login" >log out</a></li>
                   </ul>
                 </div>
               ) : (
-                <></>
-              )}
+                  <></>
+                )}
             </div>
           </div>
         </div>
