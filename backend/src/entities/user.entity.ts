@@ -15,7 +15,8 @@ export enum UserType {
 
 @Entity()
 @Unique(['username'])
-export class User {
+@Unique(['email'])
+export class User { 
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -41,5 +42,5 @@ export class User {
   phoneNumber: string;
   
   @Column({default : false})
-  verifired : boolean;
+  verified : boolean;
 }

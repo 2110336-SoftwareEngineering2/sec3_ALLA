@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { compare } from 'bcryptjs';
 import { UserService } from 'src/user/user.service';
@@ -20,10 +20,13 @@ export class AuthService {
     const user = await this.userService.findByUsername(username);
     if (!user) {
       throw new BadRequestException('Invalid username/password');
-    }
+    } 
     const isValid = await compare(password, user.password);
     if (!isValid) {
       throw new BadRequestException('Invalid username/password');
+    }
+    if (!user.verified) {
+      throw new UnauthorizedException('User is not verified')
     }
     const token = this.jwtService.sign({ uid: user.id });
     return {
@@ -42,18 +45,18 @@ export class AuthService {
     if (!user) return false;
     const user_email = user.email;
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: 'hotmail',
       auth: {
-        user: 'nisiter.system@gmail.com', // your email
+        user: 'nisiter.system@hotmail.com', // your email
         pass: 'Nisiter123' // your email password
       }
     })
     const token = this.jwtService.sign({ uid: user.id });
     let mailOptions = {
-      from: 'Company <nisiter.system@gmail.com>', 
+      from: 'nisiter.system@hotmail.com', 
       to: user_email, // list of receivers (separated by ,)
-      subject: 'Verify Email', 
-      text: 'Verify Email', 
+      subject: 'Account Verification', 
+      text: 'Account Verification', 
       html: 'Hi! <br><br> Thanks for your registration<br><br>'+
       '<a href='+ 'http://localhost:8300/auth/email/verify/'+ token + '>Click here to activate your account</a>'  // html body
     };
@@ -74,7 +77,7 @@ export class AuthService {
 
   async verifyEmail(token : string) {
     const {uid} = this.verifyToken(token);
-    console.log(uid);   
+    console.log("verify id : " + uid);   
     const ret = await this.userService.verifyUser(uid);
     return {
       id : ret.id,

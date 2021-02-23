@@ -40,10 +40,13 @@ export class UserService {
     private readonly employerService: EmployerService,
   ) {}
 
-  async validUsername(username: any): Promise<Boolean> {
+  async validUsername(username: string): Promise<Boolean> {
     const user = await this.userRepo.findOne({username});
-    console.log(String(username));
-    console.log('test : ' + user!==undefined);
+    return user !== undefined;
+  }
+
+  async validEmail(email : string) : Promise<Boolean> {
+    const user = await this.userRepo.findOne({email});
     return user !== undefined;
   }
 
@@ -59,11 +62,6 @@ export class UserService {
       ...rest,
       ...subUser,
     };
-  }
-
-  async findByEmail(email : string) {
-    const user = await this.userRepo.findOne({email});
-    return user;
   }
 
   async findByUsername(username: string): Promise<User> {
