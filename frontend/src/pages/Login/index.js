@@ -12,7 +12,7 @@ export default function Login() {
 
   const dispatch = useDispatch();
   const AuthState = useSelector(state => state.Auth);
-  
+
   const initFormData = {
     username: "",
     password: "",
@@ -31,29 +31,32 @@ export default function Login() {
       .then(response => {
         console.log('response', response)
         if (response.status === 201) {
-          //console.log('Auth State', AuthState)
-          dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id, "token": response.data.token } })
-        } 
+          console.log('Auth State', AuthState)
+          //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
+          dispatch({ type: "SET_UID", payload: { "id": response.data.id } })
+          dispatch({ type: "SET_ACCESS_TOKEN", payload: { "token": response.data.token } })
+          history.push('/')
+        }
         return response
       })
       .catch(error => {
-        alert(error.response.data.message)
         console.log(error.response)
         return error
       });
   }
 
-  useEffect(() => {
-    console.log('Auth State in useEffect', AuthState)
-    if (AuthState.isLogin === true) {
-      history.push('/')
-    }
-  }, [AuthState.isLogin])
+  // useEffect(() => {
+  //   console.log('Auth State in useEffect', AuthState)
+  //   if (AuthState.isLogin === true) {
+  //     history.push('/')
+  //   }
+  // }, [AuthState.isLogin])
 
 
 
   return (
     <div>
+      
       Login
       <div className="form-container border border-dark Login_backgroud">
         <div className="p-5">
