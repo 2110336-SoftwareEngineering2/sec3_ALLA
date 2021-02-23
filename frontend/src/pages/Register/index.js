@@ -84,28 +84,32 @@ export default function Register() {
       );
     }
   }
+  var validUsername = true;
+
+  async function checkUsername(e){
+    await axios
+      .post("http://localhost:8300/user/check-username", {
+        username: formData.username,
+      })
+      .then((response) => {
+        validUsername = !response.data;
+        return (response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  
+
+
   async function onRegisterHandler(e) {
     if (!validateForm) {
       alert("every blanks must be filled out");
       return;
     }
     e.preventDefault();
-    var validInput = true;
-    await axios
-      .post("http://localhost:8300/user/check-username", {
-        username: formData.username,
-      })
-      .then((response) => {
-        if (response.data) {
-          alert("Your username is not unique!");
-          validInput = false;
-          return;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    if (!validInput) return;
+    
+    //if (!validInput) return;
     if (formData.isStudent) {
       await axios
         .post("http://127.0.0.1:8300/user", {
@@ -124,10 +128,10 @@ export default function Register() {
           fields_of_work: student.fieldofwork,
         })
         .then((response) => {
-          console.log("response", response);
+          //console.log("response", response);
           if (response.status === 201) {
             //console.log('Auth State', AuthState)
-            alert("Hello! I am an alert box!!");
+            alert("A verification link has been sent to your email account!");
             history.push('/login')
           }
           return response;
@@ -152,15 +156,10 @@ export default function Register() {
           fields_of_work: employer.fieldofwork,
         })
         .then((response) => {
-          console.log("response", response);
           if (response.status === 201) {
             //console.log('Auth State', AuthState)
-            /* if (confirm("Register success!")){
-                            history.push("/login")
-                        }
-                        else {
-                            history.push("/login")
-                        } */
+            alert("A verification link has been sent to your email account!");
+            history.push('/login')
           }
           return response;
         })
@@ -183,13 +182,18 @@ export default function Register() {
           <label for="inputEmail4">Username</label>
           <input
             type="text"
+            id="username"
             class="form-control"
             pattern=".{8,}"
             onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
+              {
+                setFormData({ ...formData, username: e.target.value });
+                checkUsername(e);
+              }
             }
             placeholder="Username"
           ></input>
+          <h1 className={checkUsername()?"":"hidden"}>not unique</h1>
         </div>
         <div class="form-group col-md-6">
           <label for="inputPassword4">Password</label>
