@@ -212,27 +212,27 @@ export default function Register() {
             }}
             placeholder="Username"
           ></input>
-          {invalidStatus.username ? <small>this username is already taken</small> : <></>}
+          {invalidStatus.username ? <small className="validity">*this username is already taken</small> : <></>}
         </div>
         <div class="form-group col-md-6">
-
-          <label for="inputPassword4">Password</label>
-          <small> ( {">"}=8 lowercase uppercase) </small>
-
+          <label className="text-nowrap" for="inputPassword4">Password<small > ( {">"}=8 lowercase uppercase) </small></label>
+          
           <div className="d-flex flex-row position-relative justify-content-end align-items-center">
-            <input
-              type="password"
-              class="form-control"
-              id="myPW"
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              placeholder="Password"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            ></input>
+            <div className="w-100">
+              <input
+                type="password"
+                class="form-control"
+                id="myPW"
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                placeholder="Password"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              ></input><span></span>
+            </div>
             <input className="position-absolute mr-2" type="checkbox" onClick={toggle}></input>
           </div>
-          <span class="validity"></span>
+
           <br></br>
         </div>
       </div>
@@ -283,7 +283,7 @@ export default function Register() {
               setFormData({ ...formData, phoneNumber: e.target.value })
             }
           ></input>
-          <span class="validity"></span>
+          <span></span>
         </div>
       </div>
       <div class="form-group">
@@ -295,7 +295,7 @@ export default function Register() {
           placeholder="example@email.com"
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         ></input>
-        {invalidStatus.email ? <small>this email is already taken</small> : <></>}
+        {invalidStatus.email ? <small className="validity">*this email is already taken</small> : <></>}
         <span class="validity"></span><br></br>
       </div>
       <div class="form-group">
