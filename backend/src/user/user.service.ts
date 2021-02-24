@@ -21,12 +21,12 @@ const userprops = [
   'firstName',
   'lastName',
   'phoneNumber',
+  'birthDate',
 ];
 const studentprops = [
-  'birthDate',
   'university',
   'degree',
-  'faculty',
+  'faculty', 
   'department',
   'fields_of_work',
 ];

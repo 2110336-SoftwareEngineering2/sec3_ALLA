@@ -68,7 +68,7 @@ export default function Register() {
     )
       return false;
     if (isStudent) {
-      return (
+      return !(
         student.university == "" ||
         student.degree == "" ||
         student.faculty == "" ||
@@ -76,10 +76,10 @@ export default function Register() {
         student.fields_of_work == ""
       );
     } else {
-      return (
+      return !(
         employer.company == "" ||
-        employer.fields_of_work == "" ||
-        employer.position == ""
+        employer.position == "" ||
+        employer.fields_of_work == "" 
       );
     }
   }
@@ -135,10 +135,19 @@ export default function Register() {
 
   async function onRegisterHandler(e) {
     e.preventDefault();
-    if (!validateForm) {
-      alert("every blanks must be filled out");
+    if (!validateForm()) {
+      console.log(validateForm())
+      console.log(formData,student,employer);
+      alert("Please fill the missing information!");
       return;
     }
+    /* else{
+      console.log(validateForm())
+      console.log(formData,student,employer);
+      alert("success");
+      return;
+    }
+    return; */
     //if (!validInput) return;
 
     if (isStudent) {
@@ -193,20 +202,21 @@ export default function Register() {
 
 
   return (
+    <div className= "register-div-container">
     <form className="register-form-container" onSubmit={onRegisterHandler}>
       <div className="d-flex justify-content-left">
-        <header className=" pb-2">
+        <header className=" pb-2 font-login">
           <h1> Register </h1>
         </header>
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
-          <label for="inputEmail4">Username</label>
+          <label for="inputEmail4" className = "font-login">Username</label>
           <input
             type="text"
             id="username"
             class="form-control"
-            pattern=".{8,}"
+            
             onChange={(e) => {
               setFormData({ ...formData, username: e.target.value });
             }}
@@ -215,7 +225,7 @@ export default function Register() {
           {invalidStatus.username ? <small className="validity">*this username is already taken</small> : <></>}
         </div>
         <div class="form-group col-md-6">
-          <label className="text-nowrap" for="inputPassword4">Password<small > ( {">"}=8 lowercase uppercase) </small></label>
+          <label className="text-nowrap font-login" for="inputPassword4">Password<small > ( {">"}=8 lowercase uppercase) </small></label>
           
           <div className="d-flex flex-row position-relative justify-content-end align-items-center">
             <div className="w-100">
@@ -237,7 +247,7 @@ export default function Register() {
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6 font-login">
           <label for="inputPassword4">First Name</label>
           <input
             type="text"
@@ -250,7 +260,7 @@ export default function Register() {
           ></input>
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-6 font-login">
           <label for="inputAddress">Last Name</label>
           <input
             type="text"
@@ -264,8 +274,8 @@ export default function Register() {
       </div>
 
       <div class="form-group">
-        <label for="inputAddress">Mobile Number</label>
-        <small> (Format: xxx-xxx-xxxx) </small>
+        <label for="inputAddress" className = "font-login">Mobile Number</label>
+        <small className = "font-login"> (Format: xxx-xxx-xxxx) </small>
         <div class="input-group">
           <div class="input-group-prepend">
             <div class="input-group-text">Tel</div>
@@ -287,7 +297,7 @@ export default function Register() {
         </div>
       </div>
       <div class="form-group">
-        <label for="inputAddress">E-mail</label>
+        <label for="inputAddress" className = "font-login">E-mail</label>
         <input
           type="email"
           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
@@ -296,10 +306,10 @@ export default function Register() {
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         ></input>
         {invalidStatus.email ? <small className="validity">*this email is already taken</small> : <></>}
-        <span class="validity"></span><br></br>
+        <span></span><br></br>
       </div>
       <div class="form-group">
-        <label className="d-block">Date of Birth</label>
+        <label className="d-block" className = "font-login">Date of Birth</label>
         <div class="input-group">
           {/* <div class="input-group-prepend">
                         <i class="fa fa-calendar input-group-text" aria-hidden="true"></i>
@@ -314,21 +324,21 @@ export default function Register() {
       </div>
       <div className="d-flex justify-content-left">
         <header className=" pb-2">
-          <h2> Tell us who you are? </h2>
+          <h2 className = "font-login"> Tell us who you are? </h2>
         </header>
       </div>
       <ul className="nav nav-pills mb-3">
         <li className="list-item">
           <a
-            className={`nav-link ${isStudent ? "active" : ""}`}
+            className={`nav-link ${isStudent ? "active font-login" : "font-login"}`}
             onClick={(e) => setisStudent(true)}
           >
             Student
           </a>
         </li>
         <li className="list-item">
-          <a
-            className={`nav-link ${!isStudent ? "active" : ""}`}
+          <a 
+            className={`nav-link ${!isStudent ? "active font-login" : "font-login"}`}
             onClick={(e) => setisStudent(false)}
           >
             Employer
@@ -339,18 +349,21 @@ export default function Register() {
         <div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputEmail4">Degree</label>
+              <label className = "font-login">Degree</label>
               <input
                 type="text"
                 class="form-control"
-                onChange={(e) =>
-                  setStudent({ ...student, degree: e.target.value })
+                onChange={(e) =>{
+                
+                  setStudent({ ...student, degree: e.target.value });
+                  console.log(student);
+                }
                 }
                 placeholder="Degree"
               ></input>
             </div>
             <div class="form-group col-md-6">
-              <label>University</label>
+              <label className = "font-login">University</label>
               <input
                 type="text"
                 class="form-control"
@@ -363,24 +376,30 @@ export default function Register() {
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputFaculty4">Faculty</label>
+              <label className = "font-login">Faculty</label>
               <input
                 type="text"
                 class="form-control"
-                onChange={(e) =>
-                  setStudent({ ...student, faculty: e.target.value })
+                onChange={(e) =>{
+                  
+                  setStudent({ ...student, faculty: e.target.value }
+                    );
+                    console.log(student);
+                  }
                 }
                 placeholder="Faculty"
               ></input>
             </div>
 
             <div class="form-group col-md-6">
-              <label for="inputAddress">Department</label>
+              <label className = "font-login">Department</label>
               <input
                 type="text"
                 class="form-control"
-                onChange={(e) =>
-                  setStudent({ ...student, department: e.target.value })
+                onChange={(e) =>{
+                  
+                  setStudent({ ...student, department: e.target.value });
+                  console.log(student);}
                 }
                 placeholder="Department"
               ></input>
@@ -388,7 +407,7 @@ export default function Register() {
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputAddress">Field of work</label>
+              <label className = "font-login">Field of work</label>
               <input
                 type="text"
                 class="form-control"
@@ -412,23 +431,23 @@ export default function Register() {
           <div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="inputEmail4">Company</label>
+                <label className = "font-login">Company</label>
                 <input
                   type="text"
                   class="form-control"
                   onChange={(e) =>
-                    setEmployer({ ...formData, company: e.target.value })
+                    setEmployer({ ...employer, company: e.target.value })
                   }
                   placeholder="Company"
                 ></input>
               </div>
               <div class="form-group col-md-6">
-                <label for="inputPassword4">Position</label>
+                <label className = "font-login">Position</label>
                 <input
                   type="text"
                   class="form-control"
                   onChange={(e) =>
-                    setEmployer({ ...formData, position: e.target.value })
+                    setEmployer({ ...employer, position: e.target.value })
                   }
                   placeholder="Position"
                 ></input>
@@ -436,12 +455,12 @@ export default function Register() {
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label for="inputPassword4">Field of works</label>
+                <label className = "font-login">Field of works</label>
                 <input
                   type="text"
                   class="form-control"
                   onChange={(e) =>
-                    setEmployer({ ...formData, fields_of_work: e.target.value })
+                    setEmployer({ ...employer, fields_of_work: e.target.value })
                   }
                   placeholder="Field of works"
                 ></input>
@@ -453,5 +472,6 @@ export default function Register() {
         Create account
       </button>
     </form>
+    </div>
   );
 }

@@ -43,4 +43,7 @@ export class User {
   
   @Column({default : false})
   verified : boolean;
+
+  @Column()
+  birthDate: string;
 }

@@ -57,7 +57,7 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      <div className="form-container border border-dark Login_backgroud">
+      <div className="form-container  Login_backgroud">
         <div className="p-5">
           <header class="d-flex justify-content-center pb-2 font-header">
 
