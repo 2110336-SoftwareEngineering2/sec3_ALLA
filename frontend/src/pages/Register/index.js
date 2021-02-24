@@ -2,18 +2,18 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input";
 import "./style.scss";
-import DatePicker from "react-datepicker";
 import axios from "axios";
 
+//import PhoneInput from "react-phone-number-input";
+//import DatePicker from "react-datepicker";
 //import Select from "react-dropdown-select";
 
 import "react-datepicker/dist/react-datepicker.css";
 
 export default function Register() {
   // const location = useLocation();
-  // const history = useHistory();
+  const history = useHistory();
   // const dispatch = useDispatch();
   // const AuthState = useSelector((state) => state.Auth);
 
@@ -83,21 +83,37 @@ export default function Register() {
       );
     }
   }
-
-  const [invalidUsername, setInvalidUsername] = useState(false)
+  const [invalidStatus, setinvalidStatus] = useState({ 'username': false, 'email': false })
 
   useEffect(() => {
     checkUsername()
   }, [formData.username])
+  useEffect(() => {
+    checkEmail()
+  }, [formData.email])
 
   async function checkUsername() {
     await axios
-      .post("http://localhost:8300/user/check-username", {
+      .post("http://127.0.0.1:8300/user/check-username", {
         username: formData.username,
       })
       .then((response) => {
-        setInvalidUsername(response.data) //response data is true if invalid
-        console.log('response check uname', response)
+        setinvalidStatus({ ...invalidStatus, username: response.data }) //response data is true if invalid
+
+        return (response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  async function checkEmail() {
+    await axios
+      .post("http://127.0.0.1:8300/user/check-email", {
+        email: formData.email,
+      })
+      .then((response) => {
+        setinvalidStatus({ ...invalidStatus, email: response.data }) //response data is true if invalid
+        console.log('mail ver', response)
         return (response.data);
       })
       .catch((error) => {
@@ -137,8 +153,8 @@ export default function Register() {
           if (response.status === 201) {
             // console.log("response", response);
             sendVerificationMail(response.data.id)
-            alert("A verification link has been sent to your email account!");
-            //history.push('/login')
+            alert("A verification link has been sent to your email account!   If you do not find the email, please check your spam folder");
+            history.push('/login')
           }
           return response;
         })
@@ -158,8 +174,8 @@ export default function Register() {
           if (response.status === 201) {
             console.log('response', response)
             sendVerificationMail(response.data.id)
-            alert("A verification link has been sent to your email account!");
-            //history.push('/login')
+            alert("A verification link has been sent to your email account!   If you do not find the email, please check your spam folder");
+            history.push('/login')
           }
           return response;
         })
@@ -196,7 +212,7 @@ export default function Register() {
             }}
             placeholder="Username"
           ></input>
-          {invalidUsername ? <small>not unique</small> : <></>}
+          {invalidStatus.username ? <small>this username is already taken</small> : <></>}
         </div>
         <div class="form-group col-md-6">
 
@@ -279,8 +295,8 @@ export default function Register() {
           placeholder="example@email.com"
           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         ></input>
-        <span class="validity"></span>
-        <br></br>
+        {invalidStatus.email ? <small>this email is already taken</small> : <></>}
+        <span class="validity"></span><br></br>
       </div>
       <div class="form-group">
         <label className="d-block">Date of Birth</label>
