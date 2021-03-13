@@ -21,12 +21,12 @@ const userprops = [
   'firstName',
   'lastName',
   'phoneNumber',
+  'birthDate',
 ];
 const studentprops = [
-  'birthDate',
   'university',
   'degree',
-  'faculty',
+  'faculty', 
   'department',
   'fields_of_work',
 ];
@@ -42,6 +42,11 @@ export class UserService {
 
   async validUsername(username: string): Promise<Boolean> {
     const user = await this.userRepo.findOne({username});
+    return user !== undefined;
+  }
+
+  async validEmail(email : string) : Promise<Boolean> {
+    const user = await this.userRepo.findOne({email});
     return user !== undefined;
   }
 
@@ -101,6 +106,12 @@ export class UserService {
         ...ret_employer
       }
     }
+  }
+
+  async verifyUser(id : number) {
+    const user = await this.findById(id);
+    user.verified = true;
+    return this.userRepo.save(user);
   }
 
   async update(id: number, dto: any): Promise<any> {

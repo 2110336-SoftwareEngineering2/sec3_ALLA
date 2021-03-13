@@ -1,0 +1,29 @@
+.image-style {
+  width: 250px;
+  height: 250px;
+}
+
+.name_font-style {
+  font-style: italic;
+  font-size: 45px;
+}
+
+.addPhoto-style {
+  padding-top:8px;
+  height: 40px;
+  width: 140px;
+  text-align:center;
+  vertical-align: middle;
+  color: white;
+  font-size: 15px;
+  background-color: rgb(35, 155, 65);
+  border-radius: 7px;
+}
+.inputfile {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}

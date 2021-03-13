@@ -1,29 +1,73 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useLocation, useHistory } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux';
 import "./style.scss";
-import Welcome from "../../assets/logo/welcome_logo.png"
+import Nisiter from "../../assets/nav_photo/Nisiter.png";
+import axios from 'axios';
+
 export default function Login() {
+  const location = useLocation();
+  console.log(location)
+  const history = useHistory();
+
+  const dispatch = useDispatch();
+  const AuthState = useSelector(state => state.Auth);
+
   const initFormData = {
     username: "",
     password: "",
     stayLogin: false,
   };
+
   const [formData, setFormData] = useState(initFormData);
-  console.log("form obj", formData);
+  //console.log("form obj", formData);
+
+  async function onLoginHandler(e) {
+    e.preventDefault();
+    await axios.post('http://127.0.0.1:8300/auth/login', {
+      "username": formData.username,
+      "password": formData.password
+    })
+      .then(response => {
+        console.log('response', response)
+        if (response.status === 201) {
+          console.log('Auth State', AuthState)
+          //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
+          dispatch({ type: "SET_UID", payload: { "id": response.data.id } })
+          dispatch({ type: "SET_ACCESS_TOKEN", payload: { "token": response.data.token } })
+          history.push('/')
+        }
+        return response
+      })
+      .catch(error => {
+        if(error.response)alert(error.response.data.message)
+        console.log(error.response)
+        return error
+      });
+  }
+
+  // useEffect(() => {
+  //   console.log('Auth State in useEffect', AuthState)
+  //   if (AuthState.isLogin === true) {
+  //     history.push('/')
+  //   }
+  // }, [AuthState.isLogin])
+
+
+
   return (
-    <div>
-      Login
-      <div className="form-container border border-dark Login_backgroud">
+    <div className="login-container">
+      <div className="form-container  Login_backgroud">
         <div className="p-5">
           <header class="d-flex justify-content-center pb-2 font-header">
-            
-            <img src={Welcome} alt="Logo" className="photo_size"></img>
+
+            <img src={Nisiter} alt="Logo" className="photo_size"></img>
           </header>
-          <form>
+          <form onSubmit={onLoginHandler}>
             <div class="form-group">
-              <label for="inputEmail4">Username</label>
+              <label for="inputEmail4" className="font-login">Username</label>
               <input
-                type="email"
+                type="text"
                 class="form-control"
                 id="inputEmail4"
                 value={formData.username}
@@ -34,7 +78,7 @@ export default function Login() {
               ></input>
             </div>
             <div class="form-group ">
-              <label for="inputPassword4">Password</label>
+              <label for="inputPassword4" className="font-login">Password</label>
               <input
                 type="password"
                 class="form-control"
@@ -54,17 +98,17 @@ export default function Login() {
                   type="checkbox"
                   id="gridCheck"
                 ></input>
-                <label class="form-check-label" for="gridCheck">
+                <label class="form-check-label font-login" for="gridCheck">
                   Keep me sign in
                 </label>
               </div>
             </div>
             <div class="d-flex flex-column justify-content-center pb-5">
-              <button type="submit" class="btn btn-primary">
+              <button type="submit" class="btn btn-success">
                 Sign in
               </button>
             </div>
-            <div class="d-flex justify-content-center pt-5  font-newhere">
+            <div class="d-flex justify-content-center pt-5 font-newhere">
               {" "}
               New Here?
               <a href="/register" class="pl-2 font-signup">
