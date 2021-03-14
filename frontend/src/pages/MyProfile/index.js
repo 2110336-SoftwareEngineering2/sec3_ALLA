@@ -2,6 +2,7 @@ import "./style.scss";
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import {useHistory} from "react-router-dom";
 
 
 export default function MyProfile() {
@@ -10,6 +11,7 @@ export default function MyProfile() {
   const userState = useSelector(state => state.Auth);
   const uid = userState.id;
   const token = userState.token;
+  const history = useHistory();
 
   const initProfile = {
     firstName: "supawit",
@@ -128,7 +130,7 @@ export default function MyProfile() {
             </text>
           </div>
           <div className="d-flex justify-content-left p-2">
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary" onClick = {()=>{history.push("/editprofile")}}>
               {" "}
               Edit Profile{" "}
             </button>
