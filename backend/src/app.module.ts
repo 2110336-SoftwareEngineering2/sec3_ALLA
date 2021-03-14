@@ -13,10 +13,10 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'mysql',
-    host: 'mysql',
+    host: 'nisiter-db.cw61o2wwfwig.us-east-2.rds.amazonaws.com',
     port: 3306,
-    username: 'user',
-    password: 'password',
+    username: 'admin',
+    password: 'alla-project',
     database: 'all_a',
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
