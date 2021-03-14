@@ -12,6 +12,7 @@ import { JobModule } from './job/job.module';
 import { ApplicationRecordService } from './application-record/application-record.service';
 import { ApplicationRecordController } from './application-record/application-record.controller';
 import { ApplicationRecordModule } from './application-record/application-record.module';
+import { ApplicationRecordLogModule } from './application-record-log/application-record-log.module';
 
  
 @Module({
@@ -24,7 +25,7 @@ import { ApplicationRecordModule } from './application-record/application-record
     database: 'all_a',
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
-  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule
+  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule
 ],
   controllers: [AppController, ApplicationRecordController],
   providers: [AppService, ApplicationRecordService],
