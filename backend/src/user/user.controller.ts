@@ -20,12 +20,22 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get(':id')
-  findById(@Param('id', new ParseIntPipe()) id: number): Promise<User> {
+  findById(@Param('id', new ParseIntPipe()) id: number): {} {
     return this.service.findById(id);
   }
 
+  @Post('check-username')
+  checkUser(@Body('username') username : string) {
+    return this.service.validUsername(username);
+  }
+
+  @Post('check-email')
+  checkEmail(@Body('email') email : string){
+    return this.service.validEmail(email);
+  }
+
   @Post()
-  create(@Body() dto: Omit<User, 'id'>): Promise<User> {
+  create(@Body() dto: Omit<User, 'id'>): {} {
     return this.service.create(dto);
   }
 
@@ -37,7 +47,7 @@ export class UserController {
 
   @UseGuards(OwnGuard)
   @Delete(':id')
-  delete(@Param('id', new ParseIntPipe()) id: number): Promise<User> {
+  delete(@Param('id', new ParseIntPipe()) id: number): {} {
     return this.service.delete(id);
-  }
+  } 
 }

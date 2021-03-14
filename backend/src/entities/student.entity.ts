@@ -17,10 +17,7 @@ export class Student {
 
   @OneToOne(() => User, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
   @JoinColumn()
-  user : User;
-
-  @Column()
-  birthDate: string;
+  user : User; 
 
   @Column()
   university: string;

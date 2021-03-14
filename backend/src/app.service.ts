@@ -10,11 +10,14 @@ import { Employer } from './entities/employer.entity';
 export class AppService {
   constructor(private readonly userService: UserService) {}
   getHello(): string {
-    this.initializeDB();
+    /* this.initializeDB(); */
+    
     return 'Hello World!';
   }
 
-  async initializeDB() {
+
+  // for temporary usage
+  /* async initializeDB() {
     const pw = await hash('testt1', 10);
     await getConnection()
       .createQueryBuilder()
@@ -73,7 +76,6 @@ export class AppService {
       .into(Student)
       .values([
           {
-            sid : Number(user2.id),
             user : user2,
             birthDate: "_",
             university : "Chula",
@@ -104,5 +106,5 @@ export class AppService {
       .execute();
 
     console.log('employer added');
-  }
+  } */
 }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .form-container{
     width:50%;
     max-width: 650px;
@@ -6,3 +7,38 @@
 .nav-link{
     cursor: pointer;
 }
+||||||| merged common ancestors
+=======
+.register-form-container {
+  width: fit-content;
+  max-width: 650px;
+  margin: auto;
+  //background-color: #99753f;
+  //background-image: linear-gradient(to right,#10344e, #0644a0, #0557ac);
+  padding: 40px;
+}
+
+.register-div-container {
+  //background-color: #1f4f72;
+  background-image: linear-gradient(#1D5071, #3086CF);
+  //background-image: linear-gradient(to right,#1D5071, #3086CF, #D3D9DB);
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+input:invalid + span:after , .validity{
+  position: absolute;
+  content: "*incorrect format";
+  padding: 5px;
+  color: rgb(145, 19, 19);
+  line-height: 12px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.font-login {
+  color: white;
+}
+>>>>>>> 11330c79483976b90d5a261a6c66d2917b7145f4
