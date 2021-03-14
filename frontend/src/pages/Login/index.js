@@ -35,9 +35,9 @@ export default function Login() {
           //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
           dispatch({ type: "SET_UID", payload: { "id": response.data.id } })
           dispatch({ type: "SET_ACCESS_TOKEN", payload: { "token": response.data.token } })
+          dispatch({ type: "SET_LOGIN_TYPE", payload: { "type": AuthState.type } })
           history.push('/')
-        }
-        return response
+        return response }
       })
       .catch(error => {
         if(error.response)alert(error.response.data.message)
@@ -45,6 +45,7 @@ export default function Login() {
         return error
       });
   }
+
 
   // useEffect(() => {
   //   console.log('Auth State in useEffect', AuthState)
