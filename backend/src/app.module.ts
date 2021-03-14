@@ -30,8 +30,8 @@ import { JobcontractModule } from './jobcontract/jobcontract.module';
     synchronize: true, //auto migration when db schema change
   }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, JobcontractModule
 ],
-  controllers: [AppController, ApplicationRecordController, JobcontractController],
-  providers: [AppService, ApplicationRecordService, JobcontractService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
