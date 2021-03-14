@@ -11,8 +11,10 @@ export class AppService {
   constructor(private readonly userService: UserService) {}
   getHello(): string {
     /* this.initializeDB(); */
+    
     return 'Hello World!';
   }
+
 
   // for temporary usage
   /* async initializeDB() {
