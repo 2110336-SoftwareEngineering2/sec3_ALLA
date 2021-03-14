@@ -33,7 +33,7 @@ export class JobService {
             else if (key !== 'jid') dtoo[key] = value;
         }
         dtoo['status'] = 'OPEN';
-        const job = { ...new Job(), ...dto };
+        const job = { ...new Job(), ...dtoo };
         return this.repo.save(job);
     }
 
