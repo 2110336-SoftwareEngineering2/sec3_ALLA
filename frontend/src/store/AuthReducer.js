@@ -73,7 +73,7 @@ const AuthReducer = (state = initialState, action) => {
             localStorage.setItem('uid', action.payload.id);
             return state
         case 'SET_LOGIN_TYPE':
-            localStorage.setItem('login_type', action.payload.type);
+            localStorage.setItem('login_type', action.payload.login_type);
             return state
         case 'GET_LOGIN_INFO':
             return {

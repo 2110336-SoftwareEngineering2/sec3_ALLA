@@ -35,7 +35,7 @@ export default function Login() {
           //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
           dispatch({ type: "SET_UID", payload: { "id": response.data.id } })
           dispatch({ type: "SET_ACCESS_TOKEN", payload: { "token": response.data.token } })
-          dispatch({ type: "SET_LOGIN_TYPE", payload: { "type": AuthState.type } })
+          dispatch({ type: "SET_LOGIN_TYPE", payload: { "type": AuthState.login_type } })
           history.push('/')
         return response }
       })

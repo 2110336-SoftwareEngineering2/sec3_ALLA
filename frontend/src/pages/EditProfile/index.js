@@ -67,6 +67,7 @@ export default function Register() {
     company: "",
     fields_of_work: "",
     position: "",
+    img: "",
   };
 
   const [student, setStudent] = useState(initStudent);
@@ -74,30 +75,37 @@ export default function Register() {
   const [isStudent, setisStudent] = useState(true);
 
   async function onLoadHandler(id, token) {
-    if(id) {
-    await axios
-      .get(`http://127.0.0.1:8300/user/${id}`, {
-        headers: {
-          Authorization: "Bearer " + AuthState.token,
-        },
-      })
-      .then((response) => {
-        console.log("response", response);
-        if (AuthState.login_type == "STUDENT") {
-          setStudent({
-            ...response.data,
-            resume: initStudent.resume,
-            img: initStudent.img,
-            fields_of_work: initStudent.fields_of_work,
-          });
-        }
-
-        return response;
-      })
-      .catch((error) => {
-        console.log(error);
-        return error;
-      });
+    if (id) {
+      await axios
+        .get(`http://127.0.0.1:8300/user/${id}`, {
+          headers: {
+            Authorization: "Bearer " + AuthState.token,
+          },
+        })
+        .then((response) => {
+          console.log("response", response);
+          if (AuthState.login_type == "STUDENT") {
+            setStudent({
+              ...response.data,
+              resume: initStudent.resume,
+              img: initStudent.img,
+              fields_of_work: initStudent.fields_of_work,
+            });
+            setisStudent(true);
+          } else if (AuthState.login_type == "EMPLOYER") {
+            setEmployer({
+              ...response.data,
+              img: initEmployer.img,
+              fields_of_work: initEmployer.fields_of_work,
+            });
+            setisStudent(false);
+          }
+          return response;
+        })
+        .catch((error) => {
+          console.log(error);
+          return error;
+        });
     }
   }
   useEffect(() => {
@@ -106,230 +114,173 @@ export default function Register() {
   }, [uid]);
   return (
     <div>
-      <form className="register-form-container">
-        <div className="d-flex justify-content-left">
-          <header className=" pb-2 font-login">
-            <h1> Edit your profile </h1>
-          </header>
-        </div>
-        <div class="form-row">
-          <div class="form-group col-md-6 font-login">
-            <label for="inputPassword4">First Name</label>
-            <input
-              type="text"
-              class="form-control"
-              onChange={(e) =>
-                setStudent({ ...student, firstName: e.target.value })
-              }
-              value={student.firstName}
-              placeholder="First Name"
-            ></input>
-          </div>
-
-          <div class="form-group col-md-6 font-login">
-            <label for="inputAddress">Last Name</label>
-            <input
-              type="text"
-              class="form-control"
-              onChange={(e) =>
-                setStudent({ ...student, lastName: e.target.value })
-              }
-              value={student.lastName}
-              placeholder="Last Name"
-            ></input>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="inputAddress" className="font-login">
-            Mobile Number
-          </label>
-          <small className="font-login"> (Format: xxx-xxx-xxxx) </small>
-          <div class="input-group">
-            <div class="input-group-prepend">
-              <div class="input-group-text">Tel</div>
+      {isStudent ? (
+        <div>
+          <form className="register-form-container">
+            <div className="d-flex justify-content-left">
+              <header className=" pb-2 font-login">
+                <h1> Edit your profile </h1>
+              </header>
             </div>
-            <input
-              type="tel"
-              required
-              id="telNo"
-              name="telNo"
-              class="form"
-              placeholder="091-234-5678"
-              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-              value={student.phoneNumber}
-              onChange={(e) =>
-                setStudent({ ...student, phoneNumber: e.target.value })
-              }
-            ></input>
-            <span></span>
-          </div>
-        </div>
+            <div class="form-row">
+              <div class="form-group col-md-6 font-login">
+                <label for="inputPassword4">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  onChange={(e) =>
+                    setStudent({ ...student, firstName: e.target.value })
+                  }
+                  value={student.firstName}
+                  placeholder="First Name"
+                ></input>
+              </div>
 
-        <div class="form-group">
-          <label className="d-block" className="font-login">
-            Date of Birth
-          </label>
-          <div class="input-group">
-            {/* <div class="input-group-prepend">
+              <div class="form-group col-md-6 font-login">
+                <label for="inputAddress">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  onChange={(e) =>
+                    setStudent({ ...student, lastName: e.target.value })
+                  }
+                  value={student.lastName}
+                  placeholder="Last Name"
+                ></input>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="inputAddress" className="font-login">
+                Mobile Number
+              </label>
+              <small className="font-login"> (Format: xxx-xxx-xxxx) </small>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Tel</div>
+                </div>
+                <input
+                  type="tel"
+                  required
+                  id="telNo"
+                  name="telNo"
+                  class="form"
+                  placeholder="091-234-5678"
+                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                  value={student.phoneNumber}
+                  onChange={(e) =>
+                    setStudent({ ...student, phoneNumber: e.target.value })
+                  }
+                ></input>
+                <span></span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label className="d-block" className="font-login">
+                Date of Birth
+              </label>
+              <div class="input-group">
+                {/* <div class="input-group-prepend">
                         <i class="fa fa-calendar input-group-text" aria-hidden="true"></i>
                     </div> */}
-            <input
-              type="date"
-              onChange={(e) =>
-                setStudent({ ...student, birthDate: e.target.value })
-              }
-            ></input>
-          </div>
-        </div>
-        <div className="d-flex justify-content-left">
-          <header className=" pb-2">
-            <h2 className="font-login"> Tell us who you are? </h2>
-          </header>
-        </div>
-        <ul className="nav nav-pills mb-3">
-          <li className="list-item">
-            <a
-              className={`nav-link ${
-                isStudent ? "active font-login" : "font-login"
-              }`}
-              onClick={(e) => setisStudent(true)}
-            >
-              Student
-            </a>
-          </li>
-          <li className="list-item">
-            <a
-              className={`nav-link ${
-                !isStudent ? "active font-login" : "font-login"
-              }`}
-              onClick={(e) => setisStudent(false)}
-            >
-              Employer
-            </a>
-          </li>
-        </ul>
-        {isStudent ? (
-          <div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label className="font-login">Degree</label>
                 <input
-                  type="text"
-                  class="form-control"
-                  onChange={(e) => {
-                    setStudent({ ...student, degree: e.target.value });
-                    console.log(student);
-                  }}
-                  placeholder="Degree"
-                ></input>
-              </div>
-              <div class="form-group col-md-6">
-                <label className="font-login">University</label>
-                <input
-                  type="text"
-                  class="form-control"
+                  type="date"
+                  value={student.birthDate}
                   onChange={(e) =>
-                    setStudent({ ...student, university: e.target.value })
+                    setStudent({ ...student, birthDate: e.target.value })
                   }
-                  placeholder="University"
                 ></input>
               </div>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label className="font-login">Faculty</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  onChange={(e) => {
-                    setStudent({ ...student, faculty: e.target.value });
-                    console.log(student);
-                  }}
-                  placeholder="Faculty"
-                ></input>
+            <div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label className="font-login">Degree</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    onChange={(e) => {
+                      setStudent({ ...student, degree: e.target.value });
+                      console.log(student);
+                    }}
+                    value={student.degree}
+                    placeholder="Degree"
+                  ></input>
+                </div>
+                <div class="form-group col-md-6">
+                  <label className="font-login">University</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    onChange={(e) =>
+                      setStudent({ ...student, university: e.target.value })
+                    }
+                    value={student.university}
+                    placeholder="University"
+                  ></input>
+                </div>
               </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label className="font-login">Faculty</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    onChange={(e) => {
+                      setStudent({ ...student, faculty: e.target.value });
+                      console.log(student);
+                    }}
+                    value={student.faculty}
+                    placeholder="Faculty"
+                  ></input>
+                </div>
 
-              <div class="form-group col-md-6">
-                <label className="font-login">Department</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  onChange={(e) => {
-                    setStudent({ ...student, department: e.target.value });
-                    console.log(student);
-                  }}
-                  placeholder="Department"
-                ></input>
+                <div class="form-group col-md-6">
+                  <label className="font-login">Department</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    onChange={(e) => {
+                      setStudent({ ...student, department: e.target.value });
+                      console.log(student);
+                    }}
+                    value={student.department}
+                    placeholder="Department"
+                  ></input>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label className="font-login">Field of work</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    onChange={(e) =>
+                      setStudent({ ...student, fields_of_work: e.target.value })
+                    }
+                    value={student.department}
+                    placeholder="Field of work"
+                  ></input>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input"></input>
+                  <label class="custom-file-label" for="inputGroupFile01">
+                    Edit Resume
+                  </label>
+                </div>
               </div>
             </div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label className="font-login">Field of work</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  onChange={(e) =>
-                    setStudent({ ...student, fields_of_work: e.target.value })
-                  }
-                  placeholder="Field of work"
-                ></input>
-              </div>
-            </div>
-            <div class="input-group mb-3">
-              <div class="custom-file">
-                <input type="file" class="custom-file-input"></input>
-                <label class="custom-file-label" for="inputGroupFile01">
-                  Upload Resume
-                </label>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label className="font-login">Company</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  onChange={(e) =>
-                    setEmployer({ ...employer, company: e.target.value })
-                  }
-                  placeholder="Company"
-                ></input>
-              </div>
-              <div class="form-group col-md-6">
-                <label className="font-login">Position</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  onChange={(e) =>
-                    setEmployer({ ...employer, position: e.target.value })
-                  }
-                  placeholder="Position"
-                ></input>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label className="font-login">Field of works</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  onChange={(e) =>
-                    setEmployer({ ...employer, fields_of_work: e.target.value })
-                  }
-                  placeholder="Field of works"
-                ></input>
-              </div>
-            </div>
-          </div>
-        )}
-        <button type="submit" class="btn btn-success">
-          Create account
-        </button>
-      </form>
+            <button type="submit" class="btn btn-success">
+              Confirm Change
+            </button>
+          </form>
+        </div>
+      ) : (
+        <div> EMPLOYER </div>
+      )}
     </div>
   );
 }
