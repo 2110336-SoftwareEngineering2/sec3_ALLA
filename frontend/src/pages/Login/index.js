@@ -99,7 +99,7 @@ export default function Login() {
                   id="gridCheck"
                 ></input>
                 <label class="form-check-label font-login" for="gridCheck">
-                  Keep me sign in
+                  keep me sign in
                 </label>
               </div>
             </div>
@@ -109,11 +109,11 @@ export default function Login() {
               </button>
             </div>
             <div class="d-flex justify-content-center pt-5 font-newhere">
-              {" "}
+              
               New Here?
               <a href="/register" class="pl-2 font-signup">
-                {" "}
-                Sign Up{" "}
+                
+                Sign Up
               </a>
             </div>
 

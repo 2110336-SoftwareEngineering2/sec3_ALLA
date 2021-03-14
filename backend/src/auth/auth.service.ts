@@ -3,7 +3,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { compare } from 'bcryptjs';
 import { UserService } from 'src/user/user.service';
 import * as nodemailer from 'nodemailer';
-
+ 
 export interface loginLayout {
   username: string;
   password: string;
