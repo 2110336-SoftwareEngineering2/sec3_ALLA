@@ -13,6 +13,9 @@ import { ApplicationRecordService } from './application-record/application-recor
 import { ApplicationRecordController } from './application-record/application-record.controller';
 import { ApplicationRecordModule } from './application-record/application-record.module';
 import { ApplicationRecordLogModule } from './application-record-log/application-record-log.module';
+import { JobcontractService } from './jobcontract/jobcontract.service';
+import { JobcontractController } from './jobcontract/jobcontract.controller';
+import { JobcontractModule } from './jobcontract/jobcontract.module';
 
  
 @Module({
@@ -25,10 +28,10 @@ import { ApplicationRecordLogModule } from './application-record-log/application
     database: 'all_a',
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
-  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule
+  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, JobcontractModule
 ],
-  controllers: [AppController, ApplicationRecordController],
-  providers: [AppService, ApplicationRecordService],
+  controllers: [AppController, ApplicationRecordController, JobcontractController],
+  providers: [AppService, ApplicationRecordService, JobcontractService],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
