@@ -1,3 +1,42 @@
+<<<<<<< HEAD
+.nav-container{
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+}
+.nav-spacer{
+    padding-top:50px;
+}
+
+.font-style {
+    color: white;
+    &:hover{
+        color:rgb(113, 230, 157);
+    }
+}
+
+
+.logo-container {
+    width: 30%;
+    justify-content: flex-start;
+}
+
+.search-container {
+    width: 40%;
+    justify-content: center;
+}
+
+.profile-container {
+    width :30%;
+    justify-content: flex end;
+}
+
+.nav-style {
+    background-color: #1f4f72;
+}
+||||||| merged common ancestors
+=======
 .nav-container {
     width: 100%;
     flex-direction: row;
@@ -53,3 +92,4 @@
         }
     }
 }
+>>>>>>> 11330c79483976b90d5a261a6c66d2917b7145f4
