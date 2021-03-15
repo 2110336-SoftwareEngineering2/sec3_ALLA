@@ -137,7 +137,7 @@ export default function Register() {
     e.preventDefault();
     if (!validateForm()) {
       console.log(validateForm())
-      console.log(formData,student,employer);
+      console.log(formData, student, employer);
       alert("Please fill the missing information!");
       return;
     }
@@ -202,276 +202,282 @@ export default function Register() {
 
 
   return (
-    <div className= "register-div-container">
-    <form className="register-form-container" onSubmit={onRegisterHandler}>
-      <div className="d-flex justify-content-left">
-        <header className=" pb-2 font-login">
-          <h1> Register </h1>
-        </header>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="inputEmail4" className = "font-login">Username</label>
-          <input
-            type="text"
-            id="username"
-            class="form-control"
-            
-            onChange={(e) => {
-              setFormData({ ...formData, username: e.target.value });
-            }}
-            placeholder="Username"
-          ></input>
-          {invalidStatus.username ? <small className="validity">*this username is already taken</small> : <></>}
+    <div className="register-div-container">
+      <form className="register-form-container" onSubmit={onRegisterHandler}>
+        <div className="d-flex justify-content-left">
+          <header className=" pb-2 font-login">
+            <h1> Register </h1>
+          </header>
         </div>
-        <div class="form-group col-md-6">
-          <label className="text-nowrap font-login" for="inputPassword4">Password<small > ( {">"}=8 lowercase uppercase) </small></label>
-          
-          <div className="d-flex flex-row position-relative justify-content-end align-items-center">
-            <div className="w-100">
-              <input
-                type="password"
-                class="form-control"
-                id="myPW"
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                placeholder="Password"
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-              ></input><span></span>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail4" className="font-login">Username</label>
+            <input
+              type="text"
+              id="username"
+              class="form-control"
+
+              onChange={(e) => {
+                setFormData({ ...formData, username: e.target.value });
+              }}
+              placeholder="Username"
+            ></input>
+            {invalidStatus.username ? <small className="validity">*this username is already taken</small> : <></>}
+          </div>
+          <div class="form-group col-md-6">
+            <label className="text-nowrap font-login" for="inputPassword4">Password<small > ( {">"}=8 lowercase uppercase) </small></label>
+
+            <div className="d-flex flex-row position-relative justify-content-end align-items-center">
+              <div className="w-100">
+                <input
+                  type="password"
+                  class="form-control"
+                  id="myPW"
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
+                  }
+                  placeholder="Password"
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                ></input><span></span>
+              </div>
+              <input className="position-absolute mr-2" type="checkbox" onClick={toggle}></input>
             </div>
-            <input className="position-absolute mr-2" type="checkbox" onClick={toggle}></input>
+
+            <br></br>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6 font-login">
+            <label for="inputPassword4">First Name</label>
+            <input
+              type="text"
+              class="form-control"
+              onChange={(e) =>
+                setFormData({ ...formData, firstName: e.target.value })
+              }
+              value={formData.firstName}
+              placeholder="First Name"
+            ></input>
           </div>
 
-          <br></br>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6 font-login">
-          <label for="inputPassword4">First Name</label>
-          <input
-            type="text"
-            class="form-control"
-            onChange={(e) =>
-              setFormData({ ...formData, firstName: e.target.value })
-            }
-            value={formData.firstName}
-            placeholder="First Name"
-          ></input>
-        </div>
-
-        <div class="form-group col-md-6 font-login">
-          <label for="inputAddress">Last Name</label>
-          <input
-            type="text"
-            class="form-control"
-            onChange={(e) =>
-              setFormData({ ...formData, lastName: e.target.value })
-            }
-            placeholder="Last Name"
-          ></input>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="inputAddress" className = "font-login">Mobile Number</label>
-        <small className = "font-login"> (Format: xxx-xxx-xxxx) </small>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <div class="input-group-text">Tel</div>
+          <div class="form-group col-md-6 font-login">
+            <label for="inputAddress">Last Name</label>
+            <input
+              type="text"
+              class="form-control"
+              onChange={(e) =>
+                setFormData({ ...formData, lastName: e.target.value })
+              }
+              placeholder="Last Name"
+            ></input>
           </div>
-          <input
-            type="tel"
-            required
-            id="telNo"
-            name="telNo"
-            class="form"
-            placeholder="091-234-5678"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-            value={formData.phoneNumber}
-            onChange={(e) =>
-              setFormData({ ...formData, phoneNumber: e.target.value })
-            }
-          ></input>
-          <span></span>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="inputAddress" className = "font-login">E-mail</label>
-        <input
-          type="email"
-          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-          class="form-control"
-          placeholder="example@email.com"
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        ></input>
-        {invalidStatus.email ? <small className="validity">*this email is already taken</small> : <></>}
-        <span></span><br></br>
-      </div>
-      <div class="form-group">
-        <label className="d-block" className = "font-login">Date of Birth</label>
-        <div class="input-group">
-          {/* <div class="input-group-prepend">
+
+        <div class="form-group">
+          <label for="inputAddress" className="font-login">Mobile Number</label>
+          <small className="font-login"> (Format: xxx-xxx-xxxx) </small>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">Tel</div>
+            </div>
+            <input
+              type="tel"
+              required
+              id="telNo"
+              name="telNo"
+              class="form"
+              placeholder="091-234-5678"
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+              value={formData.phoneNumber}
+              onChange={(e) =>
+                setFormData({ ...formData, phoneNumber: e.target.value })
+              }
+            ></input>
+            <span></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputAddress" className="font-login">E-mail</label>
+          <input
+            type="email"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+            class="form-control"
+            placeholder="example@email.com"
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          ></input>
+          {invalidStatus.email ? <small className="validity">*this email is already taken</small> : <></>}
+          <span></span><br></br>
+        </div>
+        <div class="form-group">
+          <label className="d-block" className="font-login">Date of Birth</label>
+          <div class="input-group">
+            {/* <div class="input-group-prepend">
                         <i class="fa fa-calendar input-group-text" aria-hidden="true"></i>
                     </div> */}
-          <input
-            type="date"
-            onChange={(e) =>
-              setFormData({ ...formData, birthDate: e.target.value })
-            }
-          ></input>
-        </div>
-      </div>
-      <div className="d-flex justify-content-left">
-        <header className=" pb-2">
-          <h2 className = "font-login"> Tell us who you are? </h2>
-        </header>
-      </div>
-      <ul className="nav nav-pills mb-3">
-        <li className="list-item">
-          <a
-            className={`nav-link ${isStudent ? "active font-login" : "font-login"}`}
-            onClick={(e) => setisStudent(true)}
-          >
-            Student
-          </a>
-        </li>
-        <li className="list-item">
-          <a 
-            className={`nav-link ${!isStudent ? "active font-login" : "font-login"}`}
-            onClick={(e) => setisStudent(false)}
-          >
-            Employer
-          </a>
-        </li>
-      </ul>
-      {isStudent ? (
-        <div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label className = "font-login">Degree</label>
-              <input
-                type="text"
-                class="form-control"
-                onChange={(e) =>{
-                
-                  setStudent({ ...student, degree: e.target.value });
-                  console.log(student);
-                }
-                }
-                placeholder="Degree"
-              ></input>
-            </div>
-            <div class="form-group col-md-6">
-              <label className = "font-login">University</label>
-              <input
-                type="text"
-                class="form-control"
-                onChange={(e) =>
-                  setStudent({ ...student, university: e.target.value })
-                }
-                placeholder="University"
-              ></input>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label className = "font-login">Faculty</label>
-              <input
-                type="text"
-                class="form-control"
-                onChange={(e) =>{
-                  
-                  setStudent({ ...student, faculty: e.target.value }
-                    );
-                    console.log(student);
-                  }
-                }
-                placeholder="Faculty"
-              ></input>
-            </div>
-
-            <div class="form-group col-md-6">
-              <label className = "font-login">Department</label>
-              <input
-                type="text"
-                class="form-control"
-                onChange={(e) =>{
-                  
-                  setStudent({ ...student, department: e.target.value });
-                  console.log(student);}
-                }
-                placeholder="Department"
-              ></input>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label className = "font-login">Field of work</label>
-              <input
-                type="text"
-                class="form-control"
-                onChange={(e) =>
-                  setStudent({ ...student, fields_of_work: e.target.value })
-                }
-                placeholder="Field of work"
-              ></input>
-            </div>
-          </div>
-          <div class="input-group mb-3">
-            <div class="custom-file">
-              <input type="file" class="custom-file-input"></input>
-              <label class="custom-file-label" for="inputGroupFile01">
-                Upload Resume
-              </label>
-            </div>
+            <input
+              type="date"
+              onChange={(e) =>
+                setFormData({ ...formData, birthDate: e.target.value })
+              }
+            ></input>
           </div>
         </div>
-      ) : (
+        <div className="d-flex justify-content-left">
+          <header className=" pb-2">
+            <h2 className="font-login"> Tell us who you are? </h2>
+          </header>
+        </div>
+        <ul className="nav nav-pills mb-3">
+          <li className="list-item">
+            <a
+              className={`nav-link ${isStudent ? "active font-login" : "font-login"}`}
+              onClick={(e) => setisStudent(true)}
+            >
+              Student
+          </a>
+          </li>
+          <li className="list-item">
+            <a
+              className={`nav-link ${!isStudent ? "active font-login" : "font-login"}`}
+              onClick={(e) => setisStudent(false)}
+            >
+              Employer
+          </a>
+          </li>
+        </ul>
+        {isStudent ? (
           <div>
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label className = "font-login">Company</label>
+                <label className="font-login">Degree</label>
                 <input
                   type="text"
                   class="form-control"
-                  onChange={(e) =>
-                    setEmployer({ ...employer, company: e.target.value })
+                  value={student.degree}
+                  onChange={(e) => {
+
+                    setStudent({ ...student, degree: e.target.value });
+                    console.log(student);
                   }
-                  placeholder="Company"
+                  }
+                  placeholder="Degree"
                 ></input>
               </div>
               <div class="form-group col-md-6">
-                <label className = "font-login">Position</label>
+                <label className="font-login">University</label>
                 <input
                   type="text"
                   class="form-control"
+                  value={student.university}
                   onChange={(e) =>
-                    setEmployer({ ...employer, position: e.target.value })
+                    setStudent({ ...student, university: e.target.value })
                   }
-                  placeholder="Position"
+                  placeholder="University"
                 ></input>
               </div>
             </div>
             <div class="form-row">
-              <div class="form-group">
-                <label className = "font-login">Field of works</label>
+              <div class="form-group col-md-6">
+                <label className="font-login">Faculty</label>
                 <input
                   type="text"
                   class="form-control"
-                  onChange={(e) =>
-                    setEmployer({ ...employer, fields_of_work: e.target.value })
+                  value={student.faculty}
+                  onChange={(e) => {
+                    setStudent({ ...student, faculty: e.target.value }
+                    );
                   }
-                  placeholder="Field of works"
+                  }
+                  placeholder="Faculty"
+                ></input>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label className="font-login">Department</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  value={student.department}
+                  onChange={(e) => {
+
+                    setStudent({ ...student, department: e.target.value });
+                  }
+                  }
+                  placeholder="Department"
                 ></input>
               </div>
             </div>
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label className="font-login">Field of work</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  value={student.fields_of_work}
+                  onChange={(e) =>
+                    setStudent({ ...student, fields_of_work: e.target.value })
+                  }
+                  placeholder="Field of work"
+                ></input>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <div class="custom-file">
+                <input type="file" class="custom-file-input"></input>
+                <label class="custom-file-label" for="inputGroupFile01">
+                  Upload Resume
+              </label>
+              </div>
+            </div>
           </div>
-        )}
-      <button type="submit" class="btn btn-success">
-        Create account
+        ) : (
+            <div>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label className="font-login">Company</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value={employer.company}
+                    onChange={(e) =>
+                      setEmployer({ ...employer, company: e.target.value })
+                    }
+                    placeholder="Company"
+                  ></input>
+                </div>
+                <div class="form-group col-md-6">
+                  <label className="font-login">Position</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value={employer.position}
+                    onChange={(e) =>
+                      setEmployer({ ...employer, position: e.target.value })
+                    }
+                    placeholder="Position"
+                  ></input>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label className="font-login">Field of works</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value={employer.fields_of_work}
+                    onChange={(e) =>
+                      setEmployer({ ...employer, fields_of_work: e.target.value })
+                    }
+                    placeholder="Field of works"
+                  ></input>
+                </div>
+              </div>
+            </div>
+          )}
+        <button type="submit" class="btn btn-success">
+          Create account
       </button>
-    </form>
+      </form>
     </div>
   );
 }
