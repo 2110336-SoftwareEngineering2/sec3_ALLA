@@ -22,7 +22,7 @@ const initialState = {
     "token": "",
     "username": "test",
     "password": "test",
-    "type": "STUDENT",
+    "type": "",
     "email": "test@example.com",
     "firstName": "fname",
     "lastName": "lname",
@@ -36,7 +36,8 @@ const initialState = {
     //Employer
     "company": "usercomp",
     "position": "frontend",
-    "fields_of_work": "work"
+    "fields_of_work": "work",
+    "login_type" : ""
 }
 
 
@@ -71,6 +72,16 @@ const AuthReducer = (state = initialState, action) => {
         case 'SET_UID':
             localStorage.setItem('uid', action.payload.id);
             return state
+        case 'SET_LOGIN_TYPE':
+            localStorage.setItem('login_type', action.payload.type);
+            return state
+        case 'GET_LOGIN_INFO':
+            return {
+                ...state,
+                login_type: localStorage.getItem('login_type'),
+                id: localStorage.getItem('uid'),
+                token: localStorage.getItem('accessToken'),
+            }
         default: return state
     }
 }

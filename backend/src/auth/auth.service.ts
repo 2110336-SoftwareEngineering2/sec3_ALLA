@@ -3,7 +3,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { compare } from 'bcryptjs';
 import { UserService } from 'src/user/user.service';
 import * as nodemailer from 'nodemailer';
-
+ 
 export interface loginLayout {
   username: string;
   password: string;
@@ -29,8 +29,9 @@ export class AuthService {
       throw new UnauthorizedException('User is not verified')
     }
     const token = this.jwtService.sign({ uid: user.id });
-    return {
+    return { 
       id: user.id,
+      type : user.type,
       token: token,
     };
   }

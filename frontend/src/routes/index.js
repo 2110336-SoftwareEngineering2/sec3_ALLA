@@ -8,6 +8,8 @@ import Login from '../pages/Login';
 import MyProfile from '../pages/MyProfile';
 import Register from '../pages/Register';
 import Store from '../store'
+import EditProfile from '../pages/EditProfile'
+
 const Routes = () => {
     const location = useLocation();
     return (
@@ -27,6 +29,12 @@ const Routes = () => {
                     <RequireAuth
                         {...props}
                         Component={MyProfile}
+                    />
+                )} />
+                <Route exact path="/editprofile" component={(props) => (
+                    <RequireAuth
+                        {...props}
+                        Component={EditProfile}
                     />
                 )} />
                 <Route path="*" ><Redirect to="/login" /></Route>

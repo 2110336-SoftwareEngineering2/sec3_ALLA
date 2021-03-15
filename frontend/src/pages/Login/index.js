@@ -32,12 +32,13 @@ export default function Login() {
         console.log('response', response)
         if (response.status === 201) {
           console.log('Auth State', AuthState)
+          console.log('response data login',response.data)
           //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
           dispatch({ type: "SET_UID", payload: { "id": response.data.id } })
           dispatch({ type: "SET_ACCESS_TOKEN", payload: { "token": response.data.token } })
+          dispatch({ type: "SET_LOGIN_TYPE", payload: { "type": response.data.type } })
           history.push('/')
-        }
-        return response
+        return response }
       })
       .catch(error => {
         if(error.response)alert(error.response.data.message)
@@ -45,16 +46,6 @@ export default function Login() {
         return error
       });
   }
-
-  // useEffect(() => {
-  //   console.log('Auth State in useEffect', AuthState)
-  //   if (AuthState.isLogin === true) {
-  //     history.push('/')
-  //   }
-  // }, [AuthState.isLogin])
-
-
-
   return (
     <div className="login-container">
       <div className="form-container  Login_backgroud">
@@ -99,7 +90,7 @@ export default function Login() {
                   id="gridCheck"
                 ></input>
                 <label class="form-check-label font-login" for="gridCheck">
-                  Keep me sign in
+                  keep me sign in
                 </label>
               </div>
             </div>
@@ -109,11 +100,11 @@ export default function Login() {
               </button>
             </div>
             <div class="d-flex justify-content-center pt-5 font-newhere">
-              {" "}
+              
               New Here?
               <a href="/register" class="pl-2 font-signup">
-                {" "}
-                Sign Up{" "}
+                
+                Sign Up
               </a>
             </div>
 
