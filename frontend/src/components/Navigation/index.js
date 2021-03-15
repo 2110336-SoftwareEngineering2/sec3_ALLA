@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
+import {useDispatch } from 'react-redux';
+import {useHistory} from 'react-router-dom';
 import "./style.scss";
+
 import inbox_image from "../../assets/nav_photo/inbox.png";
 import profile_image from "../../assets/nav_photo/profile.png";
 import nisiter_logo from "../../assets/nav_photo/N.png";
@@ -9,9 +12,16 @@ import arrow from "../../assets/nav_photo/arrow.png";
 
 export default function Navigation() {
   //return <div><div className="nav-container">NAV</div><div className="nav-spacer"></div></div>;
-
+  
   const [dropDown, setDropdown] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const logoutHandler = () => {dispatch({ type: "LOGOUT"})}
 
+  const [searchInput, setSearchInput] = useState('')
+  const searchSubmitHandler=()=>{
+    history.push('/?q='+searchInput)
+  }
   return (
     <nav class="navbar navbar-dark  justify-content-space-between position-sticky nav-style">
       <div className="d-flex justify-content-between align-items-center nav-container ">
@@ -23,16 +33,22 @@ export default function Navigation() {
             </span>
           </a>
         </div>
-        <div className="d-flex justify-content-around ">
+        <div>
+          <form className="d-flex  justify-content-around " onSubmit={searchSubmitHandler}>
           <input
             class="form-control"
+            onChange={(e) => {
+              setSearchInput(e.target.value );
+            }}
             type="search"
             placeholder="Search"
             aria-label="Search"
+            value={searchInput}
           ></input>
           <button class="btn btn-success" type="submit">
             Search
           </button>
+          </form>
         </div>
         <div className="d-flex ">
           <button class="btn btn-default">
@@ -60,7 +76,7 @@ export default function Navigation() {
                 >
                   <ul className='menu-list d-flex flex-column'>
                     <li><a href="/myprofile" >my profile</a></li>
-                    <li><a href="/login" >log out</a></li>
+                    <li><a href="/login" onClick={logoutHandler}>log out</a></li>
                   </ul>
                 </div>
               ) : (

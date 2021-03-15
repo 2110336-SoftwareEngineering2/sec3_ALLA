@@ -32,6 +32,7 @@ export default function Login() {
         console.log('response', response)
         if (response.status === 201) {
           console.log('Auth State', AuthState)
+          console.log('response data login',response.data)
           //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
           dispatch({ type: "SET_UID", payload: { "id": response.data.id } })
           dispatch({ type: "SET_ACCESS_TOKEN", payload: { "token": response.data.token } })
@@ -45,16 +46,6 @@ export default function Login() {
         return error
       });
   }
-
-  // useEffect(() => {
-  //   console.log('Auth State in useEffect', AuthState)
-  //   if (AuthState.isLogin === true) {
-  //     history.push('/')
-  //   }
-  // }, [AuthState.isLogin])
-
-
-
   return (
     <div className="login-container">
       <div className="form-container  Login_backgroud">
