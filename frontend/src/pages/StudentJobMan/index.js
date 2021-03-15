@@ -7,15 +7,65 @@ import "./style.scss";
 
 export default function StudentJobMan() {
   const [currentTab, setCurrentTab] = useState("Pending");
+  const history = useHistory();
+  const location = useLocation();
+    const getParamObj = () => {
+
+        const l = location.search.slice(1).split("&")
+        var retObj = {}
+        l.forEach((i, idx) => {
+            const a = i.split('=')
+            retObj[a[0]] = decodeURI(a[1])
+        })
+        return retObj
+    }
+
+  const JobState = useSelector((state) => state.Job);
+  
+  //ยังไม่ได้ ้handle การดึงข้อมูลใหม่หลังเปลี่ยน tab
+
   const display = () => {
     switch(currentTab) {
 
       case "Pending":   
-        return <div> Pending </div>;
+        return 
+        <div className="list-container d-flex justify-content-center">
+            <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
+                {JobState.jobList ? 
+                    <div className="d-flex justify-content-center ">
+                        <JobPane jobList={JobState.jobList} />
+                    </div> 
+                :
+                    <div>Nothing to show here..</div>
+                }
+            </div>
+        </div>;
       case "Result":   
-        return <div> Result </div>;
-      case "On-Progress": 
-        return <div> On-Progress </div>;
+        return 
+        <div className="list-container d-flex justify-content-center">
+            <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
+                {JobState.jobList ? 
+                    <div className="d-flex justify-content-center ">
+                        <JobPane jobList={JobState.jobList} />
+                    </div> 
+                :
+                    <div>Nothing to show here..</div>
+                }
+            </div>
+        </div>;
+      case "On-progress": 
+        return 
+        <div className="list-container d-flex justify-content-center">
+            <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
+                {JobState.jobList ? 
+                    <div className="d-flex justify-content-center ">
+                        <JobPane jobList={JobState.jobList} />
+                    </div> 
+                :
+                    <div>Nothing to show here..</div>
+                }
+            </div>
+        </div>;
       default:      
         return <h1> Error </h1>
         
@@ -23,11 +73,13 @@ export default function StudentJobMan() {
   }
   return (
     <div>
+
       <div className="d-flex justify-content-left">
         <header className=" pb-2">
           <h2 className="font-login"> Job Management </h2>
         </header>
       </div>
+
       <ul className="nav nav-pills mb-3">
         <li className="list-item">
           <a
@@ -60,6 +112,7 @@ export default function StudentJobMan() {
           </a>
         </li>
       </ul>
+
       <div> {display()} </div>
     </div>
   );

@@ -9,11 +9,22 @@ export default function JobCard(props) {
         history.push(`/job/${jobObj.Jid}`)
     }
     //Golf
-    isinManagepage = false; //how?
+    isAccepted = true; //how?
 
-    function deleteApplication(){
-        //call delete api function
+    function deleteCard(){
+        //??
     }
+    function acceptOffer(){
+        //call accept offer api
+        deleteCard();
+    }
+    function rejectOffer(){
+        //call accept offer api
+        deleteCard();
+    }
+
+
+
     
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
@@ -29,20 +40,35 @@ export default function JobCard(props) {
                 <div> {jobObj.workingHours}</div>
                 <div> {jobObj.salaryMin}-{jobObj.salaryMax}</div>
             </div>
-            
-            <div>{jobObj.positionLeft}</div>
 
-            {isinManagepage?
+            {isAccepted?
             <div>
+                <div>Congratulations</div>
                 <button
                     onClick={() => {
-                      deleteApplication()
+                      acceptOffer()
                     }}
                   >
-                    Cancel
+                    Accept
+                </button>
+                <button
+                    onClick={() => {
+                      rejectOffer()
+                    }}
+                  >
+                    reject
                 </button>
             </div>:
-            <></>
+            <div>
+            <div>Reject</div>
+            <button
+                onClick={() => {
+                  deleteCard()
+                }}
+              >
+                OK
+            </button>
+        </div>
             }
             
         </div>

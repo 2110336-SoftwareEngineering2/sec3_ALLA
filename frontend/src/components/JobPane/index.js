@@ -3,6 +3,9 @@ import JobCard from '../JobCard';
 import './style.scss'
 const JobPane = (props) => {
     let jobArray = [];
+
+    //ยังไม่ครอบคลุมกรณีของทุก card
+
     props.jobList.map((job, idx) => {
         jobArray.push(
             <div className=" mb-3" key={idx}>
