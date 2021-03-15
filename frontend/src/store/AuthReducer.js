@@ -37,7 +37,7 @@ const initialState = {
     "company": "usercomp",
     "position": "frontend",
     "fields_of_work": "work",
-    "login_type" : ""
+    "login_type": ""
 }
 
 
@@ -82,6 +82,10 @@ const AuthReducer = (state = initialState, action) => {
                 id: localStorage.getItem('uid'),
                 token: localStorage.getItem('accessToken'),
             }
+        case 'LOGOUT':
+            localStorage.removeItem('uid');
+            localStorage.removeItem('accessToken');
+            return state
         default: return state
     }
 }
