@@ -1,11 +1,15 @@
 import React from 'react'
 import './style.scss'
+import {useHistory} from 'react-router-dom'
 export default function JobCard(props) {
+    const history= useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
-
+    const cardClickedHandler=()=>{
+        history.push(`/job/${jobObj.Jid}`)
+    }
     return (
-        <div className="card-container d-flex p-2 justify-content-between">
+        <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
             <div><img src={jobObj.companyPic_url} className="rounded-circle job-card-pic p-2"></img></div>
             <div className="job-text-col ">
                 <div>{jobObj.jobTitle}</div>

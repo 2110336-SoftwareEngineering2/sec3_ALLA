@@ -1,6 +1,6 @@
 import React from 'react';
 import JobCard from '../JobCard';
-
+import './style.scss'
 const JobPane = (props) => {
     let jobArray = [];
     props.jobList.map((job, idx) => {
@@ -14,7 +14,7 @@ const JobPane = (props) => {
     })
 
     return (
-        <div className="jobpane-container bg-primary m-2 col-sm-10 col-md-8 col-lg-8">
+        <div className="jobpane-container ">
             {jobArray}
         </div>
     )
