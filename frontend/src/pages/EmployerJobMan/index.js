@@ -9,7 +9,7 @@ export default function EmployerJobMan() {
   const history = useHistory();
   const display = () => {
     switch (currentTab) {
-      case "Available":
+      case "Available": 
         return <div> Available </div>;
       case "Request":
         return <div> Request </div>;
