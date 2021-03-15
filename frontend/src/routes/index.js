@@ -9,6 +9,7 @@ import MyProfile from '../pages/MyProfile';
 import Register from '../pages/Register';
 import Store from '../store'
 import EditProfile from '../pages/EditProfile'
+import ManageJob from '../pages/ManageJob'
 
 const Routes = () => {
     const location = useLocation();
@@ -37,7 +38,14 @@ const Routes = () => {
                         Component={EditProfile}
                     />
                 )} />
+                <Route exact path="/managejob" component={(props) => (
+                    <RequireAuth
+                        {...props}
+                        Component={ManageJob}
+                    />
+                )} />
                 <Route path="*" ><Redirect to="/login" /></Route>
+                
             </Switch>
         </Provider>
     )

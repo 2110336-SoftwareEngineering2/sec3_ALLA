@@ -60,6 +60,7 @@ export default function Navigation() {
                 >
                   <ul className='menu-list d-flex flex-column'>
                     <li><a href="/myprofile" >my profile</a></li>
+                    <li><a href="/managejob" >job management</a></li>
                     <li><a href="/login" >log out</a></li>
                   </ul>
                 </div>
