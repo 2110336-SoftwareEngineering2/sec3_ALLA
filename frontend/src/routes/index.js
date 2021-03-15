@@ -10,6 +10,7 @@ import Register from '../pages/Register';
 import Store from '../store'
 import EditProfile from '../pages/EditProfile'
 import JobDetail from '../pages/JobDetail';
+import ManageJob from '../pages/ManageJob'
 
 const Routes = () => {
     const location = useLocation();
@@ -41,10 +42,16 @@ const Routes = () => {
                 <Route exact path="/job/:Jid" component={(props) => (
                     <RequireAuth
                         {...props}
-                        Component={JobDetail}
+                        Component={JobDetail} />
+                )} />
+                <Route exact path="/managejob" component={(props) => (
+                    <RequireAuth
+                        {...props}
+                        Component={ManageJob}
                     />
                 )} />
                 <Route path="*" ><Redirect to="/login" /></Route>
+
             </Switch>
         </Provider>
     )
