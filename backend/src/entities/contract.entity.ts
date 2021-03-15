@@ -3,10 +3,14 @@ import { Employer } from "./employer.entity";
 import { Job } from "./job.entity";
 import { Student } from "./student.entity";
 
-type contractStatus = 'DOING' | 'DONE' | 'RESIGN';
+export enum ContractStatus {
+    DOING = "DOING",
+    DONE = "DONE",
+    RESIGN = "RESIGN"
+}
 
 @Entity()
-export class JobContract {
+export class Contract {
     
     @PrimaryGeneratedColumn()
     cid: number;
@@ -23,7 +27,7 @@ export class JobContract {
     @JoinColumn()
     job : Job;
 
-    @Column()
-    status : contractStatus;
+    @Column('enum', {enum : ContractStatus, default : ContractStatus.DOING})
+    status : ContractStatus;
     
 }

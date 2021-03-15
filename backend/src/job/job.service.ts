@@ -31,11 +31,6 @@ const requiredJobAttr = [
   //'createdDate',
 ];
 
-const queryField = [
-  'jobTitle',
-  'companyName',
-]
-
 @Injectable()
 export class JobService {
   constructor(
@@ -51,8 +46,10 @@ export class JobService {
       else if (key !== 'jid') dtoo[key] = value;
     }
     const user =  await this.userService.findById(dto.id);
+    console.log(dto.id);
     if (!user) throw new NotFoundException('User not found');
-    if (user.type === UserType.EMPLOYER){
+    console.log(user);
+    if (user.type == UserType.EMPLOYER){
         dtoo['createdDate'] = new Date();
         dtoo['employer'] = user;
         const job = { ...new Job(), ...dtoo };
