@@ -9,12 +9,8 @@ import { EmployerModule } from './employer/employer.module';
 import { StudentModule } from './student/student.module';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { JobModule } from './job/job.module';
-import { ApplicationRecordService } from './application-record/application-record.service';
-import { ApplicationRecordController } from './application-record/application-record.controller';
 import { ApplicationRecordModule } from './application-record/application-record.module';
 import { ApplicationRecordLogModule } from './application-record-log/application-record-log.module';
-import { JobcontractService } from './jobcontract/jobcontract.service';
-import { JobcontractController } from './jobcontract/jobcontract.controller';
 import { JobcontractModule } from './jobcontract/jobcontract.module';
 
  

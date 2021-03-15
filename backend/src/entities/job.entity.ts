@@ -52,4 +52,7 @@ export class Job {
     @Column()
     status : JobStatus;
 
+    @Column()
+    createdDate : Date;
+
 }
