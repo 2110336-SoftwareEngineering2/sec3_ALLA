@@ -7,34 +7,40 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmployerService } from 'src/employer/employer.service';
 import { Job } from 'src/entities/job.entity';
-import { UserType } from 'src/entities/user.entity';
+import { User, UserType } from 'src/entities/user.entity';
 import { UserService } from 'src/user/user.service';
-import { Repository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 
 const requiredJobAttr = [
-  'jid',
-  'companypic_url',
+  'id',
+  'companyPicUrl',
   'companyName',
-  'jobtitle',
+  'jobTitle',
   'location',
   'minimumEducation',
-  'workinghours',
-  'salarymin',
-  'salarymax',
+  'workingHours',
+  'salaryMin',
+  'salaryMax',
   'positionLeft',
   'description',
   'responsibility',
   'requirement',
   'status',
+  'uid',
+  'tagList'
   //'createdDate',
 ];
+
+const queryField = [
+  'jobTitle',
+  'companyName',
+]
 
 @Injectable()
 export class JobService {
   constructor(
     @InjectRepository(Job) private readonly repo: Repository<Job>,
     private readonly userService : UserService,
-    private readonly employerService : EmployerService,
   ) {}
 
   async create(dto: any): Promise<Job> {
@@ -47,10 +53,8 @@ export class JobService {
     const user =  await this.userService.findById(dto.id);
     if (!user) throw new NotFoundException('User not found');
     if (user.type === UserType.EMPLOYER){
-        const employer = await this.employerService.findByUser(user);
-        dtoo['status'] = 'OPEN';
         dtoo['createdDate'] = new Date();
-        dtoo['employer'] = employer;
+        dtoo['employer'] = user;
         const job = { ...new Job(), ...dtoo };
         return this.repo.save(job);
     }
@@ -61,6 +65,18 @@ export class JobService {
     const job = await this.repo.findOne(jid);
     if (job === undefined) throw new NotFoundException('Job ID not found');
     else return job;
+  }
+
+  async viewJob(jid: number) {
+    const job = await this.repo.findOne(jid, {relations: ['employer']});
+    //console.log(job);
+    if (!job) throw new NotFoundException('Job ID not found');
+    return job;
+  }
+
+  async findJobOwner(jid: number) {
+    const job = await this.viewJob(jid);
+    return job.employer.id;
   }
 
   async update(jid: number, dto: Partial<Omit<Job, 'jid'>>): Promise<Job> {
@@ -87,5 +103,34 @@ export class JobService {
     if (!job.positionLeft) throw new ConflictException('Job is fulled')
     job.positionLeft = job.positionLeft - 1;
     return this.repo.save(job);
+  }
+
+  async searchDB(queryStr : string, tagList : string[], time : string, salaryMin : number, salaryMax : number) {
+    const res = await getRepository(Job)
+      .createQueryBuilder("job")
+      .where(qb => {
+        const subQuery = qb.subQuery()
+          .select('job2.jid')
+          .from(Job, 'job2')
+          .where('job2.salaryMin >= :salaryMin \
+                  AND job2.salaryMax <= :salaryMax \
+                  AND job2.createdDate >= :time')
+          .getQuery();
+
+        return 'job.jid IN '+ subQuery + ' and ( job.jobTitle LIKE :search OR job.companyName LIKE :search )'
+      })
+      .setParameter('salaryMin', salaryMin)
+      .setParameter('salaryMax', salaryMax)
+      .setParameter('time', time)
+      .setParameter('search', `%${queryStr}%`)
+      .setParameter('search', `%${queryStr}%`)
+      .getMany();
+  
+  let ret = []
+  for (var i=0; i < res.length; i++) {
+    const jobObj = res[i];
+    if (jobObj.tagList.filter(value => tagList.includes(value)).length) ret.push(jobObj);
+  }
+  return tagList.length == 0 ? res : ret;
   }
 }

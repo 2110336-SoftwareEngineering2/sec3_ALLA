@@ -1,7 +1,12 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Employer } from "./employer.entity";
+import { User } from "./user.entity";
 
-type JobStatus = 'OPEN' | 'CLOSE'
+
+export enum JobStatusType{
+    OPEN = 'OPEN',
+    CLOSE = 'CLOSE'
+}
 
 @Entity()
 export class Job {
@@ -9,14 +14,14 @@ export class Job {
     @PrimaryGeneratedColumn()
     jid: number;
 
-    @Column()
-    companypic_url : string;
+    @Column({default : 'None'})
+    companyPicUrl : string;
 
     @Column()
     companyName : string;
 
     @Column()
-    jobtitle : string;
+    jobTitle : string;
 
     @Column()
     location : string;
@@ -25,13 +30,13 @@ export class Job {
     minimumEducation : string;
 
     @Column()
-    workinghours : string;
+    workingHours : string;
 
     @Column()
-    salarymin : number;
+    salaryMin : number;
 
     @Column()
-    salarymax : number;
+    salaryMax : number;
 
     @Column()
     positionLeft : number;
@@ -45,14 +50,17 @@ export class Job {
     @Column()
     requirement : string;
 
-    @ManyToOne(() => Employer, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
+    @ManyToOne(() => User, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
     @JoinColumn()
-    employer : Employer;
+    employer : User;
 
-    @Column()
-    status : JobStatus;
-
-    @Column()
+    @Column('enum', {enum: JobStatusType})
+    status : JobStatusType;
+ 
+    @Column({type : "date"})
     createdDate : Date;
 
-}
+    @Column('simple-array')
+    tagList: string[];
+
+} 

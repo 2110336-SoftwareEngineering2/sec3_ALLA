@@ -79,6 +79,7 @@ export class UserService {
     dto.password = await hash(dto.password, 10);
 
     for (const [key, value] of Object.entries(dto)) {
+      console.log(key);
       if (userprops.includes(key)) user_dto[key] = value;
       else if (user_type === UserType.STUDENT && studentprops.includes(key))
         sub_dto[key] = value;
