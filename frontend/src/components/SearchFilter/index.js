@@ -1,41 +1,47 @@
 import React, { useState } from 'react'
-
-
-export default function SearchFilter() {
+import { useHistory, useLocation } from 'react-router-dom'
+import './style.scss'
+export default function SearchFilter(props) {// receive props from parent sending search querry
+    const history = useHistory();
+    console.log(props.param)
     const initialFilterParam = {
-        jobType: '',
-        timeFilter: '',
-        salaryMin: 0,
-        salaryMax: 0,
+        jobTag: props.param.tag,
+        timeFilter: props.param.t,
+        salaryMin: props.param.smin,
+        salaryMax: props.param.smax,
+        location:props.param.l
     }
     const [filterParam, setfilterParam] = useState(initialFilterParam)
     const initialFilterOptions = {
-        jobType: ['All job', 'a', 'b', 'c', 'd'],
-        timeFilter: ['Posted Anytime', 'last 24hr', 'last week', 'last two week', 'last month'],
-        salaryMin: 0,
-        salaryMax: 0,
+        jobTag: ['All job', 'engineering', 'marketing', 'accounting', 'business development'],
+        timeFilter: ['Posted Anytime', 'last 24hrs', 'last week', 'last two week', 'last month'],
+        salaryMin: '',
+        salaryMax: '',
     }
     const [filterOptions, setFilterOptions] = useState(initialFilterOptions)
     console.log(filterParam)
-    const filterSubmitHandler = () =>{
-        
+    const filterSubmitHandler = (e) => {//get search querry and push to home with search and filter querry(ต้องเรียก controller รวม)
+        e.preventDefault();
+        history.push(`/?q=${'searchQuery'}&tag=${filterParam.jobTag}&t=${filterParam.timeFilter}&smin=${filterParam.salaryMin}&smax=${filterParam.salaryMax}`)
+
     }
     return (
-        <div>
-            <form onSubmit={filterSubmitHandler}>
-                <div class="select-dropdown">
+        <div className="filter-container">
+            <form className="filter-form d-flex justify-content-around " onSubmit={filterSubmitHandler}>
+
+                <div className="filter-input select-dropdown">
                     <select
-                        value={filterParam.jobType}
-                        onChange={(e) => { setfilterParam({ ...filterParam, jobType: e.target.value }) }}
+                        value={filterParam.jobTag}
+                        onChange={(e) => { setfilterParam({ ...filterParam, jobTag: e.target.value }) }}
                     >
                         <option selected disabled>Choose an option</option>
-                        {filterOptions.jobType.map((job, index) => (
+                        {filterOptions.jobTag.map((job, index) => (
                             <option selected>{job}</option>
                         ))}
 
                     </select>
                 </div>
-                <div class="select-dropdown">
+                <div className="filter-input select-dropdown ">
                     <select
                         value={filterParam.timeFilter}
                         onChange={(e) => { setfilterParam({ ...filterParam, timeFilter: e.target.value }) }}
@@ -47,6 +53,29 @@ export default function SearchFilter() {
 
                     </select>
                 </div>
+                <input
+                    className="filter-input form-control"
+                    onChange={(e) => {
+                        setfilterParam({ ...filterParam, salaryMin: e.target.value });
+                    }}
+                    type="number"
+                    placeholder="min salary"
+                    aria-label="min salary"
+                    value={filterParam.salaryMin}
+                ></input>
+                <input
+                    className="filter-input form-control"
+                    onChange={(e) => {
+                        setfilterParam({ ...filterParam, salaryMax: e.target.value });
+                    }}
+                    type="number"
+                    placeholder="max salary"
+                    aria-label="min salary"
+                    value={filterParam.salaryMax}
+                ></input>
+                <button className="btn btn-primary" type="submit">
+                    Filter
+          </button>
             </form>
 
         </div>
