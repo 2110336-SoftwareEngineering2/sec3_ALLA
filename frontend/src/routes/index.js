@@ -9,7 +9,11 @@ import MyProfile from '../pages/MyProfile';
 import Register from '../pages/Register';
 import Store from '../store'
 import EditProfile from '../pages/EditProfile'
+<<<<<<< HEAD
 import JobDetail from '../pages/JobDetail';
+=======
+import ManageJob from '../pages/ManageJob'
+>>>>>>> 5cfd174ce48154560faf4d98d0f2f1a8fd999bd8
 
 const Routes = () => {
     const location = useLocation();
@@ -41,10 +45,16 @@ const Routes = () => {
                 <Route exact path="/job/:Jid" component={(props) => (
                     <RequireAuth
                         {...props}
-                        Component={JobDetail}
+                        Component={JobDetail} />
+                )} />
+                <Route exact path="/managejob" component={(props) => (
+                    <RequireAuth
+                        {...props}
+                        Component={ManageJob}
                     />
                 )} />
                 <Route path="*" ><Redirect to="/login" /></Route>
+
             </Switch>
         </Provider>
     )
