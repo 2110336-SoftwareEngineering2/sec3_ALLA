@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 import { Employer } from "./employer.entity";
 import { Job } from "./job.entity";
 import { Student } from "./student.entity";
+import { User } from "./user.entity";
 
 export enum ContractStatus {
     DOING = "DOING",
@@ -15,13 +16,13 @@ export class Contract {
     @PrimaryGeneratedColumn()
     cid: number;
 
-    @ManyToOne(() => Employer, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
+    @ManyToOne(() => User, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
     @JoinColumn()
-    employer : Employer;
+    employer : User;
 
-    @ManyToOne(() => Student, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
+    @ManyToOne(() => User, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
     @JoinColumn()
-    student : Student;
+    student : User;
 
     @ManyToOne(() => Job, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
     @JoinColumn()

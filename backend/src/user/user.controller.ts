@@ -50,4 +50,19 @@ export class UserController {
   delete(@Param('id', new ParseIntPipe()) id: number): {} {
     return this.service.delete(id);
   } 
+
+  @Get('job/:id')
+  getAllJob(@Param('id', new ParseIntPipe()) id: number){
+    return this.service.getUserJob(id);
+  }
+
+  @Get('contract/:id')
+  getAllContract(@Param('id', new ParseIntPipe()) id: number){
+    return this.service.getUserContract(id);
+  }
+
+  @Get('record/:id')
+  getAllRecord(@Param('id', new ParseIntPipe()) id: number){
+    return this.service.getUserRecord(id);
+  }
 }
