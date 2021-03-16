@@ -10,19 +10,27 @@ export default function Home() {
     //เอา path มา ยิง api ตาม search and filters
     //dispatch to set querry param in navigationbar
     const location = useLocation();
+    const dispatch = useDispatch();
     const getParamObj = () => {
-
         const l = location.search.slice(1).split("&")
         var retObj = {}
         l.forEach((i, idx) => {
             const a = i.split('=')
             retObj[a[0]] = decodeURI(a[1])
         })
-        return retObj
+        if (!retObj) return {
+            q: '',
+            smax: '',
+            smin: '',
+            t: '',
+            tag: ''
+        }
+        else return retObj
     }
-
+    dispatch({ type: 'SET_PARAMOBJ', payload: { paramObj: getParamObj() } })
     const JobState = useSelector((state) => state.Job);
-    console.log('location from home page', location)
+    console.log('param from home', JobState.paramObj)
+    //console.log('location from home page', location)
     console.log('JOB LIST ', JobState.jobList)
     return (
         <div className="home-container d-flex justify-content-center">
@@ -31,9 +39,9 @@ export default function Home() {
                     <SearchFilter param={getParamObj()} />
                 </div>
                 {JobState.jobList ? <div className="d-flex justify-content-center ">
-                    <JobPane jobList={JobState.jobList} />
-                </div> 
-                :
+                    <JobPane isinManagepage = {false} jobList={JobState.jobList} />
+                </div>
+                    :
                     <div>Sorry we cant find matching result</div>
                 }
             </div>

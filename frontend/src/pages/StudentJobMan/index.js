@@ -3,6 +3,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import "./style.scss";
+import JobPane from "../../components/JobPane";
 
 
 export default function StudentJobMan() {
@@ -33,7 +34,7 @@ export default function StudentJobMan() {
             <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
                 {JobState.jobList ? 
                     <div className="d-flex justify-content-center ">
-                        <JobPane jobList={JobState.jobList} />
+                        <JobPane type={"STUDENT-PENDING"} isjobList={JobState.jobList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
@@ -46,7 +47,7 @@ export default function StudentJobMan() {
             <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
                 {JobState.jobList ? 
                     <div className="d-flex justify-content-center ">
-                        <JobPane jobList={JobState.jobList} />
+                        <JobPane type={"STUDENT-RESULT"} jobList={JobState.resultList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
@@ -59,7 +60,7 @@ export default function StudentJobMan() {
             <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
                 {JobState.jobList ? 
                     <div className="d-flex justify-content-center ">
-                        <JobPane jobList={JobState.jobList} />
+                        <JobPane type="STUDENT-ONPROGRESS" jobList={JobState.jobList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>

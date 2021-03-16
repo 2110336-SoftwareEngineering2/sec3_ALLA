@@ -6,7 +6,14 @@ import axios from 'axios';
 
 //initial state for the reducer
 const initialState = {
-    jobList:[
+    paramObj: {
+        q: '',
+        smax: '',
+        smin: '',
+        t: '',
+        tag: ''
+    },
+    jobList: [
         {
             'Jid': '999',
             'Eid': '888',
@@ -34,7 +41,7 @@ const initialState = {
             'salaryMax': '10000',
             'positionLeft': '998',
             'status': ''
-        },{
+        }, {
             'Jid': '997',
             'Eid': '888',
             'companyPic_url': 'https://picsum.photos/208',
@@ -75,7 +82,7 @@ const initialState = {
             'salaryMax': '10000',
             'positionLeft': '998',
             'status': ''
-        },{
+        }, {
             'Jid': '997',
             'Eid': '888',
             'companyPic_url': 'https://picsum.photos/205',
@@ -116,7 +123,7 @@ const initialState = {
             'salaryMax': '10000',
             'positionLeft': '998',
             'status': ''
-        },{
+        }, {
             'Jid': '997',
             'Eid': '888',
             'companyPic_url': 'https://picsum.photos/203',
@@ -157,7 +164,7 @@ const initialState = {
             'salaryMax': '10000',
             'positionLeft': '998',
             'status': ''
-        },{
+        }, {
             'Jid': '997',
             'Eid': '888',
             'companyPic_url': 'https://picsum.photos/200',
@@ -180,9 +187,8 @@ const initialState = {
 /// REDUCER (update or modify state)
 const JobReducer = (state = initialState, action) => {
     switch (action.type) {
-        // case 'TEST':
-        //     console.log('in test Auth Reducer');
-        //     return 'testAction'
+        case 'SET_PARAMOBJ':
+            return { ...state, paramObj: action.payload.paramObj }
         // case 'LOGIN_SUCCESS':
         //     return {
         //         ...state,

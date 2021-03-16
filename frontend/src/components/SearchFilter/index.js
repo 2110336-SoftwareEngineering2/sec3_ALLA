@@ -5,24 +5,26 @@ export default function SearchFilter(props) {// receive props from parent sendin
     const history = useHistory();
     console.log(props.param)
     const initialFilterParam = {
-        jobTag: props.param.tag,
-        timeFilter: props.param.t,
-        salaryMin: props.param.smin,
-        salaryMax: props.param.smax,
-        location:props.param.l
+        jobTag: props.param.tag||'',
+        timeFilter: props.param.t||'',
+        salaryMin: props.param.smin||'',
+        salaryMax: props.param.smax||'',
+        location:props.param.l||''
     }
     const [filterParam, setfilterParam] = useState(initialFilterParam)
+
     const initialFilterOptions = {
         jobTag: ['All job', 'engineering', 'marketing', 'accounting', 'business development'],
         timeFilter: ['Posted Anytime', 'last 24hrs', 'last week', 'last two week', 'last month'],
         salaryMin: '',
         salaryMax: '',
+        location:''
     }
     const [filterOptions, setFilterOptions] = useState(initialFilterOptions)
     console.log(filterParam)
     const filterSubmitHandler = (e) => {//get search querry and push to home with search and filter querry(ต้องเรียก controller รวม)
         e.preventDefault();
-        history.push(`/?q=${'searchQuery'}&tag=${filterParam.jobTag}&t=${filterParam.timeFilter}&smin=${filterParam.salaryMin}&smax=${filterParam.salaryMax}`)
+        history.push(`/?q=${props.param.q||""}&tag=${filterParam.jobTag}&t=${filterParam.timeFilter}&smin=${filterParam.salaryMin}&smax=${filterParam.salaryMax}`)
 
     }
     return (

@@ -9,10 +9,11 @@ export default function JobCard(props) {
         history.push(`/job/${jobObj.Jid}`)
     }
     //Golf
-    isinManagepage = false; //how?
+    const isinManagepage = props.isinManagepage; 
 
     function deleteApplication(){
         //call delete api function
+        return;
     }
     
     return (

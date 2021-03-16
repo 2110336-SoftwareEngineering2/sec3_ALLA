@@ -1,7 +1,7 @@
 import React from 'react'
 import './style.scss'
 import {useHistory} from 'react-router-dom'
-export default function JobCard(props) {
+export default function ResultCard(props) {
     const history= useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
@@ -9,7 +9,7 @@ export default function JobCard(props) {
         history.push(`/job/${jobObj.Jid}`)
     }
     //Golf
-    isAccepted = true; //how?
+    const isAccepted = props.isAccepted; //how?
 
     function deleteCard(){
         //??

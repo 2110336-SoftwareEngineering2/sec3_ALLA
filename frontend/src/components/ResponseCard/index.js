@@ -1,7 +1,7 @@
 import React from 'react'
 import './style.scss'
 import {useHistory} from 'react-router-dom'
-export default function JobCard(props) {
+export default function ResponseCard(props) {
     const history= useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
@@ -9,15 +9,14 @@ export default function JobCard(props) {
         history.push(`/job/${jobObj.Jid}`)
     }
     //Golf
-    isOnprogresspage = false; //how??
+    const isOnprogresspage = props.isOnprogresspage; //how??
+    isAccepted = props.isAccepted;
     function getUserlink(){
         //api
     }
-    function acceptRequesthandler(){
-        //api
-    }
-    function rejectRequesthandler(){
-        //api
+    function acceptOffer(){
+        //call accept offer api
+        deleteCard();
     }
     
     return (
@@ -29,36 +28,15 @@ export default function JobCard(props) {
                 <div> {jobObj.location}</div>
             </div>
 
-            {isOnprogresspage?
-            <div className="card-container d-flex p-2 justify-content-between">
-                <div>
-                    working by
-                </div>
-                
-                <a href={URL}>Name Surname</a>
-            </div>:
-            <div className="card-container d-flex p-2 justify-content-between">
-            <div>
-                Requested by
-            </div>
-            <a href={URL}>Name Surname</a>
-            <button
-                    onClick={() => {
-                        acceptRequesthandler()
-                    }}
-                  >
-                    Accept
-            </button>
-            <button
-                    onClick={() => {
-                        rejectRequesthandler()
-                    }}
-                  >
-                    Reject
-            </button>
-            </div>
-            }
+            {isAccepted? <div>Accepted by</div>:<div>Rejected by</div>}
             
+            <button
+                onClick={() => {
+                  deleteCard()
+                }}
+              >
+                OK
+            </button>
         </div>
     )
 }

@@ -1,22 +1,25 @@
 import React from 'react'
 import './style.scss'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 export default function JobCard(props) {
-    const history= useHistory()
+    const history = useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
-    const cardClickedHandler=()=>{
+    const cardClickedHandler = () => {
         history.push(`/job/${jobObj.Jid}`)
     }
-    //Golf
-    isOnprogresspage = false; //how??
-    function acceptRequesthandler(){
+    //Golf On-progress & request
+    const isOnprogresspage = props.isOnprogresspage; //how??
+    function getUserlink(){
         //api
     }
-    function rejectRequesthandler(){
+    function acceptRequesthandler() {
         //api
     }
-    
+    function rejectRequesthandler() {
+        //api
+    }
+
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
             <div><img src={jobObj.companyPic_url} className="rounded-circle job-card-pic p-2"></img></div>
@@ -26,36 +29,36 @@ export default function JobCard(props) {
                 <div> {jobObj.location}</div>
             </div>
 
-            {isOnprogresspage?
-            <div className="card-container d-flex p-2 justify-content-between">
-                <div>
-                    working by
+            {isOnprogresspage ?
+                <div className="card-container d-flex p-2 justify-content-between">
+                    <div>
+                        working by
                 </div>
-                
-                <a href={URL}>Name Surname</a>
-            </div>:
-            <div className="card-container d-flex p-2 justify-content-between">
-            <div>
-                Requested by
+
+                    <a href={URL}>Name Surname</a>
+                </div> :
+                <div className="card-container d-flex p-2 justify-content-between">
+                    <div>
+                        Requested by
             </div>
-            <a href={URL}>Name Surname</a>
-            <button
-                    onClick={() => {
-                        acceptRequesthandler()
-                    }}
-                  >
-                    Accept
+                    <a href={URL}>Name Surname</a>
+                    <button
+                        onClick={() => {
+                            acceptRequesthandler()
+                        }}
+                    >
+                        Accept
             </button>
-            <button
-                    onClick={() => {
-                        rejectRequesthandler()
-                    }}
-                  >
-                    Reject
+                    <button
+                        onClick={() => {
+                            rejectRequesthandler()
+                        }}
+                    >
+                        Reject
             </button>
-            </div>
+                </div>
             }
-            
+
         </div>
     )
 }
