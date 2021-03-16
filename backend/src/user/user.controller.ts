@@ -51,6 +51,7 @@ export class UserController {
     return this.service.delete(id);
   } 
 
+  @UseGuards(OwnGuard)
   @Get('jobManagement/:id')
   getAllJob(@Param('id', new ParseIntPipe()) id: number){
     return this.service.getUserJobManagementData(id);

@@ -4,6 +4,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { Employer } from './employer.entity';
 import { Job } from './job.entity';
@@ -17,7 +18,9 @@ export enum StateNum {
   FINISH = 4,
 }
 
+
 @Entity()
+@Unique(['student','job'])
 export class ApplicationRecord {
   @PrimaryGeneratedColumn()
   rid: number;
