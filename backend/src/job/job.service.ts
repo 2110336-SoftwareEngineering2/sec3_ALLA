@@ -111,6 +111,10 @@ export class JobService {
     salaryMin: number,
     salaryMax: number,
   ) {
+    try {
+      queryStr = queryStr.toLowerCase();
+    } catch (e) {}
+
     const res = await getRepository(Job)
       .createQueryBuilder('job')
       .where((qb) => {
@@ -128,14 +132,13 @@ export class JobService {
         return (
           'job.jid IN ' +
           subQuery +
-          ' AND ( job.jobTitle LIKE :search OR job.companyName LIKE :search OR job.location LIKE :search)'
+          ' AND ( LOWER(job.jobTitle) LIKE :search OR LOWER(job.companyName) LIKE :search OR LOWER(job.location) LIKE :search)'
         );
       })
+
       .setParameter('salaryMin', salaryMin)
       .setParameter('salaryMax', salaryMax)
       .setParameter('time', time)
-      .setParameter('search', `%${queryStr}%`)
-      .setParameter('search', `%${queryStr}%`)
       .setParameter('search', `%${queryStr}%`)
       .getMany();
 

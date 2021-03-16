@@ -41,13 +41,13 @@ export class Job {
     @Column()
     positionLeft : number;
 
-    @Column({length : 255})
+    @Column({length : 2047})
     description : string;
 
-    @Column({length : 255})
+    @Column({length : 2047})
     responsibility : string;
 
-    @Column({length : 255})
+    @Column({length : 2047})
     requirement : string;
 
     @ManyToOne(() => User, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
