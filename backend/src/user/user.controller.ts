@@ -50,4 +50,10 @@ export class UserController {
   delete(@Param('id', new ParseIntPipe()) id: number): {} {
     return this.service.delete(id);
   } 
+
+  @Get('jobManagement/:id')
+  getAllJob(@Param('id', new ParseIntPipe()) id: number){
+    return this.service.getUserJobManagementData(id);
+  }
+
 }

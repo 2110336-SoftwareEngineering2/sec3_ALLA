@@ -15,6 +15,12 @@ export class EmployerService {
     return this.repo.save(employer);
   }
 
+  async findUserId(eid: number) {
+    const employer = await this.repo.findOne(eid, {relations : ['user']});
+    if (employer === undefined) throw new NotFoundException("Employer ID not found");
+    return employer.user.id;
+  }
+
   async findById(eid: number): Promise<Employer> {
     const employer = await this.repo.findOne(eid);
     if (employer === undefined) throw new NotFoundException("Employer ID not found");
