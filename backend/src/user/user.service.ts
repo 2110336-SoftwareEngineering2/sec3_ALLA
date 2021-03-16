@@ -192,7 +192,17 @@ export class UserService {
       contract = await getRepository(Contract)
         .createQueryBuilder('contract')
         .leftJoinAndSelect('contract.student', 'student')
+        .leftJoinAndSelect('contract.employer', 'employer')
         .where('contract.student.id = :id')
+        .select([
+          'contract.cid',
+          'contract.status',
+          'employer.id',
+          'employer.firstName',
+          'employer.lastName',
+          'employer.phoneNumber',
+          'employer.email',
+        ])
         .setParameter('id', id)
         .getMany();
     } else if ((user.type = UserType.STUDENT)) {
@@ -200,6 +210,15 @@ export class UserService {
         .createQueryBuilder('contract')
         .leftJoinAndSelect('contract.employer', 'employer')
         .where('contract.employer.id = :id')
+        .select([
+          'contract.cid',
+          'contract.status',
+          'student.id',
+          'student.firstName',
+          'student.lastName',
+          'student.phoneNumber',
+          'student.email',
+        ])
         .setParameter('id', id)
         .getMany();
     }
@@ -213,16 +232,44 @@ export class UserService {
         .createQueryBuilder('application_record')
         .leftJoinAndSelect('application_record.student', 'student')
         .leftJoinAndSelect('application_record.employer', 'employer')
-        .where('application_record.student.id = :id \
-          AND application_record.state=1')
+        .where(
+          'application_record.student.id = :id \
+          AND application_record.state=1',
+        )
+        .select([
+          'application_record.rid',
+          'application_record.state',
+          'application_record.yesFlag',
+          'application_record.timestamp',
+          'application_record.student',
+          'employer.id',
+          'employer.firstName',
+          'employer.lastName',
+          'employer.phoneNumber',
+          'employer.email',
+        ])
         .setParameter('id', id)
         .getMany();
       const waiting = await getRepository(ApplicationRecord)
         .createQueryBuilder('application_record')
         .leftJoinAndSelect('application_record.student', 'student')
         .leftJoinAndSelect('application_record.employer', 'employer')
-        .where('application_record.student.id = :id \
-          AND application_record.state=2')
+        .where(
+          'application_record.student.id = :id \
+          AND application_record.state=2',
+        )
+        .select([
+          'application_record.rid',
+          'application_record.state',
+          'application_record.yesFlag',
+          'application_record.timestamp',
+          'application_record.student',
+          'employer.id',
+          'employer.firstName',
+          'employer.lastName',
+          'employer.phoneNumber',
+          'employer.email',
+        ])
         .setParameter('id', id)
         .getMany();
       return {
@@ -234,22 +281,50 @@ export class UserService {
         .createQueryBuilder('application_record')
         .leftJoinAndSelect('application_record.employer', 'employer')
         .leftJoinAndSelect('application_record.student', 'student')
-        .where('application_record.employer.id = :id \
-          AND application_record.state=1')
+        .where(
+          'application_record.employer.id = :id \
+          AND application_record.state=1',
+        )
+        .select([
+          'application_record.rid',
+          'application_record.state',
+          'application_record.yesFlag',
+          'application_record.timestamp',
+          'application_record.student',
+          'student.id',
+          'student.firstName',
+          'student.lastName',
+          'student.phoneNumber',
+          'student.email',
+        ])
         .setParameter('id', id)
         .getMany();
       const responded = await getRepository('application_record')
         .createQueryBuilder('application_record')
         .leftJoinAndSelect('application_record.employer', 'employer')
         .leftJoinAndSelect('application_record.student', 'student')
-        .where('application_record.employer.id = :id \
-          AND application_record.state=3')
+        .where(
+          'application_record.employer.id = :id \
+          AND application_record.state=3',
+        )
+        .select([
+          'application_record.rid',
+          'application_record.state',
+          'application_record.yesFlag',
+          'application_record.timestamp',
+          'application_record.student',
+          'student.id',
+          'student.firstName',
+          'student.lastName',
+          'student.phoneNumber',
+          'student.email',
+        ])
         .setParameter('id', id)
         .getMany();
       return {
         applied,
-        responded
-      }
+        responded,
+      };
     }
   }
 }
