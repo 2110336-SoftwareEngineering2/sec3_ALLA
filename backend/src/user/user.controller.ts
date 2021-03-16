@@ -51,18 +51,9 @@ export class UserController {
     return this.service.delete(id);
   } 
 
-  @Get('job/:id')
+  @Get('jobManagement/:id')
   getAllJob(@Param('id', new ParseIntPipe()) id: number){
-    return this.service.getUserJob(id);
+    return this.service.getUserJobManagementData(id);
   }
 
-  @Get('contract/:id')
-  getAllContract(@Param('id', new ParseIntPipe()) id: number){
-    return this.service.getUserContract(id);
-  }
-
-  @Get('record/:id')
-  getAllRecord(@Param('id', new ParseIntPipe()) id: number){
-    return this.service.getUserRecord(id);
-  }
 }

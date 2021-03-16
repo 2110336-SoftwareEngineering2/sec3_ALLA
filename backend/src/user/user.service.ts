@@ -175,6 +175,16 @@ export class UserService {
     return user;
   }
 
+  async getUserJobManagementData(id: number) {
+    const job = await this.getUserJob(id);
+    const record = await this.getUserRecord(id);
+    const contract = await this.getUserContract(id);
+    const user = await this.findById(id);
+
+    return user.type == UserType.STUDENT ?
+      {record, contract} : {job, record, contract}
+  }
+
   async getUserJob(id: number) {
     const job = await getRepository(Job)
       .createQueryBuilder('job')
@@ -188,7 +198,7 @@ export class UserService {
   async getUserContract(id: number) {
     const user = await this.findById(id);
     let contract: Contract[];
-    if ((user.type = UserType.STUDENT)) {
+    if (user.type == UserType.STUDENT) {
       contract = await getRepository(Contract)
         .createQueryBuilder('contract')
         .leftJoinAndSelect('contract.student', 'student')
@@ -205,9 +215,10 @@ export class UserService {
         ])
         .setParameter('id', id)
         .getMany();
-    } else if ((user.type = UserType.STUDENT)) {
+    } else if (user.type == UserType.EMPLOYER) {
       contract = await getRepository(Contract)
         .createQueryBuilder('contract')
+        .leftJoinAndSelect('contract.student', 'student')
         .leftJoinAndSelect('contract.employer', 'employer')
         .where('contract.employer.id = :id')
         .select([
@@ -299,6 +310,28 @@ export class UserService {
         ])
         .setParameter('id', id)
         .getMany();
+      const waiting = await getRepository('application_record')
+        .createQueryBuilder('application_record')
+        .leftJoinAndSelect('application_record.employer', 'employer')
+        .leftJoinAndSelect('application_record.student', 'student')
+        .where(
+          'application_record.employer.id = :id \
+          AND application_record.state=2',
+        )
+        .select([
+          'application_record.rid',
+          'application_record.state',
+          'application_record.yesFlag',
+          'application_record.timestamp',
+          'application_record.student',
+          'student.id',
+          'student.firstName',
+          'student.lastName',
+          'student.phoneNumber',
+          'student.email',
+        ])
+        .setParameter('id', id)
+        .getMany();
       const responded = await getRepository('application_record')
         .createQueryBuilder('application_record')
         .leftJoinAndSelect('application_record.employer', 'employer')
@@ -323,6 +356,7 @@ export class UserService {
         .getMany();
       return {
         applied,
+        waiting,
         responded,
       };
     }
