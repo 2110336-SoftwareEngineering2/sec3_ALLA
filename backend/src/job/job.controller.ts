@@ -20,32 +20,32 @@ import { JobService } from './job.service';
 export class JobController {
   constructor(private readonly service: JobService) {}
 
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get(':jid')
   findById(@Param('jid', new ParseIntPipe()) jid: number): {} {
     return this.service.viewJob(jid);
   }
 
-  //@UseGuards(OwnGuard)
+  @UseGuards(OwnGuard)
   @Post()
   create(@Body() dto: Omit<Job, 'jid'>): {} {
     console.log('created');
     return this.service.create(dto);
   }
 
-  //@UseGuards(JobGuard)
+  @UseGuards(JobGuard)
   @Patch(':jid')
   update(@Param('jid', new ParseIntPipe()) jid: number, @Body() dto: {}): {} {
     return this.service.update(jid, dto);
   }
 
-  //@UseGuards(JobGuard)
+  @UseGuards(JobGuard)
   @Delete(':jid')
   delete(@Param('jid', new ParseIntPipe()) jid: number): {} {
     return this.service.delete(jid);
   }
 
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get('/search/all/')
   async searchJob(
     @Query('q') searchQuery: string,
