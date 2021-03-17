@@ -3,7 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import './style.scss'
 export default function SearchFilter(props) {// receive props from parent sending search querry
     const history = useHistory();
-    console.log(props.param)
+    //console.log(props.param)
     const initialFilterParam = {
         jobTag: props.param.tag||'',
         timeFilter: props.param.t||'',
@@ -21,7 +21,7 @@ export default function SearchFilter(props) {// receive props from parent sendin
         location:''
     }
     const [filterOptions, setFilterOptions] = useState(initialFilterOptions)
-    console.log(filterParam)
+    //console.log('filterparam from searchFilter',filterParam)
     const filterSubmitHandler = (e) => {//get search querry and push to home with search and filter querry(ต้องเรียก controller รวม)
         e.preventDefault();
         history.push(`/?q=${props.param.q||""}&tag=${filterParam.jobTag}&t=${filterParam.timeFilter}&smin=${filterParam.salaryMin}&smax=${filterParam.salaryMax}`)

@@ -1,24 +1,41 @@
 import React from 'react'
 import './style.scss'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
+import axios from "axios";
 export default function JobCard(props) {
-    const history= useHistory()
+    const history = useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
-    const cardClickedHandler=()=>{
-        history.push(`/job/${jobObj.Jid}`)
+    const cardClickedHandler = () => {
+        //console.log(jobObj)
+        history.push(`/job/${jobObj.jid}`)
     }
     //Golf
-    const isinManagepage = props.isinManagepage; 
+    const isinManagepage = props.isinManagepage;
+    const rid = props.rid
+    async function deleteApplication(e) {
+        if (!e) var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation) e.stopPropagation();
 
-    function deleteApplication(){
-        //call delete api function
-        return;
+        await axios
+            .delete(`http://127.0.0.1:8300/application-record/` + rid.toString()
+                , {
+                })
+            .then((response) => {
+                //do nothing
+                alert("Application is cancelled");
+                history.push("/managejob");
+                return (response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
-    
+
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
-            <div><img src={jobObj.companyPic_url} className="rounded-circle job-card-pic p-2"></img></div>
+            <div><img src={jobObj.companyPic_url || 'https://picsum.photos/201'} className="rounded-circle job-card-pic p-2"></img></div>
             <div className="job-text-col ">
                 <div>{jobObj.jobTitle}</div>
                 <div> {jobObj.companyName}</div>
@@ -30,22 +47,22 @@ export default function JobCard(props) {
                 <div> {jobObj.workingHours}</div>
                 <div> {jobObj.salaryMin}-{jobObj.salaryMax}</div>
             </div>
-            
+
             <div>{jobObj.positionLeft}</div>
 
-            {isinManagepage?
-            <div>
-                <button
-                    onClick={() => {
-                      deleteApplication()
-                    }}
-                  >
-                    Cancel
+            {isinManagepage ?
+                <div>
+                    <button
+                        onClick={(e) => {
+                            deleteApplication(e)
+                        }}
+                    >
+                        Cancel
                 </button>
-            </div>:
-            <></>
+                </div> :
+                <></>
             }
-            
+
         </div>
     )
 }

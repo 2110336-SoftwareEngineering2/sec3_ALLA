@@ -5,9 +5,8 @@ import ResponseCard from '../ResponseCard';
 import StudentCard from '../StudentCard';
 import './style.scss'
 const JobPane = (props) => {
+
     
-    //api
-    //ยังไม่ครอบคลุมกรณีของทุก card
 
     const getJobList = () => {
         let jobArray = [];
@@ -15,6 +14,7 @@ const JobPane = (props) => {
             jobArray.push(
                 <div className=" mb-3" key={idx}>
                     <JobCard
+                        rid={job.rid}
                         isinManagepage={props.isinManagepage}
                         jobObj={job}
                     />
@@ -25,13 +25,15 @@ const JobPane = (props) => {
         return jobArray
     }
 
-    const getPendingList = () => {
+    const getAvailableList = (availableList) => {
         let jobArray = [];
-        props.jobList.map((job, idx) => {
+        console.log(availableList)
+        availableList.map((job, idx) => {
             jobArray.push(
                 <div className=" mb-3" key={idx}>
                     <JobCard
-                        isinManagepage={true}
+                        rid={job.rid}
+                        isinManagepage={props.isinManagepage}
                         jobObj={job}
                     />
 
@@ -40,16 +42,33 @@ const JobPane = (props) => {
         })
         return jobArray
     }
-    
-    //ยังไม่ได้ handle วิธีเช็คผลจาก employer ว่ารับมั้ย
-    const getResultList = () => {
+
+    const getPendingList = (pendingList) => {
         let jobArray = [];
-        props.jobList.map((job, idx) => {
+        pendingList.map((job, idx) => {
+            jobArray.push(
+                <div className=" mb-3" key={idx}>
+                    <JobCard
+                        rid={job.rid}
+                        isinManagepage={true}
+                        jobObj={job.job}
+                    />
+
+                </div>
+            )
+        })
+        return jobArray
+    }
+
+    const getResultList = (resultList) => {
+        let jobArray = [];
+        resultList.map((job, idx) => {
             jobArray.push(
                 <div className=" mb-3" key={idx}>
                     <ResultCard
-                        isAccepted={true}
-                        jobObj={job}
+                        rid={job.rid}
+                        isAccepted={job.yesFlag}
+                        jobObj={job.job}
                     />
 
                 </div>
@@ -58,14 +77,17 @@ const JobPane = (props) => {
         return jobArray
     }
 
-    const getOnProgressList = () => {
+    //contract ยังไม่ได้ job มา
+    const getOnProgressList = (onProgressList) => {
         let jobArray = [];
-        props.jobList.map((job, idx) => {
+        onProgressList.map((job, idx) => {
             jobArray.push(
                 <div className=" mb-3" key={idx}>
                     <StudentCard
+                        rid={job.rid}
                         isOnprogresspage={true}
-                        jobObj={job}
+                        jobObj={job.job}
+                        studentObj={job.student}
                     />
 
                 </div>
@@ -74,14 +96,16 @@ const JobPane = (props) => {
         return jobArray
     }
 
-    const getRequestList = () => {
+    const getRequestList = (requestList) => {
         let jobArray = [];
-        props.jobList.map((job, idx) => {
+        requestList.map((job, idx) => {
             jobArray.push(
                 <div className=" mb-3" key={idx}>
                     <StudentCard
+                        rid={job.rid}
                         isOnprogresspage={false}
-                        jobObj={job}
+                        jobObj={job.job}
+                        studentObj={job.student}
                     />
 
                 </div>
@@ -91,14 +115,16 @@ const JobPane = (props) => {
     }
 
     //ยังไม่ได้ handle ว่า student รับ offer มั้ย
-    const getResponseList = () => {
+    const getResponseList = (responseList) => {
         let jobArray = [];
-        props.jobList.map((job, idx) => {
+        responseList.map((job, idx) => {
             jobArray.push(
                 <div className=" mb-3" key={idx}>
                     <ResponseCard
-                        isAccepted={true}
-                        jobObj={job}
+                        rid={job.rid}
+                        isAccepted={job.yesFlag}
+                        jobObj={job.job}
+                        studentObj={job.student}
                     />
 
                 </div>
@@ -106,20 +132,22 @@ const JobPane = (props) => {
         })
         return jobArray
     }
-    
-    function getList(){
-        if (props.type=="STUDENT-PENDING") return getPendingList();
-        else if (props.type=="STUDENT-RESULT") return getResultList();
-        else if (props.type=="ONPROGRESS") return getOnProgressList();
-        else if (props.type=="EMPLOYER-REQUEST") return getRequestList();
-        else if (props.type=="EMPLOYER-RESPONSE") return getResponseList();
+
+    const getList = () => {
+        
+        if (props.type === "STUDENT-PENDING") return getPendingList(props.pendingList);
+        else if (props.type == "STUDENT-RESULT") return getResultList(props.resultList);
+        else if (props.type == "ONPROGRESS") return getOnProgressList(props.onProgressList);
+        else if (props.type == "EMPLOYER-REQUEST") return getRequestList(props.requestList);
+        else if (props.type == "EMPLOYER-RESPONSE") return getResponseList(props.responseList);
+        else if (props.type == "EMPLOYER-AVAILABLE") return getAvailableList(props.availableList);
         else return getJobList();
     }
-    
+    const list = getList()
 
     return (
         <div className="jobpane-container ">
-            {getList()}
+            {list}
         </div>
     )
 }

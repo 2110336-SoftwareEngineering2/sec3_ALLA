@@ -1,33 +1,35 @@
 .addJob-form-container {
-    width: fit-content;
-    max-width: 650px;
-    margin: auto;
-    //background-color: #99753f;
-    //background-image: linear-gradient(to right,#10344e, #0644a0, #0557ac);
-    padding: 40px;
-  }
+  width: fit-content;
+  max-width: 650px;
+  margin: auto;
+  //background-color: #99753f;
+  //background-image: linear-gradient(to right,#10344e, #0644a0, #0557ac);
+  padding: 40px;
   
-  .addJob-div-container {
-    //background-color: #1f4f72;
-    background-image: linear-gradient(#1D5071, #3086CF);
-    //background-image: linear-gradient(to right,#1D5071, #3086CF, #D3D9DB);
-  }
-  
-  .nav-link {
-    cursor: pointer;
-  }
-  
-  input:invalid + span:after , .validity{
-    position: absolute;
-    content: "*incorrect format";
-    padding: 5px;
-    color: #e76f51;
-    line-height: 12px;
-    font-size: 10px;
-    font-weight: bold;
-  }
-  
-  .font-login {
-    color: black;
-  }
-  
+}
+
+.addJob-div-container {
+  //background-color: #1f4f72;
+  margin: 0px auto;
+  //background-image: linear-gradient(#1d5071, #3086cf);
+  //background-image: linear-gradient(to right,#1D5071, #3086CF, #D3D9DB);
+}
+
+.nav-link {
+  cursor: pointer;
+}
+
+input:invalid + span:after,
+.validity {
+  position: absolute;
+  content: "*incorrect format";
+  padding: 5px;
+  color: #e76f51;
+  line-height: 12px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.font-login {
+  color: black;
+}

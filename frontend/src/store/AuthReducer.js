@@ -85,6 +85,7 @@ const AuthReducer = (state = initialState, action) => {
         case 'LOGOUT':
             localStorage.removeItem('uid');
             localStorage.removeItem('accessToken');
+            localStorage.removeItem('login_type');
             return state
         default: return state
     }

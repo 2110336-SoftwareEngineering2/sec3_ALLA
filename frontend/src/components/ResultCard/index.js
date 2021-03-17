@@ -1,29 +1,68 @@
 import React from 'react'
 import './style.scss'
 import {useHistory} from 'react-router-dom'
+import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 export default function ResultCard(props) {
+    const AuthState = useSelector((state) => state.Auth);
     const history= useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
     const cardClickedHandler=()=>{
-        history.push(`/job/${jobObj.Jid}`)
+        console.log(jobObj)
+        history.push(`/job/${jobObj.jid}`)
     }
     //Golf
     const isAccepted = props.isAccepted; //how?
-
-    function deleteCard(){
-        //??
+    const rid = props.rid;
+    async function answerRecordState(e, answer) {
+        if (!e) var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation) e.stopPropagation();
+        await axios
+            // .post(`http://127.0.0.1:8300/application-record`, {
+            //         "yesFlag": answer
+            //     }, {
+            //         headers: {
+            //             Authorization: "Bearer " + AuthState.token,
+            //         }
+            //     })
+            .post(`http://127.0.0.1:8300/application-record/navigate/` + rid.toString(), {
+                "yesFlag": answer 
+            }, {
+                headers: {
+                    Authorization: "Bearer " + AuthState.token,
+                }
+            })
+            .then((response) => {
+                alert("Sent Answer")
+                return (response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
-    function acceptOffer(){
-        //call accept offer api
-        deleteCard();
-    }
-    function rejectOffer(){
-        //call accept offer api
-        deleteCard();
-    }
 
-
+    async function nextRecordState(e) {
+        if (!e) var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation) e.stopPropagation();
+        await axios
+            
+            .post(`http://127.0.0.1:8300/application-record/navigate/` + rid.toString(), {
+            }, {
+                headers: {
+                    Authorization: "Bearer " + AuthState.token,
+                }
+            })
+            .then((response) => {
+                alert("Sent Answer")
+                return (response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 
     
     return (
@@ -45,15 +84,15 @@ export default function ResultCard(props) {
             <div>
                 <div>Congratulations</div>
                 <button
-                    onClick={() => {
-                      acceptOffer()
+                    onClick={(e) => {
+                        answerRecordState(e,true)
                     }}
                   >
                     Accept
                 </button>
                 <button
-                    onClick={() => {
-                      rejectOffer()
+                    onClick={(e) => {
+                        answerRecordState(e,false)
                     }}
                   >
                     reject
@@ -62,8 +101,8 @@ export default function ResultCard(props) {
             <div>
             <div>Reject</div>
             <button
-                onClick={() => {
-                  deleteCard()
+                onClick={(e) => {
+                    nextRecordState(e)
                 }}
               >
                 OK

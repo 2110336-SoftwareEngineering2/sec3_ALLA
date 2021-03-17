@@ -1,0 +1,53 @@
+.main-container {
+  margin: 0px auto;
+}
+
+.image-style {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .name_font-style {
+    font-size: 25px;
+  }
+
+  .num_left-style {
+      font-size: 25px;
+      color: rgb(151, 16, 16);
+  }
+  
+  .topic-style {
+      font-size: 16;
+      font-weight: bold;
+      
+  }
+
+  .body-style {
+      font-size: 15;
+      word-wrap: break-word;
+  }
+
+  .description-container-style {
+        border: black 1px solid;
+        border-radius: 5px;
+  }
+
+  .addPhoto-style {
+    padding-top:8px;
+    height: 40px;
+    width: 140px;
+    text-align:center;
+    vertical-align: middle;
+    color: white;
+    font-size: 15px;
+    background-color: rgb(35, 155, 65);
+    border-radius: 7px;
+  }
+  .inputfile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+  }

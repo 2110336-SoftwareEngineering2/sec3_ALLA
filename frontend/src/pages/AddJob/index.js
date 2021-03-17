@@ -5,62 +5,107 @@ import "react-phone-number-input/style.css";
 import "./style.scss";
 import axios from "axios";
 import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
-import SearchFilter from "../../components/SearchFilter";
 
 export default function AddJob() {
-    const initFormData = {
-        uid : 12,
+    const location = useLocation();
+    const history = useHistory();
+    const AuthState = useSelector((state) => state.Auth);
+    const EducationList = ["Not required","High School","Associate","Bachelor","Master","Doctor"];
+    const jobTag = ['All job', 'engineering', 'marketing', 'accounting', 'business development'];
+    const initJobData = {
+        id : AuthState.id,
         companyName : "",
         jobTitle : "",
-        logoFile : "",
+        logoFile : "a",
         location : "",
         minimumEducation : "",
         workingHours : "",
-        salaryMin : 50,
-        salaryMax : 100,
-        positionLeft : 1,
+        salaryMin : "",
+        salaryMax : "",
+        positionLeft : "",
         description : "",
         responsibility : "",
-        requirement : ""
+        requirement : "",
+        status:"OPEN",
+        tagList:[]
     }
-    const getParamObj = () => {
-        const l = location.search.slice(1).split("&")
-        var retObj = {}
-        l.forEach((i, idx) => {
-            const a = i.split('=')
-            retObj[a[0]] = decodeURI(a[1])
-        })
-        if (!retObj) return {
-            not: '',
-            smax: '',
-            smin: '',
-            t: '',
-            tag: ''
+    
+
+    //ยังไม่ได้แก้ให้เป็น multi select dropdown list
+    
+    const [JobData, setJobData] = useState(initJobData);
+
+    function validateForm(map) {
+        for (var key in map){
+            if (map[key]=="") {console.log(map);return false;}
         }
-        else return retObj
+        return true;
     }
-    const [formData, setFormData] = useState(initFormData);
+    
+    useEffect(() => {
+        console.log(JobData)
+    }, [JobData])
+    async function createJobHandler(e){
+        e.preventDefault();
+        if (!validateForm(JobData)) {
+            alert("Please fill the missing information!");
+            return;
+        }
+        const {logoFile,...newJobData} = JobData
+        console.log(newJobData)
+        await axios
+            .post("http://127.0.0.1:8300/job", {
+                //Post input
+                ...newJobData
+            },{
+                headers: {
+                    Authorization: "Bearer " + AuthState.token,
+                },
+            })
+            .then((response) => {
+        
+                if (response.status === 201) {
+                    
+                    //create job success
+                    alert("Create Job Success!")
+                    history.push('/managejob')
+                }
+                return response;
+            })
+            .catch((error) => {
+                alert(error.response.data.message);
+                console.log(error.response);
+            return error;
+            });
+    
+    }
 
 
     return (
-        <div classname="addJob-div-container">
-            <div classname="addJob-form-container">
+        <div className="addJob-div-container col-sm-10 col-md-8 col-lg-8 ">
+            <div className="d-flex  ">
+            <form classname="addJob-form-container" onSubmit={createJobHandler}>
+
                 <div className="d-flex justify-content-left">
                     <header className=" pb-2 font-login">
                         <h1> Create a new job </h1>
                     </header>
                 </div>
+
                 <div class="form-group">
+
                     <label className="d-block" className="font-login">Attach your logo</label>
                     <div class="input-group">
                         <input
                             type="file"
                             onChange={(e) =>
-                                setFormData({ ...formData, logoFile: e.target.files })
+                                setJobData({ ...JobData, logoFile: e.target.files })
                             }
                         ></input>
                     </div>
+
                 </div>
+
                 <div class="form-group">
                     <label className="d-block" className="font-login">Company Name</label>
                     <div class="input-group">
@@ -68,12 +113,14 @@ export default function AddJob() {
                             type="text"
                             class="form-control"
                             onChange={(e) =>
-                                setFormData({ ...formData, companyName: e.target.value })
+                                setJobData({ ...JobData, companyName: e.target.value })
                             }
+                            value = {JobData.companyName}
                             placeholder="enter your company name"
                         ></input>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label className="d-block" className="font-login">Job Name</label>
                     <div class="input-group">
@@ -81,12 +128,14 @@ export default function AddJob() {
                             type="text"
                             class="form-control"
                             onChange={(e) =>
-                                setFormData({ ...formData, jobTitle: e.target.value })
+                                setJobData({ ...JobData, jobTitle: e.target.value })
                             }
+                            value = {JobData.jobTitle}
                             placeholder="please enter job title"
                         ></input>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <label className="d-block" className="font-login">Province</label>
                     <div>
@@ -94,13 +143,14 @@ export default function AddJob() {
                             blankOptionLabel="Please select your province"
                             defaultOptionLabel="Please select your province"
                             country="Thailand"
-                            value={formData.location}
                             onChange={(selectRegion) =>
-                                setFormData({ ...formData, location: selectRegion })
+                                setJobData({ ...JobData, location: selectRegion })
                             }
+                            value={JobData.location}
                         />
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label className="d-block" className="font-login">Job Description</label>
                     <div class="input-group">
@@ -108,12 +158,14 @@ export default function AddJob() {
                             type="text"
                             class="form-control"
                             onChange={(e) =>
-                                setFormData({ ...formData, description: e.target.value })
+                                setJobData({ ...JobData, description: e.target.value })
                             }
                             placeholder="please enter job description"
+                            value={JobData.description}
                         ></input>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label className="d-block" className="font-login">Responsibility</label>
                     <div class="input-group">
@@ -121,38 +173,91 @@ export default function AddJob() {
                             type="text"
                             class="form-control"
                             onChange={(e) =>
-                                setFormData({ ...formData, responsibility: e.target.value })
+                                setJobData({ ...JobData, responsibility: e.target.value })
                             }
                             placeholder="please enter job responsibility"
+                            value={JobData.responsibility}
                         ></input>
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Education Requirement</label>
-                    <div class="input-group">
-                        <SearchFilter param={getParamObj()} />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label className="d-block" className="font-login">Amount</label>
-                    <div className="price-slider">
-                        <input value={this.state.val1} min="0" max="100" step="0.5" type="range" onChange={(e) => setFormData({...formData, min: e.target.value})}></input>
-                        <input value={this.state.val2} min="0" max="100" step="0.5" type="range" onChange={(e) => setFormData({...formData, max: e.target.value})}></input>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label className="d-block" className="font-login">Company Name</label>
+                    <label className="d-block" className="font-login">Requirement</label>
                     <div class="input-group">
                         <input
                             type="text"
                             class="form-control"
                             onChange={(e) =>
-                                setFormData({ ...formData, companyName: e.target.value })
+                                setJobData({ ...JobData, requirement: e.target.value })
                             }
-                            placeholder="enter your company name"
+                            placeholder="please enter job responsibility"
+                            value={JobData.requirement}
                         ></input>
                     </div>
                 </div>
+
+
+                <div class="form-group">
+                    <label className="d-block" className="font-login">Education Requirement</label>
+                    <div className="filter-input select-dropdown">
+                    <select
+                        value={JobData.minimumEducation}
+                        onChange={(e) => { setJobData({ ...JobData, minimumEducation: e.target.value }) }}
+                    >
+                        <option selected disabled>Choose an option</option>
+                        {EducationList.map((job, index) => (
+                            <option selected>{job}</option>
+                        ))}
+
+                    </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label className="d-block" className="font-login">Available Position(s)</label>
+                    <div className="price-slider">
+                        <input value={JobData.positionLeft} type="number" min="0" onChange={(e) => setJobData({...JobData, positionLeft: e.target.value})} ></input>
+                    </div>
+                </div> 
+
+                <div class="form-group">
+                    <label className="d-block" className="font-login">Time Period</label>
+                    <div className="price-slider">
+                        <input value={JobData.workingHours} type="text" onChange={(e) => setJobData({...JobData, workingHours: e.target.value})} ></input>
+                    </div>
+                </div>             
+
+                <div class="form-group">
+                    <label className="d-block" className="font-login">Salary Range</label>
+                    <div className="price-slider">
+                        <input value={JobData.salaryMin} type="number" min="0" onChange={(e) => setJobData({...JobData, salaryMin: e.target.value})} placeholder="min"></input>
+                        <input value={JobData.salaryMax} type="number" min={JobData.min} onChange={(e) => setJobData({...JobData, salaryMax: e.target.value})} placeholder="max"></input>
+                    </div>
+                </div>
+
+                
+                <div class="form-group">
+                    <label className="d-block" className="font-login">Job Tag</label>
+                    <div className="filter-input select-dropdown">
+                    <select
+                        value={JobData.tagList}
+                        onChange={(e) => { setJobData({ ...JobData, tagList: [...JobData.tagList,e.target.value] }) }}
+                    >
+                        <option selected disabled>Choose an option</option>
+                        {jobTag.map((job, index) => (
+                            <option selected>{job}</option>
+                        ))}
+
+                    </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    Create Job
+                </button>
+
+                
+            </form>
             </div>
         </div>
     );

@@ -8,33 +8,55 @@ import JobPane from "../../components/JobPane";
 
 export default function EmployerJobMan() {
   const [currentTab, setCurrentTab] = useState("Available");
+  const userState = useSelector((state) => state.Auth);
+  const uid = userState.id;
+  const token = userState.token;
   const history = useHistory();
-  const location = useLocation();
-    const getParamObj = () => {
+  const AuthState = useSelector((state) => state.Auth);
+  
 
-        const l = location.search.slice(1).split("&")
-        var retObj = {}
-        l.forEach((i, idx) => {
-            const a = i.split('=')
-            retObj[a[0]] = decodeURI(a[1])
-        })
-        return retObj
-    }
+  const [AvailableList,setavailableList] = useState([]);
+  const [RequestList,setrequestList] = useState([]);
+  const [ResponseList,setresponseList] = useState([]);
+  const [onProgressList,setonProgressList] = useState([]);
 
-  const JobState = useSelector((state) => state.Job);
+  
   
   //ยังไม่ได้ ้handle การดึงข้อมูลใหม่หลังเปลี่ยน tab
+  
 
+  async function getEmployerJoblistHandler() {
+    await axios
+      .get(`http://127.0.0.1:8300/user/jobManagement/` + AuthState.id, {
+        headers: {
+          Authorization: "Bearer " + AuthState.token,
+        },
+      })
+      .then((response) => {
+        console.log("response from employer man", response);
+        setavailableList(response.data.job);
+        setrequestList(response.data.record.applied);
+        setresponseList(response.data.record.responded)
+        setonProgressList(response.data.contract);
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
+  }
+
+  useEffect(() => {
+    getEmployerJoblistHandler();
+  }, []);
 
   const display = () => {
     switch (currentTab) {
       case "Available": 
-        return 
-        <div className="list-container d-flex justify-content-center">
+        return  <div className="list-container d-flex justify-content-center">
             <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
-                {JobState.jobList ? 
+                {AvailableList.length!==0 ? 
                     <div className="d-flex justify-content-center ">
-                        <JobPane jobList={JobState.jobList} />
+                        <JobPane type="EMPLOYER-AVAILABLE" availableList={AvailableList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
@@ -42,12 +64,11 @@ export default function EmployerJobMan() {
             </div>
         </div>;
       case "Request":
-        return 
-        <div className="list-container d-flex justify-content-center">
+        return  <div className="list-container d-flex justify-content-center">
             <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
-                {JobState.jobList ? 
+                {RequestList.length!==0 ? 
                     <div className="d-flex justify-content-center ">
-                        <JobPane type="EMPLOYER-REQUEST" jobList={JobState.jobList} />
+                        <JobPane type="EMPLOYER-REQUEST" requestList={RequestList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
@@ -55,12 +76,11 @@ export default function EmployerJobMan() {
             </div>
         </div>;
       case "Response":
-        return 
-        <div className="list-container d-flex justify-content-center">
+        return  <div className="list-container d-flex justify-content-center">
             <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
-                {JobState.jobList ? 
+                {ResponseList.length!==0 ? 
                     <div className="d-flex justify-content-center ">
-                        <JobPane type="EMPLOYER-RESPONSE" jobList={JobState.jobList} />
+                        <JobPane type="EMPLOYER-RESPONSE" responseList={ResponseList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
@@ -68,12 +88,11 @@ export default function EmployerJobMan() {
             </div>
         </div>;
       case "On-progress":
-        return 
-        <div className="list-container d-flex justify-content-center">
+        return <div className="list-container d-flex justify-content-center">
             <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
-                {JobState.jobList ? 
+                {onProgressList.length!==0 ? 
                     <div className="d-flex justify-content-center ">
-                        <JobPane jobList={JobState.jobList} />
+                        <JobPane type="ONPROGRESS" onProgressList={onProgressList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
@@ -91,6 +110,17 @@ export default function EmployerJobMan() {
         <header className=" pb-2">
           <h2 className="font-login"> Job Management </h2>
         </header>
+        <div className="d-flex justify-content-left p-2">
+        <button
+          type="button"
+          class="btn btn-primary"
+          onClick={() => {
+            history.push("/add-job");
+          }}
+        >
+          <span STYLE="font-size:15px">+</span> Add Job
+        </button>
+      </div>
       </div>
 
       <ul className="nav nav-pills mb-3">
@@ -139,17 +169,7 @@ export default function EmployerJobMan() {
          
       <div> {display()}</div>
       
-      <div className="d-flex justify-content-left p-2">
-        <button
-          type="button"
-          class="btn btn-primary"
-          onClick={() => {
-            history.push("/addjob");
-          }}
-        >
-          Add Job
-        </button>
-      </div>
+      
 
     </div>
   );

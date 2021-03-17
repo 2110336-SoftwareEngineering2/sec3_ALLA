@@ -183,12 +183,13 @@ const initialState = {
 
 
 
-
 /// REDUCER (update or modify state)
 const JobReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'SET_PARAMOBJ':
             return { ...state, paramObj: action.payload.paramObj }
+        case 'SET_JOBLIST':
+            return { ...state, jobList: action.payload.jobList }
         // case 'LOGIN_SUCCESS':
         //     return {
         //         ...state,
