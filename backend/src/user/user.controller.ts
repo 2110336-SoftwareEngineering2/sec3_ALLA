@@ -9,12 +9,14 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { User } from 'src/entities/user.entity';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { OwnGuard } from 'src/guard/own.guard';
 import { UserService } from './user.service';
 
 @Controller('user')
+@ApiBearerAuth('JWT')
 export class UserController {
   constructor(private readonly service: UserService) {}
 

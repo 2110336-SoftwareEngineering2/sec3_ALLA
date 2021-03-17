@@ -1,4 +1,6 @@
 import { Body, Controller, Post, Get, Param, ParseIntPipe } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { LoginDTO } from 'src/models/auth.model';
 import { AuthService, loginLayout } from './auth.service';
 
 @Controller('auth')
@@ -6,6 +8,7 @@ export class AuthController {
   constructor(private readonly service: AuthService) {}
 
   @Post('login')
+  @ApiBody({type: LoginDTO})
   login(@Body() dto : loginLayout) {
     return this.service.login(dto);
   }
