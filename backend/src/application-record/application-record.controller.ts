@@ -10,6 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApplicationRecord } from 'src/entities/applicationRecord.entity';
+import { AuthGuard } from 'src/guard/auth.guard';
 import { CreateRecordGuard } from 'src/guard/createRecord.guard';
 import { RecordGuard } from 'src/guard/record.guard';
 import { ApplicationRecordService } from './application-record.service';
@@ -18,10 +19,11 @@ import { ApplicationRecordService } from './application-record.service';
 export class ApplicationRecordController {
   constructor(private readonly service: ApplicationRecordService) {}
 
-  //@UseGuards(AuthGuard)
-  @Get(':rid')
+  @UseGuards(AuthGuard)
+  @Get('detailed/:rid')
   findById(@Param('rid', new ParseIntPipe()) rid: number): {} {
-    return this.service.findById(rid);
+    console.log('a');
+    return this.service.findDetailedById(rid); 
   }
 
   @Post()
