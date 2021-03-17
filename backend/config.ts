@@ -1,0 +1,1 @@
+export const ENDPOINT = 'localhost:8300';
