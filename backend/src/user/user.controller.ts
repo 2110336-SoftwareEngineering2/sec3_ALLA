@@ -38,6 +38,7 @@ export class UserController {
 
   @Post()
   create(@Body() dto: Omit<User, 'id'>): {} {
+    console.log('test');
     return this.service.create(dto);
   }
 

@@ -48,15 +48,13 @@ export class ApplicationRecordService {
 
   async findById(rid: number): Promise<ApplicationRecord> {
     const rec = await this.repo.findOne(rid);
-    console.log('a');
     if (rec === undefined)
       throw new NotFoundException('Application Record ID not found');
     else return rec;
   }
 
   async findDetailedById(rid : number) {
-    const rec = await this.repo.findOne(rid, {relations : ['student','emplouyer','job']});
-    console.log('b');
+    const rec = await this.repo.findOne(rid, {relations : ['student','employer','job']});
     if (!rec) throw new NotFoundException('Application Record ID not found');
     return rec;
   }
