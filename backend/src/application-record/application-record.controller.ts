@@ -20,8 +20,15 @@ export class ApplicationRecordController {
   constructor(private readonly service: ApplicationRecordService) {}
 
   @UseGuards(AuthGuard)
-  @Get('detailed/:rid')
+  @Get(':rid')
   findById(@Param('rid', new ParseIntPipe()) rid: number): {} {
+    console.log('a');
+    return this.service.findDetailedById(rid); 
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('detailed/:rid')
+  findDetailedById(@Param('rid', new ParseIntPipe()) rid: number): {} {
     console.log('a');
     return this.service.findDetailedById(rid); 
   }
