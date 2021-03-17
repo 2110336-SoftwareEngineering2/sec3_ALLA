@@ -30,14 +30,14 @@ export default function JobCard(props) {
             //         }
             //     })
             .post(`http://127.0.0.1:8300/application-record/navigate/` + rid.toString(), {
-                "yesFlag": answer 
+                "yesFlag": answer
             }, {
                 headers: {
                     Authorization: "Bearer " + AuthState.token,
                 }
             })
             .then((response) => {
-                alert("Sent Answer")
+                alert("Sending answer")
                 return (response.data);
             })
             .catch((error) => {
@@ -46,40 +46,40 @@ export default function JobCard(props) {
     }
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
-            <div><img src={jobObj.companyPic_url} className="rounded-circle job-card-pic p-2"></img></div>
-            <div className="job-text-col ">
-                <div>{jobObj.jobTitle}</div>
-                <div> {jobObj.companyName}</div>
-                <div> {jobObj.location}</div>
+            <div><img src={jobObj.companyPic_url || 'https://picsum.photos/201'} className="rounded-circle job-card-pic p-2"></img></div>
+            <div className="job-text-col p-2 ">
+                <div> <h6>{jobObj.companyName}</h6></div>
+                <div> <h4>{jobObj.jobTitle}</h4></div>
+                <div> <h6>{jobObj.location}</h6></div>
             </div>
 
             {isOnprogresspage ?
-                <div className="card-container d-flex p-2 justify-content-between">
-                    <div>
-                        working by
-                </div>
-
-                    <a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a>
+                <div className="d-flex justify-content-between">
+                    <div className="p-2"> working by </div>
+                    <h6 className="p-2"><a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
                 </div> :
-                <div className="card-container d-flex p-2 justify-content-between">
-                    <div>
-                        Requested by
-            </div>
-                    <a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a>
-                    <button
-                        onClick={(e) => {
-                            answerRecordState(e, true)
-                        }}
-                    >
-                        Accept
-            </button>
-                    <button
-                        onClick={(e) => {
-                            answerRecordState(e, false)
-                        }}
-                    >
-                        Reject
-            </button>
+                <div className="d-flex justify-content-between">
+                    <div className="d-flex" >
+                        <div className="p-2"> Requested by </div>
+                        <h6 className="p-2"><a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
+                    </div>
+                    <div className="job-text-col">
+                        <button
+                            onClick={(e) => {
+                                answerRecordState(e, true)
+                            }} 
+                        >
+                            Accept
+                        </button>
+                        <text> {" "} </text>
+                        <button
+                            onClick={(e) => {
+                                answerRecordState(e, false)
+                            }}
+                        >
+                            Reject
+                        </button>
+                    </div>
                 </div>
             }
 

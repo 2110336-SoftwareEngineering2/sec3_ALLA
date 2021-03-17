@@ -49,39 +49,39 @@ export default function StudentJobMan() {
       case 'Pending':
         console.log('ssssssssssssssssssssssss', pendingList)
         return <div className="list-container d-flex justify-content-center">
-          <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
+          
             {pendingList.length !== 0 ?
-              <div className="d-flex justify-content-center ">
+              <div className="w-100">
                 <JobPane type={"STUDENT-PENDING"} pendingList={pendingList} />
               </div>
               :
               <div>Nothing to show here..</div>
             }
-          </div>
+        
         </div>;
       case "Result":
         return <div className="list-container d-flex justify-content-center">
-          <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
+          
             {resultList.length!== 0 ?
-              <div className="d-flex justify-content-center ">
+              <div className="w-100 ">
                 <JobPane type={"STUDENT-RESULT"} resultList={resultList} />
               </div>
               :
               <div>Nothing to show here..</div>
             }
-          </div>
+          
         </div>;
       case "On-progress":
         return <div className="list-container d-flex justify-content-center">
-          <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
+      
             {onProgressList.length!== 0 ?
-              <div className="d-flex justify-content-center ">
+              <div className="w-100 ">
                 <JobPane type="ONPROGRESS" onProgressList={onProgressList} />
               </div>
               :
               <div>Nothing to show here..</div>
             }
-          </div>
+          
         </div>;
       default:
         return <h1> Error </h1>;
@@ -89,7 +89,7 @@ export default function StudentJobMan() {
     }
   }
   return (
-    <div>
+    <div className= "managejob-div-container col-sm-10 col-md-8 col-lg-8">
 
       <div className="d-flex justify-content-left">
         <header className=" pb-2">
@@ -116,7 +116,7 @@ export default function StudentJobMan() {
             Result
           </a>
         </li>
-        <li className="list-item">
+        <li className="list-item ">
           <a
             className={`nav-link ${currentTab == "On-progress" ? "active font-login" : "font-login"
               }`}
@@ -127,7 +127,7 @@ export default function StudentJobMan() {
         </li>
       </ul>
 
-      <div> {display(currentTab)} </div>
+      <div className="pane-area-container border border-solid"> {display(currentTab)} </div>
     </div>
   );
 }

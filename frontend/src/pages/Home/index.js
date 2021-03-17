@@ -59,7 +59,7 @@ export default function Home() {
     console.log('JOB LIST ', jobList)
     // console.log('param from home', JobState.paramObj)
     const getJobPane = () => {
-        if (jobList && jobList.length === 0) return <div className="">Sorry we can't find any matching results :( </div>
+        if (jobList && jobList.length === 0) return <div>Sorry we can't find any matching results :( </div>
         else if (jobList) return <JobPane isinManagepage={false} jobList={jobList} />
     }
     return (

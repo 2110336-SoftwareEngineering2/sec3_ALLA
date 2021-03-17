@@ -53,58 +53,53 @@ export default function EmployerJobMan() {
     switch (currentTab) {
       case "Available": 
         return  <div className="list-container d-flex justify-content-center">
-            <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
                 {AvailableList.length!==0 ? 
-                    <div className="d-flex justify-content-center ">
+                    <div className="w-100">
                         <JobPane type="EMPLOYER-AVAILABLE" availableList={AvailableList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
                 }
-            </div>
         </div>;
       case "Request":
         return  <div className="list-container d-flex justify-content-center">
-            <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
                 {RequestList.length!==0 ? 
-                    <div className="d-flex justify-content-center ">
+                    <div className="w-100">
                         <JobPane type="EMPLOYER-REQUEST" requestList={RequestList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
                 }
-            </div>
         </div>;
       case "Response":
         return  <div className="list-container d-flex justify-content-center">
-            <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
                 {ResponseList.length!==0 ? 
-                    <div className="d-flex justify-content-center ">
+                    <div className="w-100">
                         <JobPane type="EMPLOYER-RESPONSE" responseList={ResponseList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
                 }
-            </div>
+          
         </div>;
       case "On-progress":
         return <div className="list-container d-flex justify-content-center">
-            <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">
+            
                 {onProgressList.length!==0 ? 
-                    <div className="d-flex justify-content-center ">
+                    <div className="w-100">
                         <JobPane type="ONPROGRESS" onProgressList={onProgressList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
                 }
-            </div>
+            
         </div>;
       default:
         return <h1> Error </h1>;
     }
   };
   return (
-    <div className= "managejob-div-container">
+    <div className= "managejob-div-container col-sm-10 col-md-8 col-lg-8">
 
       <div className="d-flex justify-content-left">
         <header className=" pb-2">
@@ -123,18 +118,19 @@ export default function EmployerJobMan() {
       </div>
       </div>
 
-      <ul className="nav nav-pills mb-3">
-        <li className="list-item">
+      <div className="d-flex">
+      <ul className="nav nav-pills ">
+        <li className="list-item ">
           <a
             className={`nav-link ${
               currentTab == "Available" ? "active font-login" : "font-login"
             }`}
             onClick={(e) => setCurrentTab("Available")}
           >
-            Available
+            Open
           </a>
         </li>
-        <li className="list-item">
+        <li className="list-item ">
           <a
             className={`nav-link ${
               currentTab == "Request" ? "active font-login" : "font-login"
@@ -144,7 +140,7 @@ export default function EmployerJobMan() {
             Request
           </a>
         </li>
-        <li className="list-item">
+        <li className="list-item ">
           <a
             className={`nav-link ${
               currentTab == "Response" ? "active font-login" : "font-login"
@@ -154,7 +150,7 @@ export default function EmployerJobMan() {
             Response
           </a>
         </li>
-        <li className="list-item">
+        <li className="list-item ">
           <a
             className={`nav-link ${
               currentTab == "On-progress" ? "active font-login" : "font-login"
@@ -165,9 +161,9 @@ export default function EmployerJobMan() {
           </a>
         </li>
       </ul>
-
+      </div>
          
-      <div> {display()}</div>
+      <div className="pane-area-container border border-solid"> {display()}</div>
       
       
 

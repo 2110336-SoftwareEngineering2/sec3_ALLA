@@ -67,35 +67,36 @@ export default function ResultCard(props) {
     
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
-            <div><img src={jobObj.companyPic_url} className="rounded-circle job-card-pic p-2"></img></div>
+            <div><img src={jobObj.companyPic_url || 'https://picsum.photos/201'} className="rounded-circle job-card-pic p-2" ></img></div>
             <div className="job-text-col ">
-                <div>{jobObj.jobTitle}</div>
-                <div> {jobObj.companyName}</div>
-                <div> {jobObj.location}</div>
+                <div> <h6>{jobObj.companyName}</h6></div>
+                <div> <h4>{jobObj.jobTitle}</h4></div>
+                <div> <h6>{jobObj.location}</h6></div>
             </div>
 
             <div className="job-text-col ">
-                <div>{jobObj.minEducation}</div>
+                <div>{jobObj.minimumEducation}</div>
                 <div> {jobObj.workingHours}</div>
                 <div> {jobObj.salaryMin}-{jobObj.salaryMax}</div>
             </div>
 
             {isAccepted?
             <div>
-                <div>Congratulations</div>
-                <button
+                <div className="p-2"><h5>Congratulations</h5></div>
+                <button 
                     onClick={(e) => {
                         answerRecordState(e,true)
                     }}
                   >
                     Accept
                 </button>
-                <button
+                <text> {" "} </text>
+                <button 
                     onClick={(e) => {
                         answerRecordState(e,false)
                     }}
                   >
-                    reject
+                    Reject
                 </button>
             </div>:
             <div>

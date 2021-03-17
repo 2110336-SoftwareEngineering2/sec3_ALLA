@@ -9,7 +9,7 @@ export default function ResponseCard(props) {
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
     const cardClickedHandler = () => {
-        history.push(`/job/${jobObj.Jid}`)
+        history.push(`/job/${jobObj.jid}`)
     }
     //Golf
     const rid = props.rid;
@@ -26,7 +26,7 @@ export default function ResponseCard(props) {
                 }
             })
             .then((response) => {
-                alert("Clicked")
+                console.log("Clicked");
                 return (response.data);
             })
             .catch((error) => {
@@ -36,24 +36,24 @@ export default function ResponseCard(props) {
 
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
-            <div><img src={jobObj.companyPic_url} className="rounded-circle job-card-pic p-2"></img></div>
+            <div><img src={jobObj.companyPic_url || 'https://picsum.photos/201'} className="rounded-circle job-card-pic p-2" ></img></div>
             <div className="job-text-col ">
-                <div>{jobObj.jobTitle}</div>
-                <div> {jobObj.companyName}</div>
-                <div> {jobObj.location}</div>
+                <div> <h6>{jobObj.companyName}</h6></div>
+                <div> <h4>{jobObj.jobTitle}</h4></div>
+                <div> <h6>{jobObj.location}</h6></div>
             </div>
-
-            {isAccepted ? <div>Accepted by</div> : <div>Rejected by</div>}
-
-            <a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a>
-
-            <button
+            
+            {isAccepted ? <div className="p-3">Accepted by</div> : <div className="p-2">Rejected by</div>}
+            <div className="job-text-col p-2">
+            <h6 className="p-2"><a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
+            <button className="float-right"
                 onClick={(e) => {
                     nextRecordState(e)
                 }}
             >
                 OK
             </button>
+            </div>
         </div>
     )
 }

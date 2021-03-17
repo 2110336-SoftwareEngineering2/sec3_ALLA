@@ -116,6 +116,7 @@ const JobPane = (props) => {
 
     //ยังไม่ได้ handle ว่า student รับ offer มั้ย
     const getResponseList = (responseList) => {
+        
         let jobArray = [];
         responseList.map((job, idx) => {
             jobArray.push(
