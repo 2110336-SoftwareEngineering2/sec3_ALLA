@@ -8,19 +8,23 @@ import { AuthModule } from './auth/auth.module';
 import { EmployerModule } from './employer/employer.module';
 import { StudentModule } from './student/student.module';
 import { AuthMiddleware } from './middlewares/auth.middleware';
+import { JobModule } from './job/job.module';
+import { ApplicationRecordModule } from './application-record/application-record.module';
+import { ApplicationRecordLogModule } from './application-record-log/application-record-log.module';
+import { ContractModule } from './contract/contract.module';
 
  
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'mysql',
-    host: 'mysql',
+    host: 'mysql',  
     port: 3306,
     username: 'user',
     password: 'password',
     database: 'all_a',
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
-  }), UserModule, AuthModule, EmployerModule, StudentModule
+  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, ContractModule
 ],
   controllers: [AppController],
   providers: [AppService],

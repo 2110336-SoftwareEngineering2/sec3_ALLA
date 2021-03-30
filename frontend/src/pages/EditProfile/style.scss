@@ -1,0 +1,31 @@
+.register-form-container {
+    width: fit-content;
+    max-width: 650px;
+    margin: auto;
+    //background-color: #99753f;
+    //background-image: linear-gradient(to right,#10344e, #0644a0, #0557ac);
+    padding: 40px;
+  }
+  
+  .register-div-container {
+    background-color: #ffffff;
+  }
+  
+  .nav-link {
+    cursor: pointer;
+  }
+  
+  input:invalid + span:after , .validity{
+    position: absolute;
+    content: "*incorrect format";
+    padding: 5px;
+    color: rgb(145, 19, 19);
+    line-height: 12px;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  
+  .font-login {
+    color: rgb(0, 0, 0);
+  }
+  

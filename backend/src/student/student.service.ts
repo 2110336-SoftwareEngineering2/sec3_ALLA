@@ -14,6 +14,12 @@ export class StudentService {
     const student = { ...new Student(), ...dto };
     return this.repo.save(student);
   }
+
+  async findUserId(sid: number) {
+    const student = await this.repo.findOne(sid, {relations : ['user']});
+    if (student === undefined) throw new NotFoundException("Student ID not found");
+    return student.user.id;
+  }
   
   async findById(sid: number): Promise<Student> {
     const student = await this.repo.findOne(sid);

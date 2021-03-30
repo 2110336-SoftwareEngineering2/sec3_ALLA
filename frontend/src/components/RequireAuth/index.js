@@ -5,8 +5,7 @@ import { isEmpty } from 'lodash';
 import Navigation from '../Navigation'
 const RequireAuth = ({ Component, ...rest }) => {
     const dispatch = useDispatch();
-    dispatch({ type: "GET_ACCESS_TOKEN" })
-    dispatch({ type: "GET_UID" })
+    dispatch({ type: "GET_LOGIN_INFO" })
     const token = useSelector(state => state.Auth.token)
     //console.log('token form reqauth',token)
     //const id = useSelector(state => state.Auth.id)
