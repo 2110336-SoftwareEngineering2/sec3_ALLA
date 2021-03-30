@@ -1,39 +1,28 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { ApplicationRecord } from "./applicationRecord.entity";
-import { Employer } from "./employer.entity";
-import { Job } from "./job.entity";
-import { Student } from "./student.entity";
-
-type stateNum = 1 | 2 | 3;
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ApplicationRecord, StateNum } from './applicationRecord.entity';
 
 @Entity()
 export class ApplicationRecordLog {
+  @PrimaryGeneratedColumn()
+  lid: number;
 
-    @PrimaryGeneratedColumn()
-    lid: number;
+  @ManyToOne(() => ApplicationRecord, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    cascade: true,
+  })
+  @JoinColumn()
+  record: ApplicationRecord;
 
-    @ManyToOne(() => Employer, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
-    @JoinColumn()
-    employer : Employer;
+  @Column('enum', { enum: StateNum, default: StateNum.APPLY })
+  state: StateNum;
 
-    @ManyToOne(() => Student, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
-    @JoinColumn()
-    student : Student;
-
-    @ManyToOne(() => Job, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
-    @JoinColumn()
-    job : Job;
-
-    @ManyToOne(() => ApplicationRecord, {onDelete : 'CASCADE', onUpdate : 'CASCADE', cascade : true})
-    @JoinColumn()
-    record : ApplicationRecord;
-
-    @Column()
-    state : stateNum;
-
-    @Column()
-    ackFlag : boolean;
-
-    @Column()
-    timestamp : Date;
+  @Column({ nullable: true })
+  yesFlag: boolean;
 }

@@ -2,30 +2,31 @@ import React from 'react'
 import './style.scss'
 import { useHistory } from 'react-router-dom'
 import axios from "axios";
-export default function JobCard(props) {
+import { useSelector, useDispatch } from "react-redux";
+export default function ResponseCard(props) {
+    const AuthState = useSelector((state) => state.Auth);
     const history = useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
     const cardClickedHandler = () => {
-        //console.log(jobObj)
         history.push(`/job/${jobObj.jid}`)
     }
     //Golf
-    const isinManagepage = props.isinManagepage;
-    const rid = props.rid
-    async function deleteApplication(e) {
+    const rid = props.rid;
+    const isAccepted = props.isAccepted;
+    async function nextRecordState(e) {
         if (!e) var e = window.event;
         e.cancelBubble = true;
         if (e.stopPropagation) e.stopPropagation();
-
         await axios
-            .delete(`http://127.0.0.1:8300/application-record/` + rid.toString()
-                , {
-                })
+            .post(`http://127.0.0.1:8300/application-record/navigate/` + rid.toString(), {
+            }, {
+                headers: {
+                    Authorization: "Bearer " + AuthState.token,
+                }
+            })
             .then((response) => {
-                //do nothing
-                alert("Application is cancelled");
-                history.push("/managejob");
+                console.log("Clicked");
                 return (response.data);
             })
             .catch((error) => {
@@ -41,28 +42,18 @@ export default function JobCard(props) {
                 <div> <h4>{jobObj.jobTitle}</h4></div>
                 <div> <h6>{jobObj.location}</h6></div>
             </div>
-
-            <div className="job-text-col ">
-                <div >{jobObj.minimumEducation}</div>
-                <div> {jobObj.workingHours}</div>
-                <div> THB {jobObj.salaryMin}-{jobObj.salaryMax}</div>
+            
+            {isAccepted ? <div className="p-3">Accepted by</div> : <div className="p-2">Rejected by</div>}
+            <div className="job-text-col p-2">
+            <h6 className="p-2"><a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
+            <button className="float-right"
+                onClick={(e) => {
+                    nextRecordState(e)
+                }}
+            >
+                OK
+            </button>
             </div>
-
-            <div className="job-text-col "><small >{jobObj.positionLeft} position(s)</small></div>
-
-            {isinManagepage ?
-                <div>
-                    <button
-                        onClick={(e) => {
-                            deleteApplication(e)
-                        }}
-                    >
-                        Cancel
-                </button>
-                </div> :
-                <></>
-            }
-
         </div>
     )
 }

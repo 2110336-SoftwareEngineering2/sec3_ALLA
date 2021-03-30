@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { JobContract } from 'src/entities/jobcontract.entity';
-import { JobcontractService } from './jobcontract.service';
+import { Contract } from 'src/entities/contract.entity';
+import { ContractService } from './contract.service';
 
-@Controller('jobcontract')
-export class JobcontractController {
+@Controller('contract')
+export class ContractController {
     
-    constructor(private readonly service: JobcontractService) {}
+    constructor(private readonly service: ContractService) {}
 
     //@UseGuards(AuthGuard)
     @Get(':cid')
@@ -14,7 +14,7 @@ export class JobcontractController {
     }
 
     @Post()
-    create(@Body() dto: Omit<JobContract, 'cid'>): {} {
+    create(@Body() dto: Omit<Contract, 'cid'>): {} {
         return this.service.create(dto);
     }
 

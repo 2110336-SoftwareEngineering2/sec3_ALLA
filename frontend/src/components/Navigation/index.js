@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import "./style.scss";
 
@@ -11,15 +11,19 @@ import inbox_image_1 from "../../assets/nav_photo/profile_arrow.png";
 import arrow from "../../assets/nav_photo/arrow.png";
 
 export default function Navigation() {
-  
+
   const [dropDown, setDropdown] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const logoutHandler = () => { dispatch({ type: "LOGOUT" }) }
 
+  const JobState = useSelector((state) => state.Job);
   const [searchInput, setSearchInput] = useState('')
+  useEffect(() => {
+    setSearchInput(JobState.paramObj.q)
+  }, [JobState.paramObj.q])
   const searchSubmitHandler = () => {
-    history.push('/?q=' + searchInput)
+    history.push(`/?q=${searchInput}`)
   }
   return (
     <nav class="navbar navbar-dark  justify-content-space-between position-sticky nav-style">
