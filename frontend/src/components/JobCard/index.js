@@ -32,10 +32,9 @@ export default function JobCard(props) {
                 console.log(error);
             });
     }
-
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
-            <div><img src={jobObj.companyPic_url || 'https://picsum.photos/201'} className="rounded-circle job-card-pic p-2" ></img></div>
+            <div><img src={jobObj.companyPic_url || `https://picsum.photos/${(200+(jobObj.jid %30)).toString()}`} className="rounded-circle job-card-pic p-2" ></img></div>
             <div className="job-text-col ">
                 <div> <h6>{jobObj.companyName}</h6></div>
                 <div> <h4>{jobObj.jobTitle}</h4></div>
