@@ -104,6 +104,7 @@ export default function JobDetail(props) {
                 return error;
             });
     }
+    
     return (
         <div className="col-sm-10 col-md-8 col-lg-8 main-container">
             <div className="d-flex justify-content-around ">
@@ -112,7 +113,7 @@ export default function JobDetail(props) {
                         <div className="d-flex justify-content-between">
                             <form class="md-form p-1">
                                 <img
-                                    src={"https://picsum.photos/202"}//jobData.companyPicUrl ||
+                                    src={`https://picsum.photos/200`}//jobData.companyPicUrl ||
                                     class="rounded-circle image-style p-1"
                                 ></img>
                             </form>
@@ -142,12 +143,12 @@ export default function JobDetail(props) {
                     <div className="d-flex justify-content-right num_left-style p-1">
                         <text>
                             <span className=""> Required : </span>{" "}
-                            {jobData.positionLeft}
+                            {jobData.positionLeft || 'Fulfilled'}
                         </text>
                     </div>
                     <div className="d-flex justify-content-right num_left-style p-1">
                         <text>
-                            left
+                            {jobData.positionLeft?'left':''}
                         </text>
                     </div>
                 </div>
@@ -199,7 +200,7 @@ export default function JobDetail(props) {
                     </text>
                 </div>
             </div>
-            {AuthState.login_type === 'STUDENT' ? <div className="d-flex justify-content-start p-2 col-sm-10 col-md-8 col-lg-8 ">
+            {AuthState.login_type === 'STUDENT' && jobData.positionLeft !== 0  ? <div className="d-flex justify-content-start p-2 col-sm-10 col-md-8 col-lg-8 ">
                 <button onClick={applyBtnHandler} class="btn btn-success pl-3 pr-3">
                     Apply
                 </button>

@@ -53,6 +53,12 @@ export class ApplicationRecordService {
     else return rec;
   }
 
+  async findDetailedById(rid : number) {
+    const rec = await this.repo.findOne(rid, {relations : ['student','employer','job']});
+    if (!rec) throw new NotFoundException('Application Record ID not found');
+    return rec;
+  }
+
   async update(
     rid: number,
     dto: Partial<Omit<ApplicationRecord, 'rid'>>,

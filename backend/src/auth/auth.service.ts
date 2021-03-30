@@ -7,6 +7,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { compare } from 'bcryptjs';
 import { UserService } from 'src/user/user.service';
 import * as nodemailer from 'nodemailer';
+import { ENDPOINT } from 'config';
  
 export interface loginLayout {
   username: string;
@@ -65,7 +66,7 @@ export class AuthService {
       html:
         'Hi! <br><br> Thanks for your registration<br><br>' +
         '<a href=' +
-        'http://localhost:8300/auth/email/verify/' +
+        `http://${ENDPOINT}/auth/email/verify/` +
         token +
         '>Click here to activate your account</a>', // html body
     };

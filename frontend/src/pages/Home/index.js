@@ -62,6 +62,7 @@ export default function Home() {
         if (jobList && jobList.length === 0) return <div>Sorry we can't find any matching results :( </div>
         else if (jobList) return <JobPane isinManagepage={false} jobList={jobList} />
     }
+    
     return (
         <div className="home-container d-flex justify-content-center">
             <div className="d-flex flex-column col-sm-10 col-md-8 col-lg-8">

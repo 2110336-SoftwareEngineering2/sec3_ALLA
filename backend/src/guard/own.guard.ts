@@ -8,7 +8,7 @@ export class OwnGuard implements CanActivate {
     const req = context.switchToHttp().getRequest<Request>();
     let id = req.params.id ? Number(req.params.id) : null;
     id = req.body.id ? Number(req.body.id) : id;
-    console.log(id);
+    console.log('token id :',req.uid,'id :',id);
     return req.uid === id;
   }
 }
