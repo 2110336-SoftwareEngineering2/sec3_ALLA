@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contract, ContractStatus } from 'src/entities/contract.entity';
+import { FeedbackService } from 'src/feedback/feedback.service';
 import { JobService } from 'src/job/job.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
@@ -14,10 +15,10 @@ const conAttr = ['cid', 'eid', 'sid', 'jid', 'start_date', 'status'];
 @Injectable()
 export class ContractService {
   constructor(
-    @InjectRepository(Contract)
-    private readonly repo: Repository<Contract>,
+    @InjectRepository(Contract) private readonly repo: Repository<Contract>,
     private readonly userService: UserService,
     private readonly jobService: JobService,
+    private readonly feedbackService: FeedbackService
   ) {}
 
   async create(dto: any): Promise<Contract> {
@@ -89,6 +90,14 @@ export class ContractService {
       if (dto.yesFlag){
         dtoo['status'] = ContractStatus.DONE;
         // create feedback...
+        var dto_feed = {
+          student: con.student,
+          employer: con.employer,
+          job: con.job,
+          rate: dto.rate,
+          comment: dto.comment
+        };    
+        this.feedbackService.create(dto_feed);
       }
       else{
         dtoo['status'] = ContractStatus.DOING;
