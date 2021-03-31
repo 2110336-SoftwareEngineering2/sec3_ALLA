@@ -12,6 +12,7 @@ import { JobModule } from './job/job.module';
 import { ApplicationRecordModule } from './application-record/application-record.module';
 import { ApplicationRecordLogModule } from './application-record-log/application-record-log.module';
 import { ContractModule } from './contract/contract.module';
+import { FeedbackModule } from './feedback/feedback.module';
 
  
 @Module({
@@ -24,7 +25,7 @@ import { ContractModule } from './contract/contract.module';
     database: 'all_a',
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
-  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, ContractModule
+  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, ContractModule, FeedbackModule
 ],
   controllers: [AppController],
   providers: [AppService],
