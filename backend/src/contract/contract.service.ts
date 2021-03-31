@@ -4,12 +4,12 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Contract } from 'src/entities/contract.entity';
+import { Contract, ContractStatus } from 'src/entities/contract.entity';
 import { JobService } from 'src/job/job.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 
-const conAttr = ['cid', 'eid', 'sid', 'jid', 'status'];
+const conAttr = ['cid', 'eid', 'sid', 'jid', 'start_date', 'status'];
 
 @Injectable()
 export class ContractService {
@@ -25,7 +25,9 @@ export class ContractService {
     const employer = await this.userService.findById(dto.eid);
     const job = await this.jobService.findById(dto.jid);
 
-    const con = { ...new Contract(), employer, student, job };
+    var dtoo = {start_date: new Date()};
+
+    const con = { ...new Contract(), employer, student, job, ...dtoo};
     console.log('contract created');
     return this.repo.save(con);
   }
@@ -33,7 +35,13 @@ export class ContractService {
   async findById(cid: number): Promise<Contract> {
     const con = await this.repo.findOne(cid);
     if (!con) throw new NotFoundException('Job Contract ID not found');
-    else return con;
+    else {
+      const timeout =  await this.check_timeout(cid);
+      var dtoo = {};
+      if (timeout) dtoo['status'] = ContractStatus.TIMEOUT;
+      await this.update(cid, dtoo);
+      return con;
+    }
   }
 
   async update(
@@ -45,14 +53,67 @@ export class ContractService {
       throw new NotAcceptableException(
         'Employer/Student/Job is not modifiable',
       );
-    /* for (const [key, value] of Object.entries(dto)) {
-      if (!conAttr.includes(key))
-        new NotAcceptableException('Some fields are not defined');
-      else if (key !== 'cid') dtoo[key] = value;
-    } */
     dtoo['status'] = dto.status;
     const con = { ...(await this.findById(cid)), ...dtoo };
     return this.repo.save(con);
+  }
+
+  async check_timeout(cid: number){
+    const con = await this.findById(cid);
+    var result = new Date(con.start_date);
+    result.setDate(result.getDate() + con.job.duration);
+    const present_date = new Date();
+    if (result > present_date) return 1;
+    else return 0;
+  }
+
+  async navigate(cid: number, dto: any){
+    const con = await this.findById(cid);
+    const status = con.status;
+
+    var dtoo = {};
+
+    if (status == ContractStatus.DOING){
+      const timeout =  await this.check_timeout(cid);
+      if (timeout) dtoo['status'] = ContractStatus.TIMEOUT;
+      else{
+        if (dto.request === 'submit'){
+          dtoo['status'] = ContractStatus.SUBMITTED;
+        }
+        if (dto.request === 'resign'){
+          dtoo['status'] = ContractStatus.RESIGN_REQ;
+        }
+      }
+    }
+    if (status == ContractStatus.SUBMITTED){
+      if (dto.yesFlag){
+        dtoo['status'] = ContractStatus.DONE;
+        // create feedback...
+      }
+      else{
+        dtoo['status'] = ContractStatus.DOING;
+      }
+    }
+    if (status == ContractStatus.RESIGN_REQ){
+      if (dto.yesFlag){
+        dtoo['status'] = ContractStatus.RESIGN;
+      }
+      else{
+        dtoo['status'] = ContractStatus.DOING;
+      }
+    }
+    this.update(cid, dtoo);
+  }
+
+  async getAssociatedId(cid: number) {
+    const con = await this.repo.findOne(cid, {
+      relations: ['employer', 'student', 'job'],
+    });
+    return {
+      sid: con.student.id,
+      eid: con.employer.id,
+      jid: con.job.jid,
+    };
   }
 
   async delete(cid: number): Promise<Contract> {

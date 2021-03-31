@@ -7,7 +7,10 @@ import { User } from "./user.entity";
 export enum ContractStatus {
     DOING = "DOING",
     DONE = "DONE",
-    RESIGN = "RESIGN"
+    RESIGN = "RESIGN",
+    TIMEOUT = "TIMEOUT",
+    SUBMITTED = "SUBMITTED",
+    RESIGN_REQ = "RESIGN_REQ"
 }
 
 @Entity()
@@ -28,7 +31,10 @@ export class Contract {
     @JoinColumn()
     job : Job;
 
+    @Column({type: 'date'})
+    start_date: Date;
+
     @Column('enum', {enum : ContractStatus, default : ContractStatus.DOING})
     status : ContractStatus;
-    
+
 }

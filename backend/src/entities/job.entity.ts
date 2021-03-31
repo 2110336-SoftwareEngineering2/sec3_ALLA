@@ -63,4 +63,7 @@ export class Job {
     @Column('simple-array')
     tagList: string[];
 
+    @Column()
+    duration: number;
+
 } 

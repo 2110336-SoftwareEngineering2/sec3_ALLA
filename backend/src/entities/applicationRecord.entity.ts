@@ -25,27 +25,15 @@ export class ApplicationRecord {
   @PrimaryGeneratedColumn()
   rid: number;
 
-  @ManyToOne(() => User, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-    cascade: true,
-  })
+  @ManyToOne(() => User, { onDelete: 'CASCADE', onUpdate: 'CASCADE', cascade: true, })
   @JoinColumn()
   employer: User;
 
-  @ManyToOne(() => User, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-    cascade: true,
-  })
+  @ManyToOne(() => User, { onDelete: 'CASCADE', onUpdate: 'CASCADE', cascade: true, })
   @JoinColumn()
   student: User;
 
-  @ManyToOne(() => Job, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-    cascade: true,
-  })
+  @ManyToOne(() => Job, { onDelete: 'CASCADE', onUpdate: 'CASCADE', cascade: true, })
   @JoinColumn()
   job: Job;
 
