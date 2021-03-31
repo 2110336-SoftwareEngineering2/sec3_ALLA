@@ -3,11 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Student } from 'src/entities/student.entity';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
+import {FilesService} from 'src/files/files.service';
+
 
 @Injectable()
 export class StudentService {
   constructor(
     @InjectRepository(Student) private readonly repo: Repository<Student>,
+    private readonly filesService: FilesService
   ) {}
 
   async create(dto: Omit<Student, 'sid'>): Promise<Student> {
@@ -37,7 +40,11 @@ export class StudentService {
     const student = { ...(await this.findByUser(user)), ...dto };
     return this.repo.save(student);
   }
-
+/*
+  async upload_portfolio(imageBuffer: Buffer, filename: string): Promise<any>{
+    return  await this.filesService.uploadPublicFile(imageBuffer, filename);
+  }
+*/
   // do not need ?
   /*
   async delete(user : User) {

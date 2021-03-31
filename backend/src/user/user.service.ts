@@ -15,6 +15,8 @@ import { EmployerService } from 'src/employer/employer.service';
 import { Job } from 'src/entities/job.entity';
 import { Contract } from 'src/entities/contract.entity';
 import { ApplicationRecord } from 'src/entities/applicationRecord.entity';
+import { FilesService } from 'src/files/files.service';
+
 
 const userprops = [
   'username',
@@ -41,6 +43,8 @@ export class UserService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private readonly studentService: StudentService,
     private readonly employerService: EmployerService,
+    private readonly fileService: FilesService
+    
   ) {}
 
   async validUsername(username: string): Promise<Boolean> {
@@ -66,6 +70,35 @@ export class UserService {
       ...subUser,
     };
   }
+
+  async addAvatar(userId: number, imageBuffer: Buffer, filename: string) {
+    /*try{
+      console.log(`userId : ${userId}`);
+      console.log(await this.userRepo.findOne(userId));
+      const x = await this.findById(userId);
+      console.log('findbyid success');
+      console.log(x);
+    }
+    catch (err){
+      console.log('findById failed');
+    }*/
+    const person = await this.findById(userId);
+    console.log(person)
+    if (person.type == UserType.STUDENT){
+      console.log('doing upload')
+      const avatar =  this.fileService.uploadPublicFile(imageBuffer, filename);
+      await this.userRepo.update(userId, {
+        ...person,
+        avatar
+      });
+      
+      return avatar;
+    }
+    else{
+      console.log("Does not a student, can't upload resume");
+    }
+  }
+
 
   async findByUsername(username: string): Promise<User> {
     const user = await this.userRepo.findOne({ username });

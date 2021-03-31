@@ -33,4 +33,6 @@ export class Student {
 
   @Column()
   fields_of_work: string;
+
+
 }

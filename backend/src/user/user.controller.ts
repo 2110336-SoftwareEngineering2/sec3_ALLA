@@ -14,6 +14,9 @@ import { User } from 'src/entities/user.entity';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { OwnGuard } from 'src/guard/own.guard';
 import { UserService } from './user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 
 @Controller('user')
 @ApiBearerAuth('JWT')
@@ -58,6 +61,15 @@ export class UserController {
   @Get('jobManagement/:id')
   getAllJob(@Param('id', new ParseIntPipe()) id: number){
     return this.service.getUserJobManagementData(id);
+  }
+
+  @Post('hard_upload/:uid')
+  @UseInterceptors(FileInterceptor('file'))
+  async upload_file(
+      @Param('uid', new ParseIntPipe()) uid: number,
+      @UploadedFile() file: Express.Multer.File) : Promise<any>{
+        console.log(`user id : ${uid}`);
+          return this.service.addAvatar(uid, file.buffer, file.originalname)
   }
 
 }
