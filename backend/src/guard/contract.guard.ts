@@ -1,3 +1,4 @@
+/*
 import { CanActivate, ExecutionContext, Inject, Injectable } from "@nestjs/common";
 import { ContractService } from "src/contract/contract.service";
 import { ContractStatus } from "src/entities/contract.entity";
@@ -25,4 +26,4 @@ export class ContractGuard implements CanActivate {
         if (con.status == ContractStatus.SUBMITTED || 
             con.status == ContractStatus.RESIGN_REQ) return id == idObj.eid;
     }
-}
+}*/

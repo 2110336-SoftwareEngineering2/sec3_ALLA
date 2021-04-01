@@ -1,3 +1,4 @@
+/*
 import { CanActivate, ExecutionContext, Inject, Injectable } from "@nestjs/common";
 import { ContractService } from "src/contract/contract.service";
 
@@ -17,3 +18,4 @@ export class CreateContractGuard implements CanActivate {
         return req.uid === id;
       }
 }
+*/

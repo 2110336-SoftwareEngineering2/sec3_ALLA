@@ -9,13 +9,13 @@ export class FeedbackController {
 
   constructor(private readonly service: FeedbackService) {}
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get(':fid')
   findById(@Param('fid', new ParseIntPipe()) fid: number): {} {
     return this.service.findById(fid);
   }
 
-  @UseGuards(OwnGuard)
+  // @UseGuards(OwnGuard)
   @Post()
   create(@Body() dto: Omit<Feedback, 'fid'>): {} {
     return this.service.create(dto);

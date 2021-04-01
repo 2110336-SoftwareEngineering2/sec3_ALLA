@@ -7,7 +7,7 @@ import { User } from "./user.entity";
 export enum ContractStatus {
     DOING = "DOING",
     DONE = "DONE",
-    RESIGN = "RESIGN",
+    RESIGNED = "RESIGNED",
     TIMEOUT = "TIMEOUT",
     SUBMITTED = "SUBMITTED",
     RESIGN_REQ = "RESIGN_REQ"

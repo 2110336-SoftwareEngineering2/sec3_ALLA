@@ -17,7 +17,7 @@ import { StudentService } from './student.service';
 export class StudentController {
   constructor(private readonly service: StudentService) {}
 
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     @Get(':sid')
     findById(@Param('sid', new ParseIntPipe()) sid: number): Promise<Student>{
         return this.service.findById(sid);

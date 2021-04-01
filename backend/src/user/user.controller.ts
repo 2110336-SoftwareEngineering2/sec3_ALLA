@@ -20,7 +20,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly service: UserService) {}
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get(':id')
   findById(@Param('id', new ParseIntPipe()) id: number): {} {
     return this.service.findById(id);
@@ -42,19 +42,19 @@ export class UserController {
     return this.service.create(dto);
   }
 
-  @UseGuards(OwnGuard)
+  // @UseGuards(OwnGuard)
   @Patch(':id')
   update(@Param('id', new ParseIntPipe()) id: number, @Body() dto: {}): {} {
     return this.service.update(id, dto);
   }
 
-  @UseGuards(OwnGuard)
+  // @UseGuards(OwnGuard)
   @Delete(':id')
   delete(@Param('id', new ParseIntPipe()) id: number): {} {
     return this.service.delete(id);
   } 
 
-  @UseGuards(OwnGuard)
+  // @UseGuards(OwnGuard)
   @Get('jobManagement/:id')
   getAllJob(@Param('id', new ParseIntPipe()) id: number){
     return this.service.getUserJobManagementData(id);

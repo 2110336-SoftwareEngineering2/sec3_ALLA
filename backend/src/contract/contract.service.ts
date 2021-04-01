@@ -14,6 +14,7 @@ const conAttr = ['cid', 'eid', 'sid', 'jid', 'start_date', 'status'];
 
 @Injectable()
 export class ContractService {
+
   constructor(
     @InjectRepository(Contract) private readonly repo: Repository<Contract>,
     private readonly userService: UserService,
@@ -33,15 +34,32 @@ export class ContractService {
     return this.repo.save(con);
   }
 
+  async check_timeout(cid: number){
+    const con = await this.repo.findOne(cid,{relations: ['job']});
+    var result = new Date(con.start_date);
+    console.log('got in function check_timeout');
+    console.log(con);
+    console.log(con.job);
+    console.log(con.job.duration);
+    result.setDate(result.getDate() + con.job.duration);
+    const present_date = new Date();
+    if (result < present_date) return 1;
+    else return 0;
+  }
+
   async findById(cid: number): Promise<Contract> {
     const con = await this.repo.findOne(cid);
     if (!con) throw new NotFoundException('Job Contract ID not found');
     else {
-      const timeout =  await this.check_timeout(cid);
+      console.log('start computing timeout');
+      const timeout = await this.check_timeout(cid);
+      console.log('timeout computed completed with result:', timeout);
       var dtoo = {};
-      if (timeout) dtoo['status'] = ContractStatus.TIMEOUT;
-      await this.update(cid, dtoo);
-      return con;
+      if (timeout) {
+        dtoo['status'] = ContractStatus.TIMEOUT;
+        return await this.update(cid, dtoo);
+      }
+      else return con;
     }
   }
 
@@ -55,17 +73,13 @@ export class ContractService {
         'Employer/Student/Job is not modifiable',
       );
     dtoo['status'] = dto.status;
-    const con = { ...(await this.findById(cid)), ...dtoo };
-    return this.repo.save(con);
-  }
 
-  async check_timeout(cid: number){
-    const con = await this.findById(cid);
-    var result = new Date(con.start_date);
-    result.setDate(result.getDate() + con.job.duration);
-    const present_date = new Date();
-    if (result > present_date) return 1;
-    else return 0;
+    // for testing timeout handling
+    /*
+    dtoo['start_date'] = dto.start_date;
+    */
+    const con = { ...(await this.repo.findOne(cid)), ...dtoo };
+    return this.repo.save(con);
   }
 
   async navigate(cid: number, dto: any){
@@ -75,6 +89,15 @@ export class ContractService {
     var dtoo = {};
 
     if (status == ContractStatus.DOING){
+
+      // for testing timeout handling
+      /*
+      var tmp = {};
+      tmp['start_date'] = new Date(2021, 2, 20);
+      console.log('new bad startdate', tmp['start_date']);
+      await this.update(cid, tmp);
+      */
+     
       const timeout =  await this.check_timeout(cid);
       if (timeout) dtoo['status'] = ContractStatus.TIMEOUT;
       else{
@@ -105,7 +128,7 @@ export class ContractService {
     }
     if (status == ContractStatus.RESIGN_REQ){
       if (dto.yesFlag){
-        dtoo['status'] = ContractStatus.RESIGN;
+        dtoo['status'] = ContractStatus.RESIGNED;
       }
       else{
         dtoo['status'] = ContractStatus.DOING;

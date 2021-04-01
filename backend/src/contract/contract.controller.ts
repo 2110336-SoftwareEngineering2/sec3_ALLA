@@ -2,29 +2,29 @@ import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGua
 import { AuthGuard } from 'src/guard/auth.guard';
 import { Contract } from 'src/entities/contract.entity';
 import { ContractService } from './contract.service';
-import { ContractGuard } from 'src/guard/contract.guard';
-import { CreateContractGuard } from 'src/guard/createContract.guard';
+//import { ContractGuard } from 'src/guard/contract.guard';
+//import { CreateContractGuard } from 'src/guard/createContract.guard';
 
 @Controller('contract')
 export class ContractController {
     
     constructor(private readonly service: ContractService) {}
 
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     @Get(':cid')
     findById(@Param('cid', new ParseIntPipe()) cid: number): {} {
         return this.service.findById(cid);
     }
 
     @Post()
-    @UseGuards(CreateContractGuard)
+    // @UseGuards(CreateContractGuard)
     create(@Body() dto: Omit<Contract, 'cid'>): {} {
         return this.service.create(dto);
     }
 
 
     @Post('navigate/:cid')
-    @UseGuards(ContractGuard)
+    // @UseGuards(ContractGuard)
     navigate(@Param('cid', new ParseIntPipe()) cid: number, @Body() dto: any) {
         return this.service.navigate(cid, dto);
     }
