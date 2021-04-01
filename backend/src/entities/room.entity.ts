@@ -4,31 +4,23 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   ManyToOne,
+  ManyToMany,
+  Entity,
+  JoinTable,
 } from 'typeorm';
 import { Message } from './message.entity';
 import { User } from './user.entity';
 
+@Entity()
 export class Room {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-    cascade: true,
-  })
-  @JoinColumn()
-  employer: User;
-
-  @ManyToOne(() => User, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-    cascade: true,
-  })
-  @JoinColumn()
-  student: User;
-
   @OneToMany(() => Message, message => message.room)
   message: Message[]
+
+  @ManyToMany(() => User)
+  @JoinTable()
+  members: User[];
 
 }

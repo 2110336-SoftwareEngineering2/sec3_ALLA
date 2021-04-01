@@ -12,6 +12,9 @@ import { JobModule } from './job/job.module';
 import { ApplicationRecordModule } from './application-record/application-record.module';
 import { ApplicationRecordLogModule } from './application-record-log/application-record-log.module';
 import { ContractModule } from './contract/contract.module';
+import { RoomService } from './room/room/room.service';
+import { RoomModule } from './room/room/room.module';
+import { ChatModule } from './chat/chat.module';
 
  
 @Module({
@@ -24,12 +27,12 @@ import { ContractModule } from './contract/contract.module';
     database: 'all_a',
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
-  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, ContractModule
+  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, ContractModule, RoomModule, ChatModule
 ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
+export class AppModule { 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(AuthMiddleware).forRoutes('*');
   }

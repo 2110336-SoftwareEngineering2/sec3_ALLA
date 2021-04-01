@@ -60,4 +60,8 @@ export class UserController {
     return this.service.getUserJobManagementData(id);
   }
 
+  @Get('chatRoom/:id')
+  getAllChatRoom(@Param('id', new ParseIntPipe()) id : number) {
+    return this.service.getUserChat(id);
+  }
 }
