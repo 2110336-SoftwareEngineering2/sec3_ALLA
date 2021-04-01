@@ -50,6 +50,6 @@ export class User {
 
   @JoinColumn()
   @OneToOne(() => PublicFile, {eager: true, nullable: true})
-  avatar?: PublicFile;
+  profilePic?: PublicFile;
 
 }

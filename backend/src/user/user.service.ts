@@ -71,28 +71,20 @@ export class UserService {
     };
   }
 
-  async addAvatar(userId: number, imageBuffer: Buffer, filename: string) {
-    /*try{
-      console.log(`userId : ${userId}`);
-      console.log(await this.userRepo.findOne(userId));
-      const x = await this.findById(userId);
-      console.log('findbyid success');
-      console.log(x);
-    }
-    catch (err){
-      console.log('findById failed');
-    }*/
+  async addAvatar(userId: number, imageBuffer: Buffer, filename: string, mode:string) {
+
     const person = await this.findById(userId);
-    console.log(person)
-    if (person.type == UserType.STUDENT){
-      console.log('doing upload')
-      const avatar =  this.fileService.uploadPublicFile(imageBuffer, filename);
-      await this.userRepo.update(userId, { avatar: (await avatar)});
-      
+
+    console.log('upload...')
+    const avatar =  this.fileService.uploadPublicFile(imageBuffer, filename);
+    
+    if (mode == 'profile'){
+      await this.userRepo.update(userId, { profilePic: (await avatar)});
       return avatar;
     }
-    else{
-      console.log("Does not a student, can't upload resume");
+    else if (mode == 'resume' && person.type == UserType.STUDENT){
+      await this.studentService.add_to_repo(person.sid, (await avatar));
+      return avatar
     }
   }
 

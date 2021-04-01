@@ -4,6 +4,7 @@ import { Student } from 'src/entities/student.entity';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import {FilesService} from 'src/files/files.service';
+import { PublicFile } from 'src/entities/publicFile.entity';
 
 
 @Injectable()
@@ -40,6 +41,11 @@ export class StudentService {
     const student = { ...(await this.findByUser(user)), ...dto };
     return this.repo.save(student);
   }
+
+  async add_to_repo(sid: number, avatar: PublicFile) : Promise<any> {
+    this.repo.update(sid, {resume: avatar})
+  }
+
 /*
   async upload_portfolio(imageBuffer: Buffer, filename: string): Promise<any>{
     return  await this.filesService.uploadPublicFile(imageBuffer, filename);

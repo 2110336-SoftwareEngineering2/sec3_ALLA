@@ -63,13 +63,22 @@ export class UserController {
     return this.service.getUserJobManagementData(id);
   }
 
-  @Post('hard_upload/:uid')
+  @Post('upload/profile_pic/:uid')
   @UseInterceptors(FileInterceptor('file'))
-  async upload_file(
+  async upload_profile(
       @Param('uid', new ParseIntPipe()) uid: number,
       @UploadedFile() file: Express.Multer.File) : Promise<any>{
-        console.log(`user id : ${uid}`);
-          return this.service.addAvatar(uid, file.buffer, file.originalname)
+        console.log(`user id : ${uid} is uploading profile pic`);
+        return this.service.addAvatar(uid, file.buffer, file.originalname, 'profile')
+  }
+
+  @Post('upload/resume/:uid')
+  @UseInterceptors(FileInterceptor('file'))
+  async upload_resume(
+      @Param('uid', new ParseIntPipe()) uid: number,
+      @UploadedFile() file: Express.Multer.File) : Promise<any>{
+        console.log(`user id : ${uid} is uploading resume`);
+        return this.service.addAvatar(uid, file.buffer, file.originalname, 'resume')
   }
 
 }

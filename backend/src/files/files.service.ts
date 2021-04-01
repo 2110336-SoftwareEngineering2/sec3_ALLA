@@ -30,15 +30,16 @@ export class FilesService {
             Body: dataBuffer,
             Key: `${uuid()}-${filename}`
           }).promise();
-          console.log('After s3');
+        console.log('After s3');
 
-          const newFile = this.publicFilesRepository.create({
-            key: uploadResult.Key,
-            url: uploadResult.Location
-          });
-          await this.publicFilesRepository.save(newFile);
-          console.log('upload done')
-          return newFile;
+        const newFile = this.publicFilesRepository.create({
+                key: uploadResult.Key,
+                url: uploadResult.Location
+            });
+            
+        await this.publicFilesRepository.save(newFile);
+        console.log('upload done')
+        return newFile;
     }
     catch(err){
         throw new Error(`S3 upload error: ${err.message}`)
