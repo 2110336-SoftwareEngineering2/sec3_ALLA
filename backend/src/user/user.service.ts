@@ -225,6 +225,7 @@ export class UserService {
       .leftJoinAndSelect('room.message', 'message')
       .where('members.id = :id')
       .setParameter('id', id)
+      .select(['room.id'])
       .getMany();
 
     return room;
