@@ -49,13 +49,7 @@ export class User {
   birthDate: string;
 
   @JoinColumn()
-  @OneToOne(
-    () => PublicFile,
-    {
-      eager: true,
-      nullable: true
-    }
-  )
-  public avatar?: PublicFile;
+  @OneToOne(() => PublicFile, {eager: true, nullable: true})
+  avatar?: PublicFile;
 
 }

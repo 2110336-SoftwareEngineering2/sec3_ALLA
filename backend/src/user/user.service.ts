@@ -87,10 +87,7 @@ export class UserService {
     if (person.type == UserType.STUDENT){
       console.log('doing upload')
       const avatar =  this.fileService.uploadPublicFile(imageBuffer, filename);
-      await this.userRepo.update(userId, {
-        ...person,
-        avatar
-      });
+      await this.userRepo.update(userId, { avatar: (await avatar)});
       
       return avatar;
     }
