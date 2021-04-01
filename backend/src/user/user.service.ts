@@ -88,6 +88,10 @@ export class UserService {
     }
   }
 
+  async get_profileURL(uid:number): Promise<string>{
+    return (await this.userRepo.findOne({id:uid})).profilePic.url
+  }
+
 
   async findByUsername(username: string): Promise<User> {
     const user = await this.userRepo.findOne({ username });

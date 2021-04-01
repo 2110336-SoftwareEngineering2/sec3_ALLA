@@ -46,6 +46,10 @@ export class StudentService {
     this.repo.update(sid, {resume: avatar})
   }
 
+  async get_resumeURL(sid:number) : Promise<string>{
+    return (await this.repo.findOne({sid:sid})).resume.url;
+  }
+
 /*
   async upload_portfolio(imageBuffer: Buffer, filename: string): Promise<any>{
     return  await this.filesService.uploadPublicFile(imageBuffer, filename);

@@ -22,6 +22,11 @@ export class StudentController {
     findById(@Param('sid', new ParseIntPipe()) sid: number): Promise<Student>{
         return this.service.findById(sid);
     }
+
+    @Get('resume')
+    async get_resume(@Body('sid', new ParseIntPipe()) sid : number):Promise<string>{
+        return this.service.get_resumeURL(sid);
+    }
     /*
     @Post()
     create(@Body() dto: Omit<Student,'sid'> ): Promise<Student>{
