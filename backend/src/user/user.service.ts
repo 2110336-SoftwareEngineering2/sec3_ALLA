@@ -75,6 +75,13 @@ export class UserService {
 
     const person = await this.findById(userId);
 
+    if(person.profilePic){
+      console.log('already has profile picture, deleting old one...');
+      await this.userRepo.update(userId,{profilePic:null});
+      this.fileService.deletePublicFile(person.profilePic.Fid);
+      console.log('delete done');
+    }
+
     console.log('upload...')
     const avatar =  this.fileService.uploadPublicFile(imageBuffer, filename);
     

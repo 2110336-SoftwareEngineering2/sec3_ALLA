@@ -36,7 +36,7 @@ export class FilesService {
                 key: uploadResult.Key,
                 url: uploadResult.Location
             });
-            
+
         await this.publicFilesRepository.save(newFile);
         console.log('upload done')
         return newFile;
@@ -44,9 +44,22 @@ export class FilesService {
     catch(err){
         throw new Error(`S3 upload error: ${err.message}`)
     }
+  }
 
- 
+  async deletePublicFile(fileId: number) {
+    const file = await this.publicFilesRepository.findOne({ Fid: fileId });
+    
+    // Delete from S3
+    const s3 = new S3({
+        accessKeyId: "AKIAWSIJ2LLKAE2CEFBF",
+        secretAccessKey: "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"
+      });
+    await s3.deleteObject({
+      Bucket: "backend-nisiter",
+      Key: file.key,
+    }).promise();
 
-
+    // Delete from PublicFiles repo
+    await this.publicFilesRepository.delete(fileId);
   }
 }
