@@ -42,9 +42,31 @@ export class StudentService {
     return this.repo.save(student);
   }
 
+  async delete_resume(sid:number){
+    const person = await this.findById(sid);
+    await this.repo.update(sid, {resume:null});
+    this.filesService.deletePublicFile(person.resume.Fid);
+  }
+
+  async addResume(sid: number, imageBuffer: Buffer, filename: string){
+    const person = await this.findById(sid);
+
+    if(person.resume){
+      console.log('already has resume, deleting old one...');
+      this.delete_resume(sid);
+      console.log('delete done');
+    }
+    console.log('upload...');
+    const avatar = this.filesService.uploadPublicFile(imageBuffer, filename);
+
+    await this.repo.update(sid, {resume: (await avatar)});
+    return avatar;
+  }
+
+  /*
   async add_to_repo(sid: number, avatar: PublicFile) : Promise<any> {
     this.repo.update(sid, {resume: avatar})
-  }
+  }*/
 
   async get_resumeURL(sid:number) : Promise<string>{
     return (await this.repo.findOne({sid:sid})).resume.url;

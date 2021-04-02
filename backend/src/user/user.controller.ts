@@ -69,9 +69,17 @@ export class UserController {
       @Param('uid', new ParseIntPipe()) uid: number,
       @UploadedFile() file: Express.Multer.File) : Promise<any>{
         console.log(`user id : ${uid} is uploading profile pic`);
-        return this.service.addAvatar(uid, file.buffer, file.originalname, 'profile')
+        return this.service.addProfilePic(uid, file.buffer, file.originalname)
   }
 
+  @Delete('delete/profile_pic/:uid')
+  async delete_profile_pic(
+    @Param('uid', new ParseIntPipe()) uid: number
+  ){
+    console.log(`user id : ${uid} is deleting profile pic`);
+    this.service.deleteProfilePic(uid);
+  }
+/*
   @Post('upload/resume/:uid')
   @UseInterceptors(FileInterceptor('file'))
   async upload_resume(
@@ -80,7 +88,7 @@ export class UserController {
         console.log(`user id : ${uid} is uploading resume`);
         return this.service.addAvatar(uid, file.buffer, file.originalname, 'resume')
   }
-
+*/
   @Get('profile_pic')
   async get_profile_pic(@Body('uid', new ParseIntPipe()) uid : number): Promise<string>{
     return this.service.get_profileURL(uid);

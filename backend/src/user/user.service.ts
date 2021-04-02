@@ -71,20 +71,28 @@ export class UserService {
     };
   }
 
-  async addAvatar(userId: number, imageBuffer: Buffer, filename: string, mode:string) {
+  async deleteProfilePic(userId: number){
+    const person = await this.findById(userId);
+    await this.userRepo.update(userId,{profilePic:null});
+    this.fileService.deletePublicFile(person.profilePic.Fid);
+  }
+
+  async addProfilePic(userId: number, imageBuffer: Buffer, filename: string) {
 
     const person = await this.findById(userId);
 
     if(person.profilePic){
       console.log('already has profile picture, deleting old one...');
-      await this.userRepo.update(userId,{profilePic:null});
-      this.fileService.deletePublicFile(person.profilePic.Fid);
+      this.deleteProfilePic(userId);
       console.log('delete done');
     }
 
     console.log('upload...')
     const avatar =  this.fileService.uploadPublicFile(imageBuffer, filename);
     
+    await this.userRepo.update(userId, { profilePic: (await avatar)});
+    return avatar;
+    /*
     if (mode == 'profile'){
       await this.userRepo.update(userId, { profilePic: (await avatar)});
       return avatar;
@@ -92,7 +100,7 @@ export class UserService {
     else if (mode == 'resume' && person.type == UserType.STUDENT){
       await this.studentService.add_to_repo(person.sid, (await avatar));
       return avatar
-    }
+    }*/
   }
 
   async get_profileURL(uid:number): Promise<string>{
