@@ -12,6 +12,7 @@ import EditProfile from '../pages/EditProfile'
 import JobDetail from '../pages/JobDetail';
 import ManageJob from '../pages/ManageJob'
 import AddJob from '../pages/AddJob';
+import ChatRoom from '../pages/ChatRoom'
 
 const Routes = () => {
     const location = useLocation();
@@ -55,6 +56,12 @@ const Routes = () => {
                     <RequireAuth
                         {...props}
                         Component={AddJob}
+                    />
+                )} />
+                <Route exact path="/chat" component={(props) => (
+                    <RequireAuth
+                        {...props}
+                        Component={ChatRoom}
                     />
                 )} />
                 <Route path="*" ><Redirect to="/login" /></Route>
