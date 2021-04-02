@@ -201,6 +201,7 @@ export class UserService {
       .createQueryBuilder('room')
       .leftJoinAndSelect('room.members', 'members')
       .leftJoinAndSelect('room.message', 'message')
+      .leftJoinAndSelect('message.author', 'author')
       .where((qb) => {
         const subQuery = qb
           .subQuery()

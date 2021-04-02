@@ -22,10 +22,37 @@ export class RoomService {
 
   async findById(id: number) {
     const room = await this.roomRepo.findOne(id, {
-      relations: ['members', 'message'],
+      relations: ['members', 'message', 'message.author'],
     });
     if (!room) throw new NotFoundException('Chat Room not found');
     return room;
+  }
+
+  async findByMember(dto: any) {
+    const id1 = dto.id1;
+    const id2 = dto.id2;
+    console.log(dto);
+    const res = await getRepository(Room)
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.members', 'members')
+      .leftJoinAndSelect('room.message', 'message')
+      .where((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('room2.id')
+          .from(Room, 'room2')
+          .innerJoin('room2.members', 'member')
+          .where('member.id = :id1')
+          .getQuery();
+
+        return ('room.id IN ' + subQuery + ' AND members.id = :id2');
+      })
+      .setParameter('id2', id2)
+      .setParameter('id1', id1)
+      .select('room.id')
+      .getMany();
+
+    return res[0];
   }
 
   async create(dto: any) {
@@ -56,8 +83,8 @@ export class RoomService {
     message.author = author;
     message = await this.messageRepo.save(message);
 
-    console.log(message);
-    console.log(room.message);
+    //console.log(message);
+    //console.log(room.message);
 
     room.message = [...room.message, message];
     room = await this.roomRepo.save(room)

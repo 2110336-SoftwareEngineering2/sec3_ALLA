@@ -32,4 +32,9 @@ export class RoomController {
   delete(@Param('id', new ParseIntPipe()) id: number) {
     return this.roomService.delete(id);
   }
+
+  @Get('/members/id')
+  getRoomFromMembers(@Body() dto: any) {
+    return this.roomService.findByMember(dto);
+  }
 }
