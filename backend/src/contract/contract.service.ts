@@ -10,7 +10,7 @@ import { JobService } from 'src/job/job.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 
-const conAttr = ['cid', 'eid', 'sid', 'jid', 'start_date', 'status'];
+const conAttr = ['cid', 'eid', 'sid', 'jid', 'start_date', 'status', 'time_left'];
 
 @Injectable()
 export class ContractService {
@@ -28,22 +28,31 @@ export class ContractService {
     const job = await this.jobService.findById(dto.jid);
 
     var dtoo = {start_date: new Date()};
+    dtoo['time_left'] = job.duration;
 
     const con = { ...new Contract(), employer, student, job, ...dtoo};
     console.log('contract created');
     return this.repo.save(con);
   }
 
-  async check_timeout(cid: number){
+  async check_timeout_update_timeleft(cid: number){
     const con = await this.repo.findOne(cid,{relations: ['job']});
-    var result = new Date(con.start_date);
+    var exp = new Date(con.start_date);
     console.log('got in function check_timeout');
-    console.log(con);
-    console.log(con.job);
-    console.log(con.job.duration);
-    result.setDate(result.getDate() + con.job.duration);
+    console.log('expire on before :', exp);
+    exp.setDate(exp.getDate() + con.job.duration);
+    console.log('expire on after :', exp);
     const present_date = new Date();
-    if (result < present_date) return 1;
+    console.log('present date:', present_date);
+    var dtoo = {}
+    //const tl = exp.getDate() - present_date.getDate();
+    let tl = exp.getTime() - present_date.getTime();
+    tl = tl/(1000*60*60*24);
+    console.log('tl:', tl);
+    dtoo['time_left'] = tl;
+    const conn = await {...(await this.repo.findOne(cid)), ...dtoo};
+    await this.repo.save(conn);
+    if (exp < present_date) return 1;
     else return 0;
   }
 
@@ -52,14 +61,14 @@ export class ContractService {
     if (!con) throw new NotFoundException('Job Contract ID not found');
     else {
       console.log('start computing timeout');
-      const timeout = await this.check_timeout(cid);
+      const timeout = await this.check_timeout_update_timeleft(cid);
       console.log('timeout computed completed with result:', timeout);
       var dtoo = {};
       if (timeout) {
         dtoo['status'] = ContractStatus.TIMEOUT;
         return await this.update(cid, dtoo);
       }
-      else return con;
+      else return await this.repo.findOne(cid);
     }
   }
 
@@ -98,7 +107,7 @@ export class ContractService {
       await this.update(cid, tmp);
       */
      
-      const timeout =  await this.check_timeout(cid);
+      const timeout =  await this.check_timeout_update_timeleft(cid);
       if (timeout) dtoo['status'] = ContractStatus.TIMEOUT;
       else{
         if (dto.request === 'submit'){

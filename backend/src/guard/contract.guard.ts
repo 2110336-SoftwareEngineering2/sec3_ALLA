@@ -26,4 +26,5 @@ export class ContractGuard implements CanActivate {
         if (con.status == ContractStatus.SUBMITTED || 
             con.status == ContractStatus.RESIGN_REQ) return id == idObj.eid;
     }
-}*/
+}
+*/

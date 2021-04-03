@@ -37,4 +37,6 @@ export class Contract {
     @Column('enum', {enum : ContractStatus, default : ContractStatus.DOING})
     status : ContractStatus;
 
+    @Column()
+    time_left : number;
 }
