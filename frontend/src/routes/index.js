@@ -11,6 +11,7 @@ import Store from '../store'
 import EditProfile from '../pages/EditProfile'
 import JobDetail from '../pages/JobDetail';
 import ManageJob from '../pages/ManageJob'
+import AddJob from '../pages/AddJob';
 
 const Routes = () => {
     const location = useLocation();
@@ -48,6 +49,12 @@ const Routes = () => {
                     <RequireAuth
                         {...props}
                         Component={ManageJob}
+                    />
+                )} />
+                 <Route exact path="/add-job" component={(props) => (
+                    <RequireAuth
+                        {...props}
+                        Component={AddJob}
                     />
                 )} />
                 <Route path="*" ><Redirect to="/login" /></Route>

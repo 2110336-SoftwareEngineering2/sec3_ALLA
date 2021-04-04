@@ -57,7 +57,7 @@ export default function Register() {
   const [isStudent, setisStudent] = useState(true);
 
   async function sendUpdateProfile(e) {
-    console.log(AuthState.token);
+    console.log('TOOOOKEKN',AuthState.token);
     e.preventDefault();
     let differnt = {};
     if (isStudent) {
@@ -86,7 +86,7 @@ export default function Register() {
     await axios
       .patch("http://127.0.0.1:8300/user/" + uid, differnt, {
         headers: {
-          Authorization: "Bearer " + AuthState.token,
+          Authorization: "Bearer " + token,
         },
       })
       .then((response) => {

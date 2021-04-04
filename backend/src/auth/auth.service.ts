@@ -41,7 +41,7 @@ export class AuthService {
     };
   }
 
-  verifyToken(token: string): { uid: number } {
+  verifyToken(token): { uid: number } {
     const res = this.jwtService.verify<{ uid: number }>(token);
     return res;
   }

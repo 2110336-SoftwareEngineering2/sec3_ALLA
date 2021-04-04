@@ -48,7 +48,7 @@ export default function Register() {
 
   function toggle() {
     var x = document.getElementById("myPW");
-    if (x.type == "password") {
+    if (x.type === "password") {
       x.type = "text";
     } else {
       x.type = "password";
@@ -58,28 +58,28 @@ export default function Register() {
 
   function validateForm() {
     if (
-      formData.username == "" ||
-      formData.password == "" ||
-      formData.firstName == "" ||
-      formData.lastName == "" ||
-      formData.phoneNumber == "" ||
-      formData.email == "" ||
-      formData.birthDate == ""
+      formData.username === "" ||
+      formData.password === "" ||
+      formData.firstName === "" ||
+      formData.lastName === "" ||
+      formData.phoneNumber === "" ||
+      formData.email === "" ||
+      formData.birthDate === ""
     )
       return false;
     if (isStudent) {
       return !(
-        student.university == "" ||
-        student.degree == "" ||
-        student.faculty == "" ||
-        student.department == "" ||
-        student.fields_of_work == ""
+        student.university === "" ||
+        student.degree === "" ||
+        student.faculty === "" ||
+        student.department === "" ||
+        student.fields_of_work === ""
       );
     } else {
       return !(
-        employer.company == "" ||
-        employer.position == "" ||
-        employer.fields_of_work == "" 
+        employer.company === "" ||
+        employer.position === "" ||
+        employer.fields_of_work === "" 
       );
     }
   }
