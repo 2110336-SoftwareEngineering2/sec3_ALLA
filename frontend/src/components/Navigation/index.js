@@ -9,6 +9,7 @@ import nisiter_logo from "../../assets/nav_photo/N.png";
 import nisiter_logo_1 from "../../assets/nav_photo/N_1.png";
 import inbox_image_1 from "../../assets/nav_photo/profile_arrow.png";
 import arrow from "../../assets/nav_photo/arrow.png";
+import noti_image from "../../assets/logo/dog1.jpg";
 
 export default function Navigation() {
 
@@ -54,14 +55,13 @@ export default function Navigation() {
           </form>
         </div>
         <div className="d-flex ">
-          <button class="btn btn-default">
+          <button class="btn btn-default" onClick={() => history.push('/chat')}>
             <img src={inbox_image} width="30" />
           </button>
-          {/* <a href="myprofile">
-            <button class="btn btn-default">
-              <img src={profile_image} width="30" />
-            </button>
-          </a> */}
+          {/* for Notification Icon */}
+          <button class="btn btn-default" onClick={() => history.push('/')}> 
+            <img src={noti_image} width="30" />
+          </button>
           <div className="dropdown-container ">
             <div>
               <button
