@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
-import { EventLogService } from './event-log.service';
-import { EventLogController } from './event-log.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ChatModule } from 'src/chat/chat.module';
 import { EventLog } from 'src/entities/eventLog.entity';
-import { User } from 'src/entities/user.entity';
-import { Job } from 'src/entities/job.entity';
-import { UserService } from 'src/user/user.service';
-import { JobService } from 'src/job/job.service';
-import { ContractService } from 'src/contract/contract.service';
-import { ApplicationRecordService } from 'src/application-record/application-record.service';
+import { JobModule } from 'src/job/job.module';
+import { UserModule } from 'src/user/user.module';
+import { EventLogController } from './event-log.controller';
+import { EventLogService } from './event-log.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([EventLog, User, Job]), UserService],
-  providers: [EventLogService],
+  imports : [TypeOrmModule.forFeature([EventLog]), UserModule, JobModule, ChatModule],
   controllers: [EventLogController],
-  exports: [EventLogService]
+  providers: [EventLogService],
+  exports : [EventLogService]
 })
 export class EventLogModule {}
+ 

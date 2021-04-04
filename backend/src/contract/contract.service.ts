@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Contract, ContractStatus } from 'src/entities/contract.entity';
+import { EventLogService } from 'src/event-log/event-log.service';
 import { FeedbackService } from 'src/feedback/feedback.service';
 import { JobService } from 'src/job/job.service';
 import { UserService } from 'src/user/user.service';
@@ -19,7 +20,8 @@ export class ContractService {
     @InjectRepository(Contract) private readonly repo: Repository<Contract>,
     private readonly userService: UserService,
     private readonly jobService: JobService,
-    private readonly feedbackService: FeedbackService
+    private readonly feedbackService: FeedbackService,
+    private readonly eventLogService: EventLogService
   ) {}
 
   async create(dto: any): Promise<Contract> {
@@ -32,7 +34,9 @@ export class ContractService {
 
     const con = { ...new Contract(), employer, student, job, ...dtoo};
     console.log('contract created');
-    return this.repo.save(con);
+    const ret = await this.repo.save(con);
+    await this.addEvent(ret.cid, 4, null);
+    return ret;
   }
 
   async check_timeout_update_timeleft(cid: number){
@@ -66,6 +70,7 @@ export class ContractService {
       var dtoo = {};
       if (timeout) {
         dtoo['status'] = ContractStatus.TIMEOUT;
+        await this.addEvent(cid, 7, null);
         return await this.update(cid, dtoo);
       }
       else return await this.repo.findOne(cid);
@@ -95,6 +100,7 @@ export class ContractService {
     const con = await this.findById(cid);
     const status = con.status;
 
+    let eventFlag = 1;
     var dtoo = {};
 
     if (status == ContractStatus.DOING){
@@ -112,13 +118,16 @@ export class ContractService {
       else{
         if (dto.request === 'submit'){
           dtoo['status'] = ContractStatus.SUBMITTED;
+          eventFlag = 4;
         }
         if (dto.request === 'resign'){
           dtoo['status'] = ContractStatus.RESIGN_REQ;
+          eventFlag = 8;
         }
       }
     }
     if (status == ContractStatus.SUBMITTED){
+      eventFlag = 6;
       if (dto.yesFlag){
         dtoo['status'] = ContractStatus.DONE;
         // create feedback...
@@ -136,6 +145,7 @@ export class ContractService {
       }
     }
     if (status == ContractStatus.RESIGN_REQ){
+      eventFlag = 9;
       if (dto.yesFlag){
         dtoo['status'] = ContractStatus.RESIGNED;
       }
@@ -143,7 +153,8 @@ export class ContractService {
         dtoo['status'] = ContractStatus.DOING;
       }
     }
-    this.update(cid, dtoo);
+    await this.update(cid, dtoo);
+    await this.addEvent(cid, eventFlag, dto.yesFlag);
   }
 
   async getAssociatedId(cid: number) {
@@ -161,5 +172,13 @@ export class ContractService {
     const con = await this.findById(cid);
     await this.repo.remove(con);
     return con;
+  }
+
+  async addEvent(cid: number, eventFlag: number, addition: Boolean) {
+    const contract = await this.repo.findOne(cid, {
+      relations: ['employer', 'student', 'job'],
+    });
+    await this.eventLogService.create(contract, eventFlag, addition);
+    console.log('Event logged');
   }
 }
