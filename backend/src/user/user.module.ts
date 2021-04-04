@@ -16,11 +16,11 @@ import { UserService } from './user.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Job, Contract, ApplicationRecord, Room]),
-    EmployerModule, StudentModule, FileModule
+    EmployerModule, StudentModule, FileModule,
   ],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
-})
+}) 
 export class UserModule {}
   

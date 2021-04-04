@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Job } from './job.entity';
-import { User } from './user.entity';
+import { User } from './user.entity'; 
 
 export enum EventNum {
     APPLLICATION = 1,
@@ -51,5 +51,5 @@ export class EventLog {
   timestamp: Date;
 
   @Column({nullable: true})
-  addition: String;
+  addition: Boolean;
 }
