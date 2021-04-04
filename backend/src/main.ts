@@ -23,14 +23,14 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document); 
 
-  const configService = app.get(ConfigService);
+  /* const configService = app.get(ConfigService);
   config.update({
     accessKeyId: "nKVwNQ6SaKFw6p2pKNQtN0whTbfOodztE59icaiW",
     secretAccessKey: "AKIAWSIJ2LLKAE2CEFBF",
     region: "us-east-2",
-  });
+  }); */
 
-  await app.listen(8000);
+  await app.listen(8300);
 }
 
 bootstrap();
