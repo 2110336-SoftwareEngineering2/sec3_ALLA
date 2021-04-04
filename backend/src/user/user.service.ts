@@ -175,6 +175,8 @@ export class UserService {
     return user;
   }
 
+  //--------------------------------------- QUERY PART ---------------------------------------
+
   async getUserJobManagementData(id: number) {
     const job = await this.getUserJob(id);
     const record = await this.getUserRecord(id);
@@ -242,16 +244,28 @@ export class UserService {
         .leftJoinAndSelect('contract.employer', 'employer')
         .leftJoinAndSelect('contract.job', 'job')
         .where('contract.student.id = :id')
-        /* .select([
+        
+        .select([
           'contract.cid',
           'contract.status',
           'employer.id',
           'employer.firstName',
           'employer.lastName',
-          'employer.phoneNumber',
-          'employer.email',
-        ]) */
+          'student.id',
+          'student.firstName',
+          'student.lastName',
+          'job.companyName',
+          'job.companyPicUrl',
+          'job.jid',
+          'job.jobTitle',
+          'job.location',
+          'job.duration',
+          'contract.start_date',
+          'contract.time_left'
+        ])
+        
         .setParameter('id', id)
+        .orderBy('contract.status')
         .getMany();
     } else if (user.type == UserType.EMPLOYER) {
       contract = await getRepository(Contract)
@@ -260,16 +274,28 @@ export class UserService {
         .leftJoinAndSelect('contract.employer', 'employer')
         .leftJoinAndSelect('contract.job', 'job')
         .where('contract.employer.id = :id')
-        /* .select([
+        
+        .select([
           'contract.cid',
           'contract.status',
+          'employer.id',
+          'employer.firstName',
+          'employer.lastName',
           'student.id',
           'student.firstName',
           'student.lastName',
-          'student.phoneNumber',
-          'student.email',
-        ]) */
+          'job.companyName',
+          'job.companyPicUrl',
+          'job.jid',
+          'job.jobTitle',
+          'job.location',
+          'job.duration',
+          'contract.start_date',
+          'contract.time_left'
+        ])
+        
         .setParameter('id', id)
+        .orderBy('contract.status')
         .getMany();
     }
     return contract;
