@@ -4,8 +4,9 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
+  JoinColumn
 } from 'typeorm';
-import { Student } from './student.entity';
+import {PublicFile} from 'src/entities/publicFile.entity';
 
 export enum UserType {
   ADMIN = 'ADMIN',
@@ -46,4 +47,9 @@ export class User {
 
   @Column()
   birthDate: string;
+
+  @JoinColumn()
+  @OneToOne(() => PublicFile, {eager: true, nullable: true})
+  profilePic?: PublicFile;
+
 }

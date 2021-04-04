@@ -16,6 +16,8 @@ import { Job } from 'src/entities/job.entity';
 import { Contract } from 'src/entities/contract.entity';
 import { ApplicationRecord } from 'src/entities/applicationRecord.entity';
 import { Room } from 'src/entities/room.entity';
+import { FilesService } from 'src/files/files.service';
+
 
 const userprops = [
   'username',
@@ -42,6 +44,8 @@ export class UserService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private readonly studentService: StudentService,
     private readonly employerService: EmployerService,
+    private readonly fileService: FilesService
+    
   ) {}
 
   async validUsername(username: string): Promise<Boolean> {
@@ -67,6 +71,43 @@ export class UserService {
       ...subUser,
     };
   }
+
+  async deleteProfilePic(userId: number){
+    const person = await this.findById(userId);
+    await this.userRepo.update(userId,{profilePic:null});
+    this.fileService.deletePublicFile(person.profilePic.Fid);
+  }
+
+  async addProfilePic(userId: number, imageBuffer: Buffer, filename: string) {
+
+    const person = await this.findById(userId);
+
+    if(person.profilePic){
+      console.log('already has profile picture, deleting old one...');
+      this.deleteProfilePic(userId);
+      console.log('delete done');
+    }
+
+    console.log('upload...')
+    const avatar =  this.fileService.uploadPublicFile(imageBuffer, filename);
+    
+    await this.userRepo.update(userId, { profilePic: (await avatar)});
+    return avatar;
+    /*
+    if (mode == 'profile'){
+      await this.userRepo.update(userId, { profilePic: (await avatar)});
+      return avatar;
+    }
+    else if (mode == 'resume' && person.type == UserType.STUDENT){
+      await this.studentService.add_to_repo(person.sid, (await avatar));
+      return avatar
+    }*/
+  }
+
+  async get_profileURL(uid:number): Promise<string>{
+    return (await this.userRepo.findOne({id:uid})).profilePic.url
+  }
+
 
   async findByUsername(username: string): Promise<User> {
     const user = await this.userRepo.findOne({ username });
