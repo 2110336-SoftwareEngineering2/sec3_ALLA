@@ -17,7 +17,7 @@ import { EmployerService } from './employer.service';
 export class EmployerController {
   constructor(private readonly service: EmployerService) {}
 
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @Get(':eid')
   findById(@Param('eid', new ParseIntPipe()) eid: number): Promise<Employer> {
     return this.service.findById(eid);

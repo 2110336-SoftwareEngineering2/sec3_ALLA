@@ -1,7 +1,7 @@
-/*
 import { CanActivate, ExecutionContext, Inject, Injectable } from "@nestjs/common";
 import { ContractService } from "src/contract/contract.service";
 import { ContractStatus } from "src/entities/contract.entity";
+import { Request } from 'express';
 
 @Injectable()
 export class ContractGuard implements CanActivate {
@@ -27,4 +27,3 @@ export class ContractGuard implements CanActivate {
             con.status == ContractStatus.RESIGN_REQ) return id == idObj.eid;
     }
 }
-*/

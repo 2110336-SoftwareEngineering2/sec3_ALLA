@@ -15,7 +15,7 @@ export class FeedbackController {
     return this.service.findById(fid);
   }
 
-  // @UseGuards(OwnGuard)
+  //@UseGuards(OwnGuard)
   @Post()
   create(@Body() dto: Omit<Feedback, 'fid'>): {} {
     return this.service.create(dto);
