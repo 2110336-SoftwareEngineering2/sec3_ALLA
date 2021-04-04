@@ -138,17 +138,28 @@ export default function JobDetail(props) {
             </form>
           </div>
         </div>
-        <div className="d-flex justify-content-around">
-          <div className="d-flex justify-content-right num_left-style p-1">
-            <text>
-              <span className=""> Required : </span>{" "}
-              {jobData.positionLeft || 'Fulfilled'}
-            </text>
+        <div>
+          <div className="d-flex justify-content-around">
+            <div className="d-flex justify-content-right num_left-style p-1">
+              <text>
+                <span className=""> Required : </span>{" "}
+                {jobData.positionLeft || 'Fulfilled'}
+              </text>
+            </div>
+            <div className="d-flex justify-content-right num_left-style p-1">
+              <text>
+                {jobData.positionLeft ? 'left' : ''}
+              </text>
+            </div>
           </div>
-          <div className="d-flex justify-content-right num_left-style p-1">
-            <text>
-              {jobData.positionLeft ? 'left' : ''}
-            </text>
+          <div className="pt-2">
+            <button
+              type="submit"
+              class="btn btn-primary"
+              onClick={() => history.push("/chat")}
+            >
+              Chat with Employer
+          </button>
           </div>
         </div>
       </div>

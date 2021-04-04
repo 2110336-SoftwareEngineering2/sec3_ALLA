@@ -13,7 +13,7 @@ export default function JobCard(props) {
     const AuthState = useSelector((state) => state.Auth);
 
     //NEED API!!!!!!!!!!!!!!!
-    const status = props.jobStatus;
+    const status = props.status
     async function submitJobapi() {
         return;
     }
@@ -71,7 +71,7 @@ export default function JobCard(props) {
 
     const getStudentButton = () => {
         switch (status) {
-            case "WORKING":
+            case "DOING":
                 return <div className="job-text-col">
                     <button
                         onClick={(e) => {
@@ -155,12 +155,14 @@ export default function JobCard(props) {
                             <h6 className="p-2"><a href={`/profile/${props.studentObj.id}`}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
                         </div>
                         {getJobStatus()}
-                    </div>
+                        <div className="mt-1">
                     {isStudent ?
                         <>{getStudentButton()}</> :
                         <>{getEmployerButton()}</>
                     }
-
+                    </div>
+                    </div>
+                    
                 </div> :
                 <div className="d-flex justify-content-between">
                     <div className="d-flex" >

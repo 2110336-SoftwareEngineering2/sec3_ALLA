@@ -151,6 +151,7 @@ export default function Register() {
               </header>
             </div>
             <div class="form-group col-md-6 ">
+              <img src={student.img}></img>
               <ImageUpload />
             </div>
             <div class="form-row">

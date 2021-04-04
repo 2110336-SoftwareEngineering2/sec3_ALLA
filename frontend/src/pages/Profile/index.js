@@ -51,28 +51,28 @@ export default function Profile(props) {
     const [pendingList, setpendingList] = useState([]);
     const [resultList, setresultList] = useState([]);
     const [onProgressList, setonProgressList] = useState([]);
-  
-  
+
+
     //ยังไม่ได้ ้handle การดึงข้อมูลใหม่หลังเปลี่ยน tab
-    
-  
+
+
     async function getStudentJoblistHandler() {
-      await axios
-        .get(`http://127.0.0.1:8300/user/jobManagement/` + AuthState.id, {
-          headers: {
-            Authorization: "Bearer " + AuthState.token,
-          },
-        })
-        .then((response) => {
-          console.log("response", response);
-          setpendingList(response.data.record.pending);
-          setresultList(response.data.record.waiting);
-          setonProgressList(response.data.contract);
-        })
-        .catch((error) => {
-          console.log(error);
-          return error;
-        });
+        await axios
+            .get(`http://127.0.0.1:8300/user/jobManagement/` + AuthState.id, {
+                headers: {
+                    Authorization: "Bearer " + AuthState.token,
+                },
+            })
+            .then((response) => {
+                console.log("response", response);
+                setpendingList(response.data.record.pending);
+                setresultList(response.data.record.waiting);
+                setonProgressList(response.data.contract);
+            })
+            .catch((error) => {
+                console.log(error);
+                return error;
+            });
     }
     async function onLoadHandler(id, token) {
         await axios
@@ -104,34 +104,34 @@ export default function Profile(props) {
                 return error;
             });
 
-            // await axios
-            // .get(`http://127.0.0.1:8300/user/` + props.match.params.uid, {
-            //     headers: {
-            //         Authorization: "Bearer " + AuthState.token,
-            //     },
-            // })
-            // .then((response) => {
-            //     console.log("response", response);
-            //     if (response.data.type == "STUDENT") {
-            //         setStudent({
-            //             ...response.data,
-            //             resume: initStudent.resume,
-            //             img: initStudent.img,
-            //         });
-            //         setisStudent(true);
-            //     } else if (response.data.type == "EMPLOYER") {
-            //         setEmployer({
-            //             ...response.data,
-            //             img: initEmployer.img,
-            //         });
-            //         setisStudent(false);
-            //     }
-            //     return response;
-            // })
-            // .catch((error) => {
-            //     console.log(error);
-            //     return error;
-            // });
+        // await axios
+        // .get(`http://127.0.0.1:8300/user/` + props.match.params.uid, {
+        //     headers: {
+        //         Authorization: "Bearer " + AuthState.token,
+        //     },
+        // })
+        // .then((response) => {
+        //     console.log("response", response);
+        //     if (response.data.type == "STUDENT") {
+        //         setStudent({
+        //             ...response.data,
+        //             resume: initStudent.resume,
+        //             img: initStudent.img,
+        //         });
+        //         setisStudent(true);
+        //     } else if (response.data.type == "EMPLOYER") {
+        //         setEmployer({
+        //             ...response.data,
+        //             img: initEmployer.img,
+        //         });
+        //         setisStudent(false);
+        //     }
+        //     return response;
+        // })
+        // .catch((error) => {
+        //     console.log(error);
+        //     return error;
+        // });
     }
 
     useEffect(() => {
@@ -154,12 +154,13 @@ export default function Profile(props) {
                                     ></img>
 
                                     <div class="d-flex justify-content-center mt-3">
-                                        <button className="btn btn-primary" type="button" >
-                                            <a>
-
-                                                go to chat
-                                        </a>
-                                        </button>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                            onClick={() => history.push("/chat")}
+                                        >
+                                            Chat with student
+          </button>
 
                                     </div>
                                 </form>
@@ -235,11 +236,12 @@ export default function Profile(props) {
                                     ></img>
 
                                     <div class="d-flex justify-content-center mt-3">
-                                        <button className="btn btn-primary" type="button" >
-                                            <a>
-
-                                                go to chat
-                                        </a>
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                            onClick={() => history.push("/chat")}
+                                        >
+                                            Chat with employer
                                         </button>
 
                                     </div>
@@ -307,7 +309,7 @@ export default function Profile(props) {
             }
 
             <JobPane type="STUDENT-ONPROGRESS" onProgressList={onProgressList} />
-        
+
         </div >
     );
 }

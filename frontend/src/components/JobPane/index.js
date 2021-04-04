@@ -90,6 +90,7 @@ const JobPane = (props) => {
                         isStudent={true}
                         jobObj={job.job}
                         studentObj={job.student}
+                        status={job.status}
                     />
 
                 </div>
@@ -109,6 +110,7 @@ const JobPane = (props) => {
                         isStudent={false}
                         jobObj={job.job}
                         studentObj={job.student}
+                        status={job.status}
                     />
 
                 </div>
