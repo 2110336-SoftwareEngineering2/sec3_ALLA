@@ -15,6 +15,7 @@ import { EmployerService } from 'src/employer/employer.service';
 import { Job } from 'src/entities/job.entity';
 import { Contract } from 'src/entities/contract.entity';
 import { ApplicationRecord } from 'src/entities/applicationRecord.entity';
+import { Room } from 'src/entities/room.entity';
 
 const userprops = [
   'username',
@@ -182,8 +183,9 @@ export class UserService {
     const contract = await this.getUserContract(id);
     const user = await this.findById(id);
 
-    return user.type == UserType.STUDENT ?
-      {record, contract} : {job, record, contract}
+    return user.type == UserType.STUDENT
+      ? { record, contract }
+      : { job, record, contract };
   }
 
   async getUserJob(id: number) {
@@ -196,6 +198,42 @@ export class UserService {
     return job;
   }
 
+  async getUserChat(id: number) {
+    const res = await getRepository(Room)
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.members', 'members')
+      .leftJoinAndSelect('room.message', 'message')
+      .leftJoinAndSelect('message.author', 'author')
+      .where((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('room2.id')
+          .from(Room, 'room2')
+          .innerJoin('room2.members', 'member')
+          .where('member.id = :id', {id: id})
+          .getQuery();
+
+        return ('room.id IN ' + subQuery);
+      })
+      .getMany();
+
+    return res;
+  }
+
+  async getUserChatRoom(id: number) {
+    //const room = await this.userRepo.findOne(id, {relations:['members']});
+    const room = await getRepository(Room)
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.members', 'members')
+      .leftJoinAndSelect('room.message', 'message')
+      .where('members.id = :id')
+      .setParameter('id', id)
+      .select(['room.id'])
+      .getMany();
+
+    return room;
+  }
+
   async getUserContract(id: number) {
     const user = await this.findById(id);
     let contract: Contract[];
@@ -204,7 +242,7 @@ export class UserService {
         .createQueryBuilder('contract')
         .leftJoinAndSelect('contract.student', 'student')
         .leftJoinAndSelect('contract.employer', 'employer')
-        .leftJoinAndSelect('contract.job','job')
+        .leftJoinAndSelect('contract.job', 'job')
         .where('contract.student.id = :id')
         
         .select([
@@ -234,7 +272,7 @@ export class UserService {
         .createQueryBuilder('contract')
         .leftJoinAndSelect('contract.student', 'student')
         .leftJoinAndSelect('contract.employer', 'employer')
-        .leftJoinAndSelect('contract.job','job')
+        .leftJoinAndSelect('contract.job', 'job')
         .where('contract.employer.id = :id')
         
         .select([
