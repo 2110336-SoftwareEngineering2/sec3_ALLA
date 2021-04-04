@@ -11,8 +11,25 @@ export default function JobCard(props) {
         history.push(`/job/${jobObj.jid}`)
     }
     const AuthState = useSelector((state) => state.Auth);
+
+    //NEED API!!!!!!!!!!!!!!!
+    const status = props.jobStatus;
+    async function submitJobapi() {
+        return;
+    }
+    async function resignJobapi() {
+        return;
+    }
+    async function jobSubmithandler(answer) {
+        return;
+    }
+    async function jobResignhandler(answer) {
+        return;
+    }
+
     //Golf On-progress & request
     const isOnprogresspage = props.isOnprogresspage;
+    const isStudent = props.isStudent;
     const rid = props.rid;
     function getUserlink() {
         //employers view student's profiles
@@ -44,9 +61,86 @@ export default function JobCard(props) {
                 console.log(error);
             });
     }
+
+
+    function getJobStatus() {
+        return <div>
+            status : {status}
+        </div>
+    }
+
+    const getStudentButton = () => {
+        switch (status) {
+            case "WORKING":
+                return <div className="job-text-col">
+                    <button
+                        onClick={(e) => {
+                            resignJobapi()
+                        }}
+                    >
+                        Resign
+                    </button>
+                    <text> {" "} </text>
+                    <button
+                        onClick={(e) => {
+                            submitJobapi()
+                        }}
+                    >
+                        Submit
+                    </button>
+                </div>
+            default:
+                return <div>
+                </div>;
+        }
+    }
+    const getEmployerButton = () => {
+        switch (status) {
+            case "SUBMITTED":
+                return <div className="d-flex justify-content-between">
+                    <button
+                        onClick={(e) => {
+                            jobSubmithandler(true)
+                        }}
+                    >
+                        Accept
+                    </button>
+                    <text> {" "} </text>
+                    <button
+                        onClick={(e) => {
+                            jobSubmithandler(false)
+                        }}
+                    >
+                        Reject
+                    </button>
+                </div>
+            case "WANT TO RESIGN":
+                <div>
+                    <button
+                        onClick={(e) => {
+                            jobResignhandler(true)
+                        }}
+                    >
+                        Accept
+                    </button>
+                    <text> {" "} </text>
+                    <button
+                        onClick={(e) => {
+                            jobResignhandler(false)
+                        }}
+                    >
+                        Reject
+                    </button>
+                </div>
+            default:
+                return <div>
+                </div>;
+        }
+    }
+
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
-            <div><img src={jobObj.companyPic_url || `https://picsum.photos/${(200+(jobObj.jid %30)).toString()}`} className="rounded-circle job-card-pic p-2"></img></div>
+            <div><img src={jobObj.companyPic_url || `https://picsum.photos/${(200 + (jobObj.jid % 30)).toString()}`} className="rounded-circle job-card-pic p-2"></img></div>
             <div className="job-text-col p-2 ">
                 <div> <h6>{jobObj.companyName}</h6></div>
                 <div> <h4>{jobObj.jobTitle}</h4></div>
@@ -55,19 +149,29 @@ export default function JobCard(props) {
 
             {isOnprogresspage ?
                 <div className="d-flex justify-content-between">
-                    <div className="p-2"> working by </div>
-                    <h6 className="p-2"><a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
+                    <div className="job-text-col">
+                        <div className="d-flex justify-content-between">
+                            <div className="p-2"> by </div>
+                            <h6 className="p-2"><a href={`/profile/${props.studentObj.id}`}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
+                        </div>
+                        {getJobStatus()}
+                    </div>
+                    {isStudent ?
+                        <>{getStudentButton()}</> :
+                        <>{getEmployerButton()}</>
+                    }
+
                 </div> :
                 <div className="d-flex justify-content-between">
                     <div className="d-flex" >
                         <div className="p-2"> Requested by </div>
-                        <h6 className="p-2"><a href={URL}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
+                        <h6 className="p-2"><a href={`/profile/${props.studentObj.id}`}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
                     </div>
                     <div className="job-text-col">
                         <button
                             onClick={(e) => {
                                 answerRecordState(e, true)
-                            }} 
+                            }}
                         >
                             Accept
                         </button>

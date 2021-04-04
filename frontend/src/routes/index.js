@@ -12,6 +12,7 @@ import EditProfile from '../pages/EditProfile'
 import JobDetail from '../pages/JobDetail';
 import ManageJob from '../pages/ManageJob'
 import AddJob from '../pages/AddJob';
+import Profile from '../pages/Profile';
 
 const Routes = () => {
     const location = useLocation();
@@ -32,6 +33,12 @@ const Routes = () => {
                     <RequireAuth
                         {...props}
                         Component={MyProfile}
+                    />
+                )} />
+                <Route exact path="/profile/:uid" component={(props) => (
+                    <RequireAuth
+                        {...props}
+                        Component={Profile}
                     />
                 )} />
                 <Route exact path="/editprofile" component={(props) => (
