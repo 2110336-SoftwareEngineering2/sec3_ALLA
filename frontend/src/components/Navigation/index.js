@@ -48,7 +48,7 @@ export default function Navigation() {
               aria-label="Search"
               value={searchInput}
             ></input>
-            <button class="btn btn-success" type="submit">
+            <button className="btn btn-success" type="submit">
               Search
           </button>
           </form>

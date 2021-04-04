@@ -112,10 +112,11 @@ export default function JobDetail(props) {
                     <div class="form-row">
                         <div className="d-flex justify-content-between">
                             <form class="md-form p-1">
+                                <a href={`/profile/${jobData.employer.id}`}>
                                 <img
                                     src={`https://picsum.photos/200`}//jobData.companyPicUrl ||
                                     class="rounded-circle image-style p-1"
-                                ></img>
+                                ></img></a>
                             </form>
                         </div>
                         <form className="p-2">

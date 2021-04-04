@@ -1,11 +1,15 @@
 .image-style {
-  width: 250px;
-  height: 250px;
+  width: 350px;
+  height: 350px;
+  
 }
-
+.cardpane-container{
+  margin:0px auto;
+}
 .name_font-style {
   font-style: italic;
-  font-size: 45px;
+  font-weight: 700;
+  font-size: 48px;
 }
 
 .addPhoto-style {
@@ -26,4 +30,7 @@
 	overflow: hidden;
 	position: absolute;
 	z-index: -1;
+}
+.detail-container{
+  margin:0px auto;
 }

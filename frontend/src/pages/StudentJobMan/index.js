@@ -76,7 +76,7 @@ export default function StudentJobMan() {
       
             {onProgressList.length!== 0 ?
               <div className="w-100 ">
-                <JobPane type="ONPROGRESS" onProgressList={onProgressList} />
+                <JobPane type="STUDENT-ONPROGRESS" onProgressList={onProgressList} />
               </div>
               :
               <div>Nothing to show here..</div>

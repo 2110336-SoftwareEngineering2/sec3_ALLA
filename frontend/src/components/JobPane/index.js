@@ -4,6 +4,7 @@ import ResultCard from '../ResultCard';
 import ResponseCard from '../ResponseCard';
 import StudentCard from '../StudentCard';
 import './style.scss'
+import ContractCard from '../ContractCard';
 const JobPane = (props) => {
 
     
@@ -78,7 +79,7 @@ const JobPane = (props) => {
     }
 
     //contract ยังไม่ได้ job มา
-    const getOnProgressList = (onProgressList) => {
+    const getStudentOnProgressList = (onProgressList) => {
         let jobArray = [];
         onProgressList.map((job, idx) => {
             jobArray.push(
@@ -86,6 +87,26 @@ const JobPane = (props) => {
                     <StudentCard
                         rid={job.rid}
                         isOnprogresspage={true}
+                        isStudent={true}
+                        jobObj={job.job}
+                        studentObj={job.student}
+                    />
+
+                </div>
+            )
+        })
+        return jobArray
+    }
+
+    const getEmployerOnProgressList = (onProgressList) => {
+        let jobArray = [];
+        onProgressList.map((job, idx) => {
+            jobArray.push(
+                <div className=" mb-3" key={idx}>
+                    <StudentCard
+                        rid={job.rid}
+                        isOnprogresspage={true}
+                        isStudent={false}
                         jobObj={job.job}
                         studentObj={job.student}
                     />
@@ -134,14 +155,34 @@ const JobPane = (props) => {
         return jobArray
     }
 
+    const getDoneContractList = (contractList) => {
+        let jobArray = [];
+        contractList.map((contract, idx) => {
+            jobArray.push(
+                <div className=" mb-3" key={idx}>
+                    <ContractCard
+                        cid={contract.cid}
+                        isinManagepage={false}
+                        jobObj={contract.job}
+                        studentObj={contract.student}
+                    />
+
+                </div>
+            )
+        })
+        return jobArray
+    }
+    
     const getList = () => {
         
         if (props.type === "STUDENT-PENDING") return getPendingList(props.pendingList);
         else if (props.type == "STUDENT-RESULT") return getResultList(props.resultList);
-        else if (props.type == "ONPROGRESS") return getOnProgressList(props.onProgressList);
+        else if (props.type == "STUDENT-ONPROGRESS") return getStudentOnProgressList(props.onProgressList);
+        else if (props.type == "EMPLOYER-ONPROGRESS") return getEmployerOnProgressList(props.onProgressList);
         else if (props.type == "EMPLOYER-REQUEST") return getRequestList(props.requestList);
         else if (props.type == "EMPLOYER-RESPONSE") return getResponseList(props.responseList);
         else if (props.type == "EMPLOYER-AVAILABLE") return getAvailableList(props.availableList);
+        else if (props.type == "STUDENT-FINISHED-CONTRACT") return getDoneContractList(props.contractList);
         else return getJobList();
     }
     const list = getList()

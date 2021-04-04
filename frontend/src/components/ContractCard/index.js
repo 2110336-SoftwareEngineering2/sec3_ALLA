@@ -1,8 +1,8 @@
 import React from 'react'
-import './style.scss'
+// import './style.scss'
 import { useHistory } from 'react-router-dom'
 import axios from "axios";
-export default function JobCard(props) {
+export default function ContractCard(props) {
     const history = useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
