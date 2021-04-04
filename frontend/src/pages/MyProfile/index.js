@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import JobPane from "../../components/JobPane";
+// import ImageUpload from "../../components/ImageUpload";
+// import FileUploadForm from "../../components/FileUpload";
 
 export default function MyProfile() {
   const userState = useSelector((state) => state.Auth);
@@ -112,16 +114,15 @@ export default function MyProfile() {
                 ></img>
                 <div class="d-flex justify-content-center">
                   <input
-                    type="file"
-                    name="file"
-                    id="file"
-                    class="inputfile"
+                    type="file" id="img" name="img" accept="image/*"
                   />
                   <label for="file" className="addPhoto-style">
                     Add or Edit Photo
                   </label>
+
                 </div>
               </form>
+              
             </div>
             <div className="p-5">
               <div className="d-flex justify-content-center p-2 name_font-style ">
@@ -169,6 +170,8 @@ export default function MyProfile() {
     return (
       <div className="d-flex flex-column ">
         <div className="detail-container d-flex flex-column justify-content-left ">
+          <div>
+          </div>
           <div className="d-flex justify-content-center ">
             <form class="md-form  ">
               <div class="d-flex justify-content-center pb-3">

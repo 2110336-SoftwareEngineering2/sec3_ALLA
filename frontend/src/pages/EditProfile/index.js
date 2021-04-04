@@ -11,6 +11,8 @@ import axios from "axios";
 
 import "react-datepicker/dist/react-datepicker.css";
 import RequireAuth from "../../components/RequireAuth";
+import FileUploadForm from "../../components/FileUpload";
+import ImageUpload from "../../components/ImageUpload";
 
 export default function Register() {
   // const location = useLocation();
@@ -57,7 +59,7 @@ export default function Register() {
   const [isStudent, setisStudent] = useState(true);
 
   async function sendUpdateProfile(e) {
-    console.log('TOOOOKEKN',AuthState.token);
+    console.log('TOOOOKEKN', AuthState.token);
     e.preventDefault();
     let differnt = {};
     if (isStudent) {
@@ -148,7 +150,11 @@ export default function Register() {
                 <h1> Edit your profile </h1>
               </header>
             </div>
+            <div class="form-group col-md-6 ">
+              <ImageUpload />
+            </div>
             <div class="form-row">
+
               <div class="form-group col-md-6 font-login">
                 <label for="inputPassword4">First Name</label>
                 <input
@@ -290,14 +296,7 @@ export default function Register() {
                   ></input>
                 </div>
               </div>
-              <div class="input-group mb-3">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input"></input>
-                  <label class="custom-file-label" for="inputGroupFile01">
-                    Edit Resume
-                  </label>
-                </div>
-              </div>
+              <FileUploadForm />
             </div>
             <button type="submit" class="btn btn-success">
               Confirm Change
@@ -437,6 +436,7 @@ export default function Register() {
           </form>
         </div>
       )}
+
     </div>
   );
 }
