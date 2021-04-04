@@ -12,22 +12,32 @@ import { JobModule } from './job/job.module';
 import { ApplicationRecordModule } from './application-record/application-record.module';
 import { ApplicationRecordLogModule } from './application-record-log/application-record-log.module';
 import { ContractModule } from './contract/contract.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as Joi from 'joi';
 
- 
 @Module({
   imports: [TypeOrmModule.forRoot({
     type: 'mysql',
-    host: 'mysql',  
+    host: 'nisiter-db.cw61o2wwfwig.us-east-2.rds.amazonaws.com',
     port: 3306,
-    username: 'user',
-    password: 'password',
+    username: 'admin',
+    password: 'alla-project',
     database: 'all_a',
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
-  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, ContractModule
+
+  }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, ContractModule,
+  ConfigModule.forRoot({
+    validationSchema:Joi.object({
+      AWS_REGION: "us-east-2",
+      AWS_ACCESS_KEY_ID: "nKVwNQ6SaKFw6p2pKNQtN0whTbfOodztE59icaiW",
+      AWS_SECRET_ACCESS_KEY: "AKIAWSIJ2LLKAE2CEFBF",
+      AWS_PUBLIC_BUCKET_NAME: "backend-nisiter",
+    })
+  })  
 ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService]
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
