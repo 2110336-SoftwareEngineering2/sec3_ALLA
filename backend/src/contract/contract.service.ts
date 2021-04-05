@@ -97,7 +97,7 @@ export class ContractService {
   }
 
   async navigate(cid: number, dto: any){
-    const con = await this.findById(cid);
+    const con = await this.repo.findOne(cid, {relations : ['student', 'employer', 'job']});
     const status = con.status;
 
     let eventFlag = 1;
@@ -129,6 +129,9 @@ export class ContractService {
     if (status == ContractStatus.SUBMITTED){
       eventFlag = 6;
       if (dto.yesFlag){
+        for (const key of ['rate', 'comment']) {
+          if (!dto.key) throw new NotAcceptableException('Fields for feedback are required');
+        }
         dtoo['status'] = ContractStatus.DONE;
         // create feedback...
         var dto_feed = {
@@ -138,7 +141,7 @@ export class ContractService {
           rate: dto.rate,
           comment: dto.comment
         };    
-        this.feedbackService.create(dto_feed);
+        await this.feedbackService.create(dto_feed);
       }
       else{
         dtoo['status'] = ContractStatus.DOING;
