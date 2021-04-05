@@ -17,7 +17,7 @@ export class EventLogService {
     ){}
 
     async findById(id: number) {
-        const event = await this.eventRepo.findOne(id);
+        const event = await this.eventRepo.findOne(id, {relations:['job', 'student', 'employer']});
         if (!event) throw new NotFoundException('Event not found');
         return event;
     }
