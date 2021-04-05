@@ -148,7 +148,7 @@ export class UserService {
       await this.roomService.create({
         members:[user.id],
         privateFlag: true
-      });
+      }, true);
       console.log('private room created');
       return {
         ...rest_user,
@@ -164,8 +164,7 @@ export class UserService {
       const { ['username']: un, ['password']: pw, ...rest_user } = user;
       await this.roomService.create({
         members:[user.id],
-        privateFlag: true
-      });
+      }, true);
       console.log('private room created');
       return {
         ...rest_user,
