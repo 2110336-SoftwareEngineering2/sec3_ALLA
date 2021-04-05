@@ -12,6 +12,7 @@ import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { EventLogService } from 'src/event-log/event-log.service';
 import { EventNum } from 'src/entities/eventLog.entity';
+import { RoomService } from 'src/room/room/room.service';
 
 const recAttr = ['rid', 'jid', 'state', 'yesFlag', 'sid'];
 
@@ -23,7 +24,7 @@ export class ApplicationRecordService {
     private readonly userService: UserService,
     private readonly jobService: JobService,
     private readonly contractService: ContractService,
-    private readonly eventLogService: EventLogService
+    private readonly eventLogService: EventLogService,
   ) {}
 
   async create(dto: any): Promise<ApplicationRecord> {

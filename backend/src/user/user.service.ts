@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotAcceptableException,
   NotFoundException,
@@ -17,6 +19,7 @@ import { Contract } from 'src/entities/contract.entity';
 import { ApplicationRecord } from 'src/entities/applicationRecord.entity';
 import { Room } from 'src/entities/room.entity';
 import { FilesService } from 'src/files/files.service';
+import { RoomService } from 'src/room/room/room.service';
 
 
 const userprops = [
@@ -44,7 +47,9 @@ export class UserService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private readonly studentService: StudentService,
     private readonly employerService: EmployerService,
-    private readonly fileService: FilesService
+    private readonly fileService: FilesService,
+    @Inject(forwardRef(() => RoomService))
+    private readonly roomService: RoomService,
     
   ) {}
 
@@ -140,6 +145,11 @@ export class UserService {
         ...ret_student
       } = await this.studentService.create(student);
       const { ['username']: un, ['password']: pw, ...rest_user } = user;
+      await this.roomService.create({
+        members:[user.id],
+        privateFlag: true
+      });
+      console.log('private room created');
       return {
         ...rest_user,
         ...ret_student,
@@ -152,6 +162,11 @@ export class UserService {
         ...ret_employer
       } = await this.employerService.create(employer);
       const { ['username']: un, ['password']: pw, ...rest_user } = user;
+      await this.roomService.create({
+        members:[user.id],
+        privateFlag: true
+      });
+      console.log('private room created');
       return {
         ...rest_user,
         ...ret_employer,

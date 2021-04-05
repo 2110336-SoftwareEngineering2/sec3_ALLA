@@ -23,4 +23,7 @@ export class Room {
   @JoinTable()
   members: User[];
 
+  @Column({nullable: true})
+  privateFlag: Boolean
+
 }
