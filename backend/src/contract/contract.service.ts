@@ -55,6 +55,11 @@ export class ContractService {
     if (exp < present_date) return 1;
     else return 0;
   }
+  
+  async compute_time_used(cid: number){
+    const con = await this.repo.findOne(cid, {relations: ['job']});
+    return con.job.duration - con.time_left;
+  }
 
   async findById(cid: number): Promise<Contract> {
     const con = await this.repo.findOne(cid);
@@ -122,14 +127,21 @@ export class ContractService {
       if (dto.yesFlag){
         dtoo['status'] = ContractStatus.DONE;
         // create feedback...
-        var dto_feed = {
-          student: con.student,
-          employer: con.employer,
-          job: con.job,
-          rate: dto.rate,
-          comment: dto.comment
-        };    
+        console.log('start compute tu');
+        const tu = await this.compute_time_used(cid);
+        console.log('end compute tu');
+        console.log('start compute dto_feed');
+
+        let dto_feed = await this.getAssociatedId(cid);
+        dto_feed['finished_date'] = new Date();
+        dto_feed['time_used'] = tu;
+        dto_feed['rate'] = dto.rate;
+        dto_feed['comment'] = dto.comment;
+        
+        console.log('end compute dto_feed');
+        console.log(dto_feed);
         this.feedbackService.create(dto_feed);
+
       }
       else{
         dtoo['status'] = ContractStatus.DOING;
