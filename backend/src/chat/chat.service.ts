@@ -15,8 +15,11 @@ export class ChatService {
     
 
     async notify(dto: any, id1: number, id2: number) {
-        const room = await this.roomService.findByMember({id1, id2})
-        const id = String(room.id);
-        this.socket.to(id).emit('event', dto);
+        const room1 = await this.roomService.findPrivateRoom(id1);
+        const room2 = await this.roomService.findPrivateRoom(id2);
+        const rid1 = String(room1.id);
+        const rid2 = String(room2.id);
+        this.socket.to(rid1).emit('event', dto);
+        this.socket.to(rid2).emit('event', dto);
     }
 }

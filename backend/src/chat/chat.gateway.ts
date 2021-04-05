@@ -47,8 +47,13 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     const { uid } = this.authService.verifyToken(token);
     console.log('author :', uid);
     console.log('received message :', dto)
-    await this.roomService.addMessage({...dto, author: uid});
-    client.broadcast.to(dto.id).emit('message', dto.content);
+    const dtoo = {...dto, author: uid}
+    await this.roomService.addMessage(dtoo);
+    const privateRoom = await this.roomService.findPrivateRoomById(dto.id);
+    for (const id of privateRoom) {
+      this.server.to(id).emit('message', dtoo)
+    }
+    client.broadcast.to(dto.id).emit('room message', dto.content);
   }
 
   @SubscribeMessage('join')
@@ -65,9 +70,5 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect, On
     client.join(room_list);
     console.log(`user : ${uid} joined chat room`)
     client.emit('message', room);
-  }
-
-  async notify(dto: any, room: any) {
-    this.server.to(room).emit('event', dto);
   }
 }

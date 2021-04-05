@@ -1,4 +1,6 @@
 import {
+  forwardRef,
+  Inject,
   Injectable,
   NotAcceptableException,
   NotFoundException,
@@ -17,6 +19,7 @@ export class RoomService {
     private readonly roomRepo: Repository<Room>,
     @InjectRepository(Message)
     private readonly messageRepo: Repository<Message>,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
   ) {}
 
@@ -55,9 +58,38 @@ export class RoomService {
     return res[0];
   }
 
-  async create(dto: any) {
+  async findPrivateRoomById(id: number) {
+    const room = await this.findById(id);
+    const members = room.members;
+    let rooms = []
+    for (const user of members) {
+      const uid = user.id;
+      const privateRoom = await this.findPrivateRoom(uid);
+      rooms.push(privateRoom.id);
+    }
+    return rooms;
+  }
+
+  async findPrivateRoom(uid: number) {
+    const res = await getRepository(Room)
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.members', 'members')
+      .where('room.privateFlag = TRUE AND members.id = :id')
+      .setParameter('id', uid)
+      .select('room.id')
+      .getOne();
+
+    return res;
+  }
+
+  async create(dto: any, privateFlag = false) {
     const room = { ...new Room() };
     let members = [];
+    const temp_members = dto.members;
+    if (temp_members.length>1) {
+      const room = await this.findByMember({id1: temp_members[0],id2: temp_members[1]});
+      if (room) throw new NotAcceptableException('Room already exist');
+    }
     for (let i = 0; i < dto.members.length; i++) {
       let id = dto.members[i];
       let user = await this.userService.findById(id);
@@ -65,6 +97,7 @@ export class RoomService {
     }
     room.members = members;
     room.message = [];
+    room.privateFlag = privateFlag;
     return await this.roomRepo.save(room);
   }
 
