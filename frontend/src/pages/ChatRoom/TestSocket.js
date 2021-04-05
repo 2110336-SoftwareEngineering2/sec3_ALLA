@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
 import socketIOClient from "socket.io-client";
@@ -11,10 +11,14 @@ const messageJson = {//id = chatid
 const TestSocket = () => {
     const endpoint = "http://localhost:8300" // เชื่อมต่อไปยัง url ของ realtime server
     const AuthState = useSelector((state) => state.Auth);
-    const [socket, setSocket] = useState(null)
+    // const [socket, setSocket] = useState(null)
     const [token, setToken] = useState(AuthState.token)
     const [input, setInput] = useState('')
     const [message, setmessage] = useState([])
+    const { current: socket } = useRef(socketIOClient(endpoint, {
+        query: { token: token },
+        transports: ['websocket'], upgrade: false
+    }));
 
     const send = () => {
         socket.emit("message", { ...messageJson, content: input });
@@ -29,8 +33,8 @@ const TestSocket = () => {
             console.log("message :", messageNew);
         });
         socket.on("disconnect", (reason) => {
-            console.log('hia rai',reason);
-          });
+            console.log('hia rai', reason);
+        });
         console.log('socket created');
 
     };
@@ -42,11 +46,11 @@ const TestSocket = () => {
         //     query: { token: token }
         // })
         // console.log(newSocket)
-        setSocket(socketIOClient(endpoint, {
-            query: { token: token },
-            transports: ['websocket'], upgrade: false
-        }))
-        console.log('stateeeee', );
+        // setSocket(socketIOClient(endpoint, {
+        //     query: { token: token },
+        //     transports: ['websocket'], upgrade: false
+        // }))
+        console.log('stateeeee',);
 
     }
     useEffect(() => {
