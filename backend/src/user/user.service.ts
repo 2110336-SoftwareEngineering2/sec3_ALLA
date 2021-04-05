@@ -20,6 +20,7 @@ import { ApplicationRecord } from 'src/entities/applicationRecord.entity';
 import { Room } from 'src/entities/room.entity';
 import { FilesService } from 'src/files/files.service';
 import { RoomService } from 'src/room/room/room.service';
+import { Feedback } from 'src/entities/feedback.entity';
 
 
 const userprops = [
@@ -236,11 +237,11 @@ export class UserService {
     const job = await this.getUserJob(id);
     const record = await this.getUserRecord(id);
     const contract = await this.getUserContract(id);
+    const feedback = await this.getUserFeedback(id);
     const user = await this.findById(id);
 
-    return user.type == UserType.STUDENT
-      ? { record, contract }
-      : { job, record, contract };
+    return user.type == UserType.STUDENT ?
+      {record, contract, feedback} : {job, record, contract}
   }
 
   async getUserJob(id: number) {
@@ -354,6 +355,47 @@ export class UserService {
         .getMany();
     }
     return contract;
+  }
+
+  async getUserFeedback(id: number){
+    const user = await this.findById(id);
+    if (user.type == UserType.STUDENT) {
+      const feedback = await getRepository(Feedback)
+        .createQueryBuilder('feedback')
+        .leftJoinAndSelect('feedback.student', 'student')
+        .leftJoinAndSelect('feedback.employer', 'employer')
+        .leftJoinAndSelect('feedback.job','job')
+        // .leftJoinAndSelect('feedback.contract', 'contract')
+        .where('feedback.student.id = :id')
+
+        .select([
+          'feedback.fid',
+          'feedback.finished_date',
+          'feedback.time_used',
+          'feedback.rate',
+          'feedback.comment',
+          // 'contract.cid',
+          // 'contract.status',
+          'employer.id',
+          'employer.firstName',
+          'employer.lastName',
+          'student.id',
+          'student.firstName',
+          'student.lastName',
+          'job.companyName',
+          'job.companyPicUrl',
+          'job.jid',
+          'job.jobTitle',
+          'job.location',
+          'job.duration',
+        ])
+        
+        .setParameter('id', id)
+        .orderBy('feedback.finished_date')
+        .getMany();
+
+        return feedback;
+    }
   }
 
   async getUserRecord(id: number) {
