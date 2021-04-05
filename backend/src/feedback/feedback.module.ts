@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+// import { ContractModule } from 'src/contract/contract.module';
 import { Feedback } from 'src/entities/feedback.entity';
 import { JobModule } from 'src/job/job.module';
 import { UserModule } from 'src/user/user.module';
@@ -8,6 +9,7 @@ import { FeedbackService } from './feedback.service';
 
 @Module({
   imports : [TypeOrmModule.forFeature([Feedback]), UserModule, JobModule],
+  // imports : [TypeOrmModule.forFeature([Feedback])],
   controllers: [FeedbackController],
   providers: [FeedbackService],
   exports : [FeedbackService]

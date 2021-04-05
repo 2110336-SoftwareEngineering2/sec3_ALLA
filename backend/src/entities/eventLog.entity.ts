@@ -39,13 +39,13 @@ export class EventLog {
   @ManyToOne(() => Job, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
-    cascade: true,
+    cascade: true, 
   })
   @JoinColumn()
   job: Job;
 
   @Column()
-  state: EventNum;
+  state: EventNum; 
 
   @Column()
   timestamp: Date;
