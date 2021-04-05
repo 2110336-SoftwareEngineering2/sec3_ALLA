@@ -9,9 +9,9 @@ const ImageUpload = (props) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let formData = new FormData();
-        formData.append("image", file[0]);
+        formData.append("file", file[0]);
         // TODO: do something with -> this.state.file
-        console.log('handle uploading-', file);
+        console.log('handle uploading-', file);return;
         await axios
             .post(`http://127.0.0.1:8300/user/upload/profile_pic/` + AuthState.id, formData, {
                 headers: {
@@ -32,8 +32,9 @@ const ImageUpload = (props) => {
 
     const handleImageChange = (e) => {
         e.preventDefault();
+        console.log(e.target.files)
 
-        let reader = new FileReader();
+        /* let reader = new FileReader();
         let file = e.target.files[0];
 
         reader.onloadend = () => {
@@ -41,7 +42,7 @@ const ImageUpload = (props) => {
             setImagePreviewUrl(reader.result)
         }
 
-        reader.readAsDataURL(file)
+        reader.readAsDataURL(file) */
     }
 
 
@@ -61,6 +62,7 @@ const ImageUpload = (props) => {
             <form onSubmit={(e) => handleSubmit(e)}>
                 <input className="fileInput"
                     type="file"
+                    accept="image/png, image/jpeg"
                     onChange={(e) => handleImageChange(e)} />
 
                 <div className="imgPreview">

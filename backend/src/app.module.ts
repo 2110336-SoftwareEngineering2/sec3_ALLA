@@ -26,8 +26,8 @@ import * as Joi from 'joi';
     type: 'mysql',
     host: 'mysql',
     port: 3306,
-    username: 'admin',
-    password: 'alla-project',
+    username: 'user',
+    password: 'password',
     database: 'all_a',
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change

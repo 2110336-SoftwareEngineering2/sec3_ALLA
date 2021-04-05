@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import JobPane from "../../components/JobPane";
 // import ImageUpload from "../../components/ImageUpload";
 // import FileUploadForm from "../../components/FileUpload";
+import default_image from "../../assets/logo/dog1.jpg";
 
 export default function MyProfile() {
   const userState = useSelector((state) => state.Auth);
@@ -42,7 +43,7 @@ export default function MyProfile() {
     company: "",
     fields_of_work: "",
     position: "",
-    img: "https://picsum.photos/202",
+    img: "",
   };
 
   const [student, setStudent] = useState(initStudent);
@@ -51,7 +52,7 @@ export default function MyProfile() {
 
   const [pendingList, setpendingList] = useState([]);
   const [resultList, setresultList] = useState([]);
-  const [onProgressList, setonProgressList] = useState([]);
+  const [doneContractList, setdoneContractList] = useState([]);
 
   async function getStudentJoblistHandler() {
     await axios
@@ -64,7 +65,7 @@ export default function MyProfile() {
         console.log("response", response);
         setpendingList(response.data.record.pending);
         setresultList(response.data.record.waiting);
-        setonProgressList(response.data.contract);
+        setdoneContractList(response.data.contract);
       })
       .catch((error) => {
         console.log(error);
@@ -109,10 +110,11 @@ export default function MyProfile() {
             <div className="d-flex justify-content-between">
               <form class="md-form p-5">
                 <img
-                  src={employer.img}
-                  class="rounded-circle image-style"
+                  src={employer.img==="" ? default_image:employer.img}
+                  className="rounded-circle profile-style"
                 ></img>
-                <div class="d-flex justify-content-center">
+                {/* <div>{employer.img===""?<>yes</>:<>no</>}</div> */}
+                {/* <div class="d-flex justify-content-center">
                   <input
                     type="file" id="img" name="img" accept="image/*"
                   />
@@ -120,7 +122,7 @@ export default function MyProfile() {
                     Add or Edit Photo
                   </label>
 
-                </div>
+                </div> */}
               </form>
               
             </div>
@@ -170,22 +172,20 @@ export default function MyProfile() {
     return (
       <div className="d-flex flex-column ">
         <div className="detail-container d-flex flex-column justify-content-left ">
-          <div>
-          </div>
-          <div className="d-flex justify-content-center ">
+          <div className="d-flex justify-content-center pt-5">
             <form class="md-form  ">
               <div class="d-flex justify-content-center pb-3">
                 <img
-                  src={student.img}
-                  class="rounded-circle image-style m-3"
+                  src={employer.img==="" ? default_image:employer.img}
+                  className="rounded-circle profile-style"
                 ></img>
               </div>
-              <div class="d-flex justify-content-center">
+              {/* <div class="d-flex justify-content-center">
                 <input type="file" name="file" id="file" class="inputfile" />
                 <label for="file" className="addPhoto-style">
                   Add or Edit Photo
                 </label>
-              </div>
+              </div> */}
             </form>
           </div>
           <div className="d-flex justify-content-left p-2 name_font-style">
@@ -242,10 +242,14 @@ export default function MyProfile() {
     <div className=" d-flex flex-column">
       {isStudent ? getStudentProfile() : getEmployerProfile()}
       <div className="cardpane-container d-flex flex-column col-sm-10 col-md-8 col-lg-8">
-        <h4>Working History</h4>
-        <div className="d-flex">
-          <JobPane type="STUDENT-ONPROGRESS" onProgressList={onProgressList} />
-        </div>
+      {isStudent ?
+        <div>
+          <h4>Working History</h4>
+          <div className="d-flex">
+            <JobPane type="STUDENT-ONPROGRESS" onProgressList={doneContractList} />
+          </div>
+        </div>:<></>
+      }
       </div>
 
     </div>

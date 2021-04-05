@@ -65,7 +65,7 @@ const Routes = () => {
                         Component={AddJob}
                     />
                 )} />
-                <Route exact path="/chat" component={(props) => (
+                <Route exact path="/chat/:uid" component={(props) => (
                     <RequireAuth
                         {...props}
                         Component={ChatRoom}

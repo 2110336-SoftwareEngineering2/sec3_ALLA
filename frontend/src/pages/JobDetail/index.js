@@ -156,7 +156,7 @@ export default function JobDetail(props) {
             <button
               type="submit"
               class="btn btn-primary"
-              onClick={() => history.push("/chat")}
+              onClick={() => history.push(`/chat/${jobData.employer.id}`)}
             >
               Chat with Employer
           </button>

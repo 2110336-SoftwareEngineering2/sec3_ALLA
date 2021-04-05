@@ -15,7 +15,6 @@ export default function Home() {
     const [jobList, setJobList] = useState()
     const AuthState = useSelector((state) => state.Auth)
 
-
     const getParamObj = () => {
         const spilttedParam = location.search.slice(1).split("&")
         var retObj = {}

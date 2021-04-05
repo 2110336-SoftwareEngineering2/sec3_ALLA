@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './style.scss'
 import { useHistory } from 'react-router-dom'
 import axios from "axios";
@@ -11,41 +11,102 @@ export default function JobCard(props) {
         history.push(`/job/${jobObj.jid}`)
     }
     const AuthState = useSelector((state) => state.Auth);
+    const cid = props.cid;
+    var rating = ""
 
     //NEED API!!!!!!!!!!!!!!!
+    const startDate = props.startDate
+    const timeLeft = props.timeLeft
     const status = props.status
-    async function submitJobapi() {
-        return;
+    function ratingHandler(e) {
+        if (!e) var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation) e.stopPropagation();
+        var popup = prompt("Please rate the student's performance (0-5)", "Rating (number range 0-5)");
+        if (popup != null) {
+            popup = parseFloat(popup);
+            //console.log(typeof popup,popup,isNaN(popup) || popup<0 || popup>5,"isNaN(popup) || popup<0 || popup>5")
+            if (isNaN(popup) || popup < 0 || popup > 5) alert("Incorrect format (must be a number from 0 to 5)");
+            else {
+                rating = popup;
+                jobSubmithandler(e, true, rating);
+            }
+        }
     }
-    async function resignJobapi() {
-        return;
+    async function submitresignJobapi(e, request) {
+        if (!e) var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation) e.stopPropagation();
+        await axios
+            .post(`http://localhost:8300/contract/navigate/` + cid.toString(), {
+                "request": request
+            }, {
+                headers: {
+                    Authorization: "Bearer " + AuthState.token,
+                }
+            })
+            .then((response) => {
+                alert("Request sent!")
+                return (response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
-    async function jobSubmithandler(answer) {
-        return;
+    async function jobSubmithandler(e, answer, rating) {
+        if (!e) var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation) e.stopPropagation();
+        await axios
+            .post(`http://localhost:8300/contract/navigate/` + cid.toString(), {
+                "yesFlag": answer,
+                "rate": rating,
+                "comment": ""
+            }, {
+                headers: {
+                    Authorization: "Bearer " + AuthState.token,
+                }
+            })
+            .then((response) => {
+                if (answer) alert("Submission accepted!")
+                else alert("Submission rejected!")
+                return (response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
-    async function jobResignhandler(answer) {
-        return;
+    async function jobResignhandler(e, answer) {
+        if (!e) var e = window.event;
+        e.cancelBubble = true;
+        if (e.stopPropagation) e.stopPropagation();
+        await axios
+            .post(`http://localhost:8300/contract/navigate/` + cid.toString(), {
+                "yesFlag": answer
+            }, {
+                headers: {
+                    Authorization: "Bearer " + AuthState.token,
+                }
+            })
+            .then((response) => {
+                if (answer) alert("Resignation completed!")
+                else alert("Resignation cancelled!")
+                return (response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     //Golf On-progress & request
     const isOnprogresspage = props.isOnprogresspage;
     const isStudent = props.isStudent;
     const rid = props.rid;
-    function getUserlink() {
-        //employers view student's profiles
-    }
     async function answerRecordState(e, answer) {
         if (!e) var e = window.event;
         e.cancelBubble = true;
         if (e.stopPropagation) e.stopPropagation();
         await axios
-            // .post(`http://127.0.0.1:8300/application-record`, {
-            //         "yesFlag": answer
-            //     }, {
-            //         headers: {
-            //             Authorization: "Bearer " + AuthState.token,
-            //         }
-            //     })
             .post(`http://127.0.0.1:8300/application-record/navigate/` + rid.toString(), {
                 "yesFlag": answer
             }, {
@@ -75,7 +136,7 @@ export default function JobCard(props) {
                 return <div className="job-text-col">
                     <button
                         onClick={(e) => {
-                            resignJobapi()
+                            submitresignJobapi(e, "resign")
                         }}
                     >
                         Resign
@@ -83,7 +144,7 @@ export default function JobCard(props) {
                     <text> {" "} </text>
                     <button
                         onClick={(e) => {
-                            submitJobapi()
+                            submitresignJobapi(e, "submit")
                         }}
                     >
                         Submit
@@ -98,9 +159,17 @@ export default function JobCard(props) {
         switch (status) {
             case "SUBMITTED":
                 return <div className="d-flex justify-content-between">
+                    {/* <input 
+                        type="number" 
+                        min="0" 
+                        max="5"
+                        onChange={(e) => setRating(e.target.value)}
+                        placeholder={rating}
+                    >
+                    </input> */}
                     <button
                         onClick={(e) => {
-                            jobSubmithandler(true)
+                            ratingHandler(e)
                         }}
                     >
                         Accept
@@ -108,17 +177,17 @@ export default function JobCard(props) {
                     <text> {" "} </text>
                     <button
                         onClick={(e) => {
-                            jobSubmithandler(false)
+                            jobSubmithandler(e, false)
                         }}
                     >
                         Reject
                     </button>
                 </div>
-            case "WANT TO RESIGN":
-                <div>
+            case "RESIGN_REQ":
+                return <div>
                     <button
                         onClick={(e) => {
-                            jobResignhandler(true)
+                            jobResignhandler(e, true)
                         }}
                     >
                         Accept
@@ -126,7 +195,7 @@ export default function JobCard(props) {
                     <text> {" "} </text>
                     <button
                         onClick={(e) => {
-                            jobResignhandler(false)
+                            jobResignhandler(e, false)
                         }}
                     >
                         Reject
@@ -148,6 +217,13 @@ export default function JobCard(props) {
             </div>
 
             {isOnprogresspage ?
+                <div className="job-text-col p-2">
+                    <div> start date: <h6>{startDate}</h6></div>
+                    <div> time left: <h6>{timeLeft} day(s)</h6></div>
+                </div> : <></>
+            }
+
+            {isOnprogresspage ?
                 <div className="d-flex justify-content-between">
                     <div className="job-text-col">
                         <div className="d-flex justify-content-between">
@@ -156,13 +232,13 @@ export default function JobCard(props) {
                         </div>
                         {getJobStatus()}
                         <div className="mt-1">
-                    {isStudent ?
-                        <>{getStudentButton()}</> :
-                        <>{getEmployerButton()}</>
-                    }
+                            {isStudent ?
+                                <>{getStudentButton()}</> :
+                                <>{getEmployerButton()}</>
+                            }
+                        </div>
                     </div>
-                    </div>
-                    
+
                 </div> :
                 <div className="d-flex justify-content-between">
                     <div className="d-flex" >

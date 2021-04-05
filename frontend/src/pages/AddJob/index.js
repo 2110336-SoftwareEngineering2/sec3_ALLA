@@ -27,6 +27,7 @@ export default function AddJob() {
         responsibility : "",
         requirement : "",
         status:"OPEN",
+        duration:"",
         tagList:[]
     }
     
@@ -225,7 +226,14 @@ export default function AddJob() {
                     <div className="price-slider">
                         <input value={JobData.workingHours} type="text" onChange={(e) => setJobData({...JobData, workingHours: e.target.value})} ></input>
                     </div>
-                </div>             
+                </div>  
+
+                <div class="form-group">
+                    <label className="d-block" className="font-login">Duration (days)</label>
+                    <div className="price-slider">
+                        <input value={JobData.duration} type="text" onChange={(e) => setJobData({...JobData, duration: e.target.value})} ></input>
+                    </div>
+                </div>              
 
                 <div class="form-group">
                     <label className="d-block" className="font-login">Salary Range</label>

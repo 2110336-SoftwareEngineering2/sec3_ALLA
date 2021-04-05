@@ -89,8 +89,11 @@ const JobPane = (props) => {
                         isOnprogresspage={true}
                         isStudent={true}
                         jobObj={job.job}
+                        cid={job.cid}
                         studentObj={job.student}
                         status={job.status}
+                        startDate={job.start_date}
+                        timeLeft={job.time_left}
                     />
 
                 </div>
@@ -109,8 +112,11 @@ const JobPane = (props) => {
                         isOnprogresspage={true}
                         isStudent={false}
                         jobObj={job.job}
+                        cid={job.cid}
                         studentObj={job.student}
                         status={job.status}
+                        startDate={job.start_date}
+                        timeLeft={job.time_left}
                     />
 
                 </div>
@@ -190,8 +196,8 @@ const JobPane = (props) => {
     const list = getList()
 
     return (
-        <div className="jobpane-container ">
-            {list}
+        <div>
+            ibiubj
         </div>
     )
 }
