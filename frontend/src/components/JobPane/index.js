@@ -196,7 +196,7 @@ const JobPane = (props) => {
     const list = getList()
 
     return (
-        <div
+        <div>
             {list}
         </div>
     )
