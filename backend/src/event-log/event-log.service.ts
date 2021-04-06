@@ -32,7 +32,10 @@ export class EventLogService {
       .leftJoinAndSelect('eventLog.employer', 'employer')
       .where('student.id = :id OR employer.id = :id')
       .setParameter('id', uid)
+      .setParameter('id', uid)
       .getMany();
+    
+    return event;
   }
 
   async create(dto: any, event: any, addition: Boolean = null) {
