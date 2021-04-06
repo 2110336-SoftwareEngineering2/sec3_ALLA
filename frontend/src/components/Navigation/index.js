@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import "./style.scss";
+import axios from "axios";
 
 import inbox_image from "../../assets/nav_photo/inbox.png";
 import profile_image from "../../assets/nav_photo/profile.png";
@@ -9,7 +10,7 @@ import nisiter_logo from "../../assets/nav_photo/N.png";
 import nisiter_logo_1 from "../../assets/nav_photo/N_1.png";
 import inbox_image_1 from "../../assets/nav_photo/profile_arrow.png";
 import arrow from "../../assets/nav_photo/arrow.png";
-import noti_image from "../../assets/logo/dog1.jpg";
+import noti_image from "../../assets/nav_photo/noti_icon.png";
 import NotificationPane from "../../components/NotificationPane";
 
 export default function Navigation() {
@@ -35,36 +36,111 @@ export default function Navigation() {
   }
 
   const notificationList = [
-    {   eventId: 1,
-        student: 'KP',
-        employer: "kk",
-        eventFlag: 1,
-        jid: "",
-        date: ""
+    {
+      eventId: 1,
+      student: 'KP',
+      employer: "kk",
+      eventFlag: 1,
+      jid: "123",
+      date: ""
     },
-    {   eventId: 1,
-        student: 'KP',
-        employer: "Khun Kai",
-        eventFlag: 2,
-        jid: "",
-        date: ""
+    {
+      eventId: 2,
+      student: 'KP',
+      employer: "Khun Kai",
+      eventFlag: 1,
+      jid: "456",
+      date: "",
+      offer: "accept"
     },
-    {   eventId: 2,
-        student: 'KP',
-        employer: "Khun Kai",
-        eventFlag: 1,
-        jid: "",
-        date: ""
+    {
+      eventId: 3,
+      student: 'KP',
+      employer: "Khun Kai",
+      eventFlag: 1,
+      jid: "789a",
+      date: "",
+      confirm: "accept"
+    },
+    {
+      eventId: 1,
+      student: 'KP',
+      employer: "kk",
+      eventFlag: 2,
+      jid: "123",
+      date: ""
+    },
+    {
+      eventId: 2,
+      student: 'KP',
+      employer: "Khun Kai",
+      eventFlag: 2,
+      jid: "456",
+      date: ""
+    },
+    {
+      eventId: 3,
+      student: 'KP',
+      employer: "Khun Kai",
+      eventFlag: 2,
+      jid: "789a",
+      date: "",
+      submission: "accept"
+    },
+    {
+      eventId: 4,
+      student: 'KP',
+      employer: "kk",
+      eventFlag: 2,
+      jid: "123",
+      date: ""
+    },
+    {
+      eventId: 5,
+      student: 'KP',
+      employer: "Khun Kai",
+      eventFlag: 2,
+      jid: "456",
+      date: ""
+    },
+    {
+      eventId: 6,
+      student: 'KP',
+      employer: "Khun Kai",
+      eventFlag: 2,
+      jid: "789a",
+      date: "",
+      resign: "accept"
     }
   ]
+
+  async function getUserEventlist() {
+    await axios
+      .get(`http://127.0.0.1:8300/event-log/user/` + AuthState.id, {
+        headers: {
+          Authorization: "Bearer " + AuthState.token,
+        },
+      })
+      .then((response) => {
+        console.log("response for noti", response);
+
+        return response;
+      })
+      .catch((error) => {
+        console.log(error);
+        return error;
+      });
+  }
+
   const notificationDisplay = (notificationList) => {
-    return <div className = "list-container d-flex justify-content-center">
+    getUserEventlist()
+    return <div className="list-container d-flex justify-content-center">
       <div>
         <NotificationPane list={notificationList} />
       </div>
     </div>
   }
-  
+
   return (
     <nav class="navbar navbar-dark  justify-content-space-between position-sticky nav-style">
       <div className="d-flex justify-content-between align-items-center nav-container ">
@@ -95,7 +171,7 @@ export default function Navigation() {
         </div>
         <div className="d-flex ">
           <button class="btn btn-default" onClick={() => history.push(`/chat/${AuthState.id}`)}>
-            <img src={inbox_image} width="30" />
+            <img src={inbox_image} width="33" className="pr-1" />
           </button>
           {/* for Notification Icon */}
           <div className="dropdown-container ">
@@ -107,14 +183,14 @@ export default function Navigation() {
                   setNotificationDropDown(!notificationDropDown)
                 }}
               >
-                <span><img src={noti_image} width="33" className="pr-1" /><img src={arrow} width="15" /></span>
+                <img src={noti_image} width="33" className="" /><img src={arrow} width="15" />
               </button>
             </div>
             <div className="dropdown-item-container position-relative d-flex flex-row-reverse">
               {notificationDropDown ? (
-                <div className="dropdown-item position-absolute p-3 justify-content-left">
+                <div className="dropdown-item position-absolute p-3 justify-content-left notification-scrolling-style">
                   <div className="justify-content-left border-bottom border-dark">
-                    <text class = "font-weight-bold">
+                    <text className="text-weight-bold">
                       Notification
                     </text>
                   </div>

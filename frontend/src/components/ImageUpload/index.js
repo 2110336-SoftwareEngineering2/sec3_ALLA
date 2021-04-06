@@ -11,14 +11,16 @@ const ImageUpload = (props) => {
         let formData = new FormData();
         formData.append("file", file[0]);
         // TODO: do something with -> this.state.file
-        console.log('handle uploading-', file);return;
+        console.log('handle uploading-', file[0]);
         await axios
-            .post(`http://127.0.0.1:8300/user/upload/profile_pic/` + AuthState.id, formData, {
+            .post(`http://127.0.0.1:8300/user/upload/profile_pic/` + AuthState.id, {
+                "file":imagePreviewUrl
+            })
+                /* , {
                 headers: {
                     Authorization: "Bearer " + AuthState.token,
                     'Content-Type': 'multipart/form-data'
-                },
-            })
+                }, */
             .then((response) => {
                 console.log("response", response);
                 setImagePreviewUrl(response.data)
@@ -32,9 +34,10 @@ const ImageUpload = (props) => {
 
     const handleImageChange = (e) => {
         e.preventDefault();
-        console.log(e.target.files)
+        console.log("file detail")
+        console.log(e.target)
 
-        /* let reader = new FileReader();
+        let reader = new FileReader();
         let file = e.target.files[0];
 
         reader.onloadend = () => {
@@ -42,7 +45,7 @@ const ImageUpload = (props) => {
             setImagePreviewUrl(reader.result)
         }
 
-        reader.readAsDataURL(file) */
+        reader.readAsDataURL(file)
     }
 
 

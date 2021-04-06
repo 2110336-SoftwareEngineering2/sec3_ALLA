@@ -160,7 +160,7 @@ export default function Profile(props) {
                                             onClick={() => history.push("/chat")}
                                         >
                                             Chat with student
-          </button>
+                                        </button>
 
                                     </div>
                                 </form>

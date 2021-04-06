@@ -16,12 +16,17 @@ const NotificationPane = (props) => {
             notificationList.push(
                 <div key={idx}>
                     <NotificationCard
+                        // cardData={notification}
                         eventId={notification.eventId}
                         student={notification.student}
                         employer={notification.employer}
                         eventFlag={notification.eventFlag}
                         jid={notification.jid}
-                        date={notification.date} 
+                        date={notification.date}
+                        submission={notification.submission}
+                        confirm={notification.confirm}
+                        resign={notification.resign}
+                        offer={notification.offer}
                     />
                 </div>
             )

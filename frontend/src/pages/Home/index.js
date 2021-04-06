@@ -68,7 +68,7 @@ export default function Home() {
                 <div className="d-flex justify-content-center ">
                     <SearchFilter param={getParamObj()} />
                 </div>
-                <div className="d-flex justify-content-center ">
+                <div className="">
                     {getJobPane()}
                 </div>
             </div>

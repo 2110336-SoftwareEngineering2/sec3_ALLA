@@ -110,7 +110,7 @@ export default function MyProfile() {
             <div className="d-flex justify-content-between">
               <form class="md-form p-5">
                 <img
-                  src={employer.img==="" ? default_image:employer.img}
+                  src={employer.img === "" ? default_image : employer.img}
                   className="rounded-circle profile-style"
                 ></img>
                 {/* <div>{employer.img===""?<>yes</>:<>no</>}</div> */}
@@ -124,7 +124,7 @@ export default function MyProfile() {
 
                 </div> */}
               </form>
-              
+
             </div>
             <div className="p-5">
               <div className="d-flex justify-content-center p-2 name_font-style ">
@@ -176,7 +176,7 @@ export default function MyProfile() {
             <form class="md-form  ">
               <div class="d-flex justify-content-center pb-3">
                 <img
-                  src={employer.img==="" ? default_image:employer.img}
+                  src={employer.img === "" ? default_image : employer.img}
                   className="rounded-circle profile-style"
                 ></img>
               </div>
@@ -242,14 +242,14 @@ export default function MyProfile() {
     <div className=" d-flex flex-column">
       {isStudent ? getStudentProfile() : getEmployerProfile()}
       <div className="cardpane-container d-flex flex-column col-sm-10 col-md-8 col-lg-8">
-      {isStudent ?
-        <div>
-          <h4>Working History</h4>
-          <div className="d-flex">
-            <JobPane type="STUDENT-ONPROGRESS" onProgressList={doneContractList} />
-          </div>
-        </div>:<></>
-      }
+        {isStudent ?
+          <div>
+            <h4>Working History</h4>
+            <div className="d-flex">
+              <JobPane type="STUDENT-ONPROGRESS" onProgressList={doneContractList} />
+            </div>
+          </div> : <></>
+        }
       </div>
 
     </div>

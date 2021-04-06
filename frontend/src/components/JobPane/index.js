@@ -7,7 +7,7 @@ import './style.scss'
 import ContractCard from '../ContractCard';
 const JobPane = (props) => {
 
-    
+
 
     const getJobList = () => {
         let jobArray = [];
@@ -145,7 +145,7 @@ const JobPane = (props) => {
 
     //ยังไม่ได้ handle ว่า student รับ offer มั้ย
     const getResponseList = (responseList) => {
-        
+
         let jobArray = [];
         responseList.map((job, idx) => {
             jobArray.push(
@@ -180,9 +180,9 @@ const JobPane = (props) => {
         })
         return jobArray
     }
-    
+
     const getList = () => {
-        
+
         if (props.type === "STUDENT-PENDING") return getPendingList(props.pendingList);
         else if (props.type == "STUDENT-RESULT") return getResultList(props.resultList);
         else if (props.type == "STUDENT-ONPROGRESS") return getStudentOnProgressList(props.onProgressList);
@@ -196,8 +196,8 @@ const JobPane = (props) => {
     const list = getList()
 
     return (
-        <div>
-            ibiubj
+        <div
+            {list}
         </div>
     )
 }
