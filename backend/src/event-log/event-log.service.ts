@@ -33,6 +33,8 @@ export class EventLogService {
       .where('student.id = :id OR employer.id = :id')
       .setParameter('id', uid)
       .getMany();
+    
+    return event;
   }
 
   async create(dto: any, event: any, addition: Boolean = null) {
