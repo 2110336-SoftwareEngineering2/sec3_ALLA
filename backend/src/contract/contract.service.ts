@@ -66,7 +66,7 @@ export class ContractService {
   }
 
   async findById(cid: number): Promise<Contract> {
-    const con = await this.repo.findOne(cid, {relations: ['student',' employer', 'job']});
+    const con = await this.repo.findOne(cid, {relations: ['student','employer', 'job']});
     if (!con) throw new NotFoundException('Job Contract ID not found');
     else {
       console.log('start computing timeout');
