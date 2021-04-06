@@ -32,6 +32,7 @@ export class EventLogService {
       .leftJoinAndSelect('eventLog.employer', 'employer')
       .where('student.id = :id OR employer.id = :id')
       .setParameter('id', uid)
+      .orderBy('eventLog.timestamp', 'ASC')
       .getMany();
     
     return event;
