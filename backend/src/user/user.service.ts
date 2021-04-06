@@ -271,6 +271,7 @@ export class UserService {
 
         return ('room.id IN ' + subQuery);
       })
+      .orderBy('message.timestamp', 'ASC')
       .getMany();
 
     return res;
