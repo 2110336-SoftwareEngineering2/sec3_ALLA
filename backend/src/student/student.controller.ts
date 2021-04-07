@@ -35,8 +35,10 @@ export class StudentController {
             return this.service.addResume(sid, file.buffer, file.originalname);
     }
     
-    @Get('resume')
-    async get_resume(@Body('sid', new ParseIntPipe()) sid : number):Promise<string>{
+    @Get('resume/:sid')
+    async get_resume(
+        @Param('sid', new ParseIntPipe()) sid:number
+    ):Promise<string>{
         return this.service.get_resumeURL(sid);
     }
 

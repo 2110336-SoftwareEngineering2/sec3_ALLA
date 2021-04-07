@@ -93,10 +93,11 @@ export class UserController {
         return this.service.addAvatar(uid, file.buffer, file.originalname, 'resume')
   }
 */
-  @Get('profile_pic')
-  async get_profile_pic(@Body('uid', new ParseIntPipe()) uid : number): Promise<string>{
+  @Get('profile_pic/:uid')
+  async get_profile_pic(
+    @Param('uid', new ParseIntPipe()) uid: number
+  ): Promise<string>{
     return this.service.get_profileURL(uid);
   }
-
 
 }

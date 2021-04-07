@@ -29,6 +29,7 @@ import * as Joi from 'joi';
     username: 'user',
     password: 'password',
     database: 'all_a',
+
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
   }), UserModule, AuthModule, EmployerModule, StudentModule, JobModule, ApplicationRecordModule, ApplicationRecordLogModule, ContractModule, RoomModule, ChatModule, EventLogModule
