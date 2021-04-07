@@ -17,12 +17,19 @@ import * as Joi from 'joi';
 
 @Module({
   imports: [TypeOrmModule.forRoot({
-    type: 'mysql',
+    /*type: 'mysql',
     host: 'nisiter-db.cw61o2wwfwig.us-east-2.rds.amazonaws.com',
     port: 3306,
     username: 'admin',
     password: 'alla-project',
+    database: 'all_a',*/
+    type: 'mysql',
+    host: 'mysql',  
+    port: 3306,
+    username: 'user',
+    password: 'password',
     database: 'all_a',
+
     entities: [join(__dirname, '**/*.entity.{ts,js}')],
     synchronize: true, //auto migration when db schema change
 

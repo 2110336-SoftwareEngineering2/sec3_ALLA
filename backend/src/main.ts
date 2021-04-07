@@ -30,7 +30,7 @@ async function bootstrap() {
     region: "us-east-2",
   });
 
-  await app.listen(8000);
+  await app.listen(8300);
 }
 
 bootstrap();
