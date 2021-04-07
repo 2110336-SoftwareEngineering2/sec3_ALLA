@@ -104,6 +104,7 @@ export class UserService {
   }
 
   async get_profileURL(uid:number): Promise<string>{
+    /*
     const person = await this.userRepo.findOne({id:uid})
     if (person){
       console.log(person.profilePic.url)
@@ -111,7 +112,8 @@ export class UserService {
     }
     else{
       throw new Error('User not found');
-    }
+    }*/
+    return (await this.userRepo.findOne({id:uid})).profilePic.url;
   }
 
 
