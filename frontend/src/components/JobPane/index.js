@@ -173,6 +173,10 @@ const JobPane = (props) => {
                         isinManagepage={false}
                         jobObj={contract.job}
                         studentObj={contract.student}
+                        finishDate={contract.finished_date}
+                        timeUsed={contract.time_used}
+                        fid={contract.fid}
+                        rating={contract.rate}
                     />
 
                 </div>

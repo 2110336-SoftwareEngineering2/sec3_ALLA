@@ -1,5 +1,5 @@
 import React from 'react'
-// import './style.scss'
+import './style.scss'
 import { useHistory } from 'react-router-dom'
 import axios from "axios";
 export default function ContractCard(props) {
@@ -13,27 +13,12 @@ export default function ContractCard(props) {
     //Golf
     const isinManagepage = props.isinManagepage;
     const rid = props.rid
-    async function deleteApplication(e) {
-        if (!e) var e = window.event;
-        e.cancelBubble = true;
-        if (e.stopPropagation) e.stopPropagation();
+    const student = props.student;
+    const job = props.job;
+    console.log(student,job)
 
-        await axios
-            .delete(`http://127.0.0.1:8300/application-record/` + rid.toString()
-                , {
-                })
-            .then((response) => {
-                //do nothing
-                alert("Application is cancelled");
-                history.push("/managejob");
-                return (response.data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
     return (
-        <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
+        <div className="ccard-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
             
             <div>
                 {/* <a href={`/profile/${jobObj.employer.id}`}> */}
@@ -47,32 +32,16 @@ export default function ContractCard(props) {
                 <div> <h6>{jobObj.location}</h6></div>
             </div>
 
-            <div className="job-text-col ">
-                <div >{jobObj.minimumEducation}</div>
-                <div> {jobObj.workingHours}</div>
-                <div> THB {jobObj.salaryMin}-{jobObj.salaryMax}</div>
-            </div>
+            <div className="job-text-col p-2">
+                    <div> finish date: <h6>{props.finishDate}</h6></div>
+                    <div> time used: <h6>{props.timeUsed} day(s)</h6></div>
+            </div> 
 
-            <div className="job-text-col ">
-                <small >{jobObj.positionLeft} position(s)</small>
-                {jobObj.positionLeft === 0 ?
-                    <div> status : CLOSE </div>
-                    : <div> status : OPEN </div>
-                }
-            </div>
+            <div className="job-text-col p-2">
+                    <div> rating <h4>{props.rating}<small>/5</small></h4> </div>
+                    <div> finish status : <h6>{props.fid}</h6></div>
+            </div> 
 
-            {isinManagepage ?
-                <div>
-                    <button
-                        onClick={(e) => {
-                            deleteApplication(e)
-                        }}
-                    >
-                        Cancel
-                </button>
-                </div> :
-                <></>
-            }
 
         </div>
     )

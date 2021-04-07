@@ -50,7 +50,7 @@ export default function ChatRoom(props) {
             "content": input, //message
           }]
         })
-        console.log(currentChatRoom)
+
         setInput('')
 
       })
@@ -100,10 +100,10 @@ export default function ChatRoom(props) {
           },
         })
       .then((response) => {
-        // console.log(response.data)
+
         setChatConvoList(response.data)
         response.data.map((currElement, index) => {
-          console.log(currElement.members.length, AuthState.id)
+
           if (currElement.members.length === 1) setPrivateChat(currElement)
           else if ((currElement.members[0].id.toString() === AuthState.id && currElement.members[1].id.toString() === props.match.params.uid) || (currElement.members[1].id.toString() === AuthState.id && currElement.members[0].id.toString() === props.match.params.uid)) {
             setCurrentChatRoom(currElement)
@@ -123,42 +123,72 @@ export default function ChatRoom(props) {
   useEffect(() => {
     //join socket
     //create Chat
-    if (AuthState.id !== props.match.params.uid) {
-      createChat(AuthState.id, props.match.params.uid)
-      getChatRoomByUid(props.match.params.uid)
-    }
-    else {
-      console.log('the chat is blank')
-    }
+    setInterval(() => {
+      if (AuthState.id !== props.match.params.uid) {
+        createChat(AuthState.id, props.match.params.uid)
+        getChatRoomByUid(props.match.params.uid)
+      }
+      else {
+        getChatRoomByUid(props.match.params.uid)
+        console.log('the chat is blank')
+      }
+    }, 1000);
 
   }, [])
 
   useEffect(() => {
     console.log('currentChatRoom', currentChatRoom)
-    console.log('private chat', privateChat)
-  }, [currentChatRoom, privateChat])
+    //   console.log('private chat', privateChat)
+  }, [currentChatRoom])
+  // }, [currentChatRoom, privateChat])
   const getMessageList = () => {
-
+    let lastSeparator;
+    let needSeparator = true;
     return (
-      <MessageList typingIndicator={input !== "" ? <TypingIndicator content="แหน่ะ พิมใช่มั้ย" /> : <></>}>
-        <MessageSeparator content={new Date().toDateString()} />
-        {(currentChatRoom) ? currentChatRoom.message.map((data, i) => {
-          let lastDisplayDate = new Date()
-          console.log(data.author.id, AuthState.id)
-          return (
-            <Message key={i} model={{
-              message: data.content,
-              sentTime: data.timestamp,
-              sender: "Zoe",
-              direction: data.author.id == AuthState.id ? "outgoing" : "incoming",
-              position: "single"
-            }}>
-              <Avatar src={avatar1} name="Zoe" />
-            </Message>
-          )
-        }) : <></>}
+      <ChatContainer>
+        <ConversationHeader>
+          <ConversationHeader.Back />
+          <Avatar src={avatar1} name={"Zoe"} />
+          <ConversationHeader.Content
+            // userName={currentChatRoom.member[0]}
+          />
+        </ConversationHeader>
+        <MessageList typingIndicator={input !== "" ? <TypingIndicator /> : <></>}>
+          {(currentChatRoom) ? currentChatRoom.message.map((data, i) => {
+            if (!data.timestamp) {
+              needSeparator = false
+            }
+            else if (lastSeparator !== data.timestamp.split('T')[0].toString()) {
+              lastSeparator = data.timestamp.split('T')[0].toString()
+              needSeparator = true
+            }
+            else needSeparator = false
+            if (needSeparator) console.log(needSeparator)
+            return (
+              <>
+                {needSeparator ? <MessageSeparator content={lastSeparator} /> : <></>}
+                <Message key={i} model={{
+                  message: data.content,
+                  sentTime: data.timestamp,
+                  sender: data.author.id.firstName,
+                  direction: data.author.id == AuthState.id ? "outgoing" : "incoming",
+                  position: "single"
+                }}>
+                  <Avatar src={avatar1} name="Zoe" />
+                </Message>
+              </>
+            )
+          }) : <></>}
+        </MessageList>
+        <MessageInput
 
-      </MessageList>
+          placeholder="Type message here"
+          value={input}
+          onChange={(val) => setInput(val)}
+          onSend={send}
+        />
+      </ChatContainer>
+
     )
   }
 
@@ -173,11 +203,21 @@ export default function ChatRoom(props) {
     >
       <MainContainer responsive>
         <Sidebar position="left" scrollable={false}>
-          <Search placeholder="Search..." />
-          <div>userid: {props.match.params.uid}</div>
+          <ConversationHeader style={{
+            backgroundColor: "#C6E3FA",
+            height: 62.18,
+          }}>
+            <ConversationHeader.Content>
+              <span style={{
+                color: "black",
+                fontSize: 18,
+                alignSelf: "flex-center"
+              }}>Recent Chat</span>
+            </ConversationHeader.Content>
+          </ConversationHeader>
           <ConversationList>
             {(chatConvoList) ? chatConvoList.map((data, i) => {
-              console.log('dataaaaaaaaaaaaa', data)
+
               let otherUser;
               if (data.members.length === 1)
                 otherUser = null
@@ -199,31 +239,8 @@ export default function ChatRoom(props) {
 
           </ConversationList>
         </Sidebar>
-
-        <ChatContainer>
-          {AuthState.id !== props.match.params.uid ? <ConversationHeader>
-            <ConversationHeader.Back />
-            <Avatar src={avatar1} name="Zoe" />
-            <ConversationHeader.Content
-              userName="Zoe"
-            />
-          </ConversationHeader> : <></>}
-
-          {AuthState.id !== props.match.params.uid ? getMessageList() : <></>}
-
-
-          <MessageInput
-
-            placeholder="Type message here"
-            value={input}
-            onChange={(val) => setInput(val)}
-          />
-        </ChatContainer>
+        {AuthState.id !== props.match.params.uid ? getMessageList() : <></>}
       </MainContainer>
-      <div >
-        <input value={input} onChange={(e) => { setInput(e.target.value) }} />
-        <button onClick={() => send()}>Send</button>
-      </div>
 
     </div>
   );

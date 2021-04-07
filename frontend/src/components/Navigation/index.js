@@ -35,86 +35,11 @@ export default function Navigation() {
     setProfileDropdown(false);
   }
 
-  const notificationList = [
-    {
-      eventId: 1,
-      student: 'KP',
-      employer: "kk",
-      eventFlag: 1,
-      jid: "123",
-      date: ""
-    },
-    {
-      eventId: 2,
-      student: 'KP',
-      employer: "Khun Kai",
-      eventFlag: 1,
-      jid: "456",
-      date: "",
-      offer: "accept"
-    },
-    {
-      eventId: 3,
-      student: 'KP',
-      employer: "Khun Kai",
-      eventFlag: 1,
-      jid: "789a",
-      date: "",
-      confirm: "accept"
-    },
-    {
-      eventId: 1,
-      student: 'KP',
-      employer: "kk",
-      eventFlag: 2,
-      jid: "123",
-      date: ""
-    },
-    {
-      eventId: 2,
-      student: 'KP',
-      employer: "Khun Kai",
-      eventFlag: 2,
-      jid: "456",
-      date: ""
-    },
-    {
-      eventId: 3,
-      student: 'KP',
-      employer: "Khun Kai",
-      eventFlag: 2,
-      jid: "789a",
-      date: "",
-      submission: "accept"
-    },
-    {
-      eventId: 4,
-      student: 'KP',
-      employer: "kk",
-      eventFlag: 2,
-      jid: "123",
-      date: ""
-    },
-    {
-      eventId: 5,
-      student: 'KP',
-      employer: "Khun Kai",
-      eventFlag: 2,
-      jid: "456",
-      date: ""
-    },
-    {
-      eventId: 6,
-      student: 'KP',
-      employer: "Khun Kai",
-      eventFlag: 2,
-      jid: "789a",
-      date: "",
-      resign: "accept"
-    }
-  ]
+  const [notificationList,setNotificationList] = useState([]);
+  const [checkNotiList,setCheckNotiList] = useState([]);
 
-  async function getUserEventlist() {
+
+  async function getUserEventlistWhenClick() {
     await axios
       .get(`http://127.0.0.1:8300/event-log/user/` + AuthState.id, {
         headers: {
@@ -123,7 +48,7 @@ export default function Navigation() {
       })
       .then((response) => {
         console.log("response for noti", response);
-
+        setNotificationList(response.data);
         return response;
       })
       .catch((error) => {
@@ -132,14 +57,35 @@ export default function Navigation() {
       });
   }
 
-  const notificationDisplay = (notificationList) => {
-    getUserEventlist()
+  // const notificationList = [
+  //   {
+  //     addition:true,
+  //     student:{firstName:"KP", lastName:"CH"},
+  //     employer:{firstName:"Kuy", lastName:"Mac"},
+  //     state:8,
+  //     job:{jobTitle:"BB", campanyName:"Manu"},
+  //     timestamp:"2021/02/02t17:30"
+  //   }
+  // ]
+
+  const notificationDisplay = () => {
+    // console.log("function",notificationList); 
     return <div className="list-container d-flex justify-content-center">
       <div>
         <NotificationPane list={notificationList} />
       </div>
     </div>
   }
+
+  useEffect(() => {
+    //join socket
+    //create Chat
+    setInterval(() => {
+      // console.log("check noti len",checkNotiList.length)
+      getUserEventlistWhenClick()
+    }, 1000);
+  }, [])
+ 
 
   return (
     <nav class="navbar navbar-dark  justify-content-space-between position-sticky nav-style">
@@ -180,7 +126,7 @@ export default function Navigation() {
                 class="btn btn-default"
                 onClick={() => {
                   resetDropDown();
-                  setNotificationDropDown(!notificationDropDown)
+                  setNotificationDropDown(!notificationDropDown);
                 }}
               >
                 <img src={noti_image} width="33" className="" /><img src={arrow} width="15" />
@@ -195,7 +141,7 @@ export default function Navigation() {
                     </text>
                   </div>
                   <div>
-                    {notificationDisplay(notificationList)}
+                    {notificationDisplay()}
                   </div>
                 </div>
               ) : (

@@ -6,15 +6,20 @@ const ImageUpload = (props) => {
     const AuthState = useSelector((state) => state.Auth);
     const [file, setFile] = useState('')
     const [imagePreviewUrl, setImagePreviewUrl] = useState('')
+    const [message, setMessage] = useState("")
     const handleSubmit = async (e) => {
         e.preventDefault();
         let formData = new FormData();
-        formData.append("file", file[0]);
+        formData.append("file", file)
+        console.log('file',file)
         // TODO: do something with -> this.state.file
-        console.log('handle uploading-', file[0]);
+        console.log('handle uploading-', imagePreviewUrl);
+        console.log('file FormData',formData)
         await axios
-            .post(`http://127.0.0.1:8300/user/upload/profile_pic/` + AuthState.id, {
-                "file":imagePreviewUrl
+            .post(`http://127.0.0.1:8300/user/upload/profile_pic/` + AuthState.id, formData,{
+                headers: {Authorization: "Bearer " + AuthState.token,
+                  'Content-Type': 'multipart/form-data'
+                }
             })
                 /* , {
                 headers: {
@@ -23,11 +28,13 @@ const ImageUpload = (props) => {
                 }, */
             .then((response) => {
                 console.log("response", response);
-                setImagePreviewUrl(response.data)
+                setImagePreviewUrl(response.data.url)
+                setMessage('Image uploaded')
                 return response;
             })
             .catch((error) => {
                 console.log(error);
+                setMessage('error')
                 return error;
             });
     }
@@ -39,9 +46,9 @@ const ImageUpload = (props) => {
 
         let reader = new FileReader();
         let file = e.target.files[0];
-
+        setFile(file)
         reader.onloadend = () => {
-            setFile(file)
+            // setFile(file)
             setImagePreviewUrl(reader.result)
         }
 
@@ -52,9 +59,9 @@ const ImageUpload = (props) => {
     // let { imagePreviewUrl } = this.state;
     // let $imagePreview = null;
     const getPreview = () => {
-
+        console.log('URLLLLLL',imagePreviewUrl)
         if (imagePreviewUrl) {
-            return (<img src={imagePreviewUrl} />);
+            return (<div><img src={imagePreviewUrl} /><span>{message}</span></div>);
         } else {
             return (<div className="previewText">Please select an Image for Preview</div>);
         }

@@ -62,10 +62,8 @@ export default function MyProfile() {
         },
       })
       .then((response) => {
-        console.log("response", response);
-        setpendingList(response.data.record.pending);
-        setresultList(response.data.record.waiting);
-        setdoneContractList(response.data.contract);
+        console.log("response of my profile", response);
+        setdoneContractList(response.data.feedback);
       })
       .catch((error) => {
         console.log(error);
@@ -102,6 +100,22 @@ export default function MyProfile() {
         return error;
       });
   }
+  async function getProfilePicture(id, token) {
+    await axios.get(`http://localhost:8300/user/profile_pic`, {
+      headers: {
+        Authorization: "Bearer " + AuthState.token,
+      },
+      data: {
+        'uid' :'1',
+      }
+    })
+    .then((response) => {
+      console.log("PROFILEPIC", response);
+      // setStudent({student.img : })
+      return response;
+  })
+  }
+
   const getEmployerProfile = () => {
     return (
       <div className="d-flex justify-content-around">
@@ -236,6 +250,7 @@ export default function MyProfile() {
     onLoadHandler(uid, token);
     //set state something
     getStudentJoblistHandler();
+    getProfilePicture()
   }, []);
 
   return (
@@ -246,7 +261,7 @@ export default function MyProfile() {
           <div>
             <h4>Working History</h4>
             <div className="d-flex">
-              <JobPane type="STUDENT-ONPROGRESS" onProgressList={doneContractList} />
+              <JobPane type="STUDENT-FINISHED-CONTRACT" contractList={doneContractList} />
             </div>
           </div> : <></>
         }

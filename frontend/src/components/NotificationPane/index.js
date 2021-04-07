@@ -10,23 +10,19 @@ import NotificationCard from "../../components/NotificationCard";
 const NotificationPane = (props) => {
 
     const getList = (list) => {
-        console.log('import noti list',list)
+        //console.log('import noti list',list)
         let notificationList = []
         list.map((notification, idx) =>{
             notificationList.push(
                 <div key={idx}>
                     <NotificationCard
                         // cardData={notification}
-                        eventId={notification.eventId}
+                        state={notification.state}
                         student={notification.student}
                         employer={notification.employer}
-                        eventFlag={notification.eventFlag}
-                        jid={notification.jid}
-                        date={notification.date}
-                        submission={notification.submission}
-                        confirm={notification.confirm}
-                        resign={notification.resign}
-                        offer={notification.offer}
+                        job={notification.job}
+                        timestamp={notification.timestamp}
+                        addition={notification.addition}
                     />
                 </div>
             )

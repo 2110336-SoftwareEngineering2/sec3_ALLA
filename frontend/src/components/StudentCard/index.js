@@ -33,6 +33,11 @@ export default function JobCard(props) {
             }
         }
     }
+
+    function showOntab(){
+        return (status=="DOING" || status=="SUBMITTED" || status=="RESIGN_REQ")
+    }
+
     async function submitresignJobapi(e, request) {
         if (!e) var e = window.event;
         e.cancelBubble = true;
@@ -59,9 +64,10 @@ export default function JobCard(props) {
         if (e.stopPropagation) e.stopPropagation();
         await axios
             .post(`http://localhost:8300/contract/navigate/` + cid.toString(), {
+                "cid":cid,
                 "yesFlag": answer,
                 "rate": rating,
-                "comment": ""
+                "comment": "aa"
             }, {
                 headers: {
                     Authorization: "Bearer " + AuthState.token,
@@ -125,9 +131,36 @@ export default function JobCard(props) {
 
 
     function getJobStatus() {
-        return <div>
-            status : {status}
-        </div>
+        switch (status){
+            case "DOING":
+                return(
+                    <div> status : WORKING </div>
+                )
+            case "DONE":
+                return(
+                    <div> status : FINISHED </div>
+                )
+            case "RESIGNED":
+                return(
+                    <div> status : RESIGNED </div>
+                )
+            case "TIMEOUT":
+                return(
+                    <div> status : TIMEOUT </div>
+                )
+            case "SUBMITTED":
+                return(
+                    <div> status : SUBMITTED </div>
+                )
+            case "RESIGN_REQ":
+                return(
+                    <div> status : RESIGN REQUEST </div>
+                )
+            default:
+                return
+                    <div> status : undefined </div>;
+        }
+       
     }
 
     const getStudentButton = () => {
@@ -177,7 +210,7 @@ export default function JobCard(props) {
                     <text> {" "} </text>
                     <button
                         onClick={(e) => {
-                            jobSubmithandler(e, false)
+                            jobSubmithandler(e, false,"")
                         }}
                     >
                         Reject
@@ -207,7 +240,9 @@ export default function JobCard(props) {
         }
     }
 
-    return (
+    const showOnOnprogressTab = isOnprogresspage && showOntab()
+
+    if (showOntab()) return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
             <div><img src={jobObj.companyPic_url || `https://picsum.photos/${(200 + (jobObj.jid % 30)).toString()}`} className="rounded-circle job-card-pic p-2"></img></div>
             <div className="job-text-col p-2 ">
@@ -223,7 +258,7 @@ export default function JobCard(props) {
                 </div> : <></>
             }
 
-            {isOnprogresspage ?
+            {(isOnprogresspage)? 
                 <div className="d-flex justify-content-between">
                     <div className="job-text-col">
                         <div className="d-flex justify-content-between">
@@ -231,6 +266,7 @@ export default function JobCard(props) {
                             <h6 className="p-2"><a href={`/profile/${props.studentObj.id}`}>{props.studentObj.firstName} {props.studentObj.lastName}</a></h6>
                         </div>
                         {getJobStatus()}
+                        {/* {showOntab() ? <>yes</>:<>no</>} */}
                         <div className="mt-1">
                             {isStudent ?
                                 <>{getStudentButton()}</> :
@@ -238,7 +274,6 @@ export default function JobCard(props) {
                             }
                         </div>
                     </div>
-
                 </div> :
                 <div className="d-flex justify-content-between">
                     <div className="d-flex" >
@@ -267,4 +302,5 @@ export default function JobCard(props) {
 
         </div>
     )
+    else return <></>
 }
