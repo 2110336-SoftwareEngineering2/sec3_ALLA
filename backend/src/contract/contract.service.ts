@@ -123,7 +123,7 @@ export class ContractService {
       else{
         if (dto.request === 'submit'){
           dtoo['status'] = ContractStatus.SUBMITTED;
-          eventFlag = 4;
+          eventFlag = 5;
         }
         if (dto.request === 'resign'){
           dtoo['status'] = ContractStatus.RESIGN_REQ;

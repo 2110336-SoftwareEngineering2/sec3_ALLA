@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import './style.scss'
 
 const ImageUpload = (props) => {
     const AuthState = useSelector((state) => state.Auth);
@@ -30,11 +31,12 @@ const ImageUpload = (props) => {
                 console.log("response", response);
                 setImagePreviewUrl(response.data.url)
                 setMessage('Image uploaded')
+                alert('Image uploaded')
                 return response;
             })
             .catch((error) => {
                 console.log(error);
-                setMessage('error')
+                
                 return error;
             });
     }
@@ -61,7 +63,7 @@ const ImageUpload = (props) => {
     const getPreview = () => {
         console.log('URLLLLLL',imagePreviewUrl)
         if (imagePreviewUrl) {
-            return (<div><img src={imagePreviewUrl} /><span>{message}</span></div>);
+            return (<div className="imgPreview"><img src={imagePreviewUrl} /><span>{message}</span></div>);
         } else {
             return (<div className="previewText">Please select an Image for Preview</div>);
         }

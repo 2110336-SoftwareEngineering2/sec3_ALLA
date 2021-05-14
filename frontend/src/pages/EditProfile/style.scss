@@ -24,6 +24,16 @@
     font-size: 10px;
     font-weight: bold;
   }
+
+  .imgPreview {
+      width: 300px;
+  }
+
+  .imgPreview img {
+      display: block;
+      width: 100%;
+      height: auto;
+  }
   
   .font-editprofile {
     color: black;

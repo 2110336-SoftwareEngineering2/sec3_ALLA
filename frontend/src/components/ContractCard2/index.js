@@ -2,7 +2,7 @@ import React from 'react'
 import './style.scss'
 import { useHistory } from 'react-router-dom'
 import axios from "axios";
-export default function ContractCard(props) {
+export default function ContractCard2(props) {
     const history = useHistory()
     let jobObj = {}
     if (props.jobObj) jobObj = props.jobObj
@@ -16,8 +16,42 @@ export default function ContractCard(props) {
     const student = props.student;
     const job = props.job;
     console.log(student,job)
+    const status = props.status;
 
-    return (
+    function getJobStatus(status) {
+        switch (status){
+            case "DOING":
+                return(
+                    <h6> WORKING </h6>
+                )
+            case "DONE":
+                return(
+                    <h6> FINISHED </h6>
+                )
+            case "RESIGNED":
+                return(
+                    <h6> RESIGNED </h6>
+                )
+            case "TIMEOUT":
+                return(
+                    <h6> TIMEOUT </h6>
+                )
+            case "SUBMITTED":
+                return(
+                    <h6> SUBMITTED </h6>
+                )
+            case "RESIGN_REQ":
+                return(
+                    <h6> RESIGN REQUEST </h6>
+                )
+            default:
+                return
+                    <h6> undefined </h6>;
+        }
+       
+    }
+
+    if (status=="RESIGNED") return (
         <div className="ccard-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
             
             <div>
@@ -33,16 +67,15 @@ export default function ContractCard(props) {
             </div>
 
             <div className="job-text-col p-2">
-                    <div> finish date: <h6>{props.finishDate}</h6></div>
-                    <div> time used: <h6>{props.timeUsed} day(s)</h6></div>
+                    <div> start date: <h6>{props.startDate}</h6></div>
             </div> 
 
             <div className="job-text-col p-2">
-                    <div> rating <h4>{props.rating}<small>/5</small></h4> </div>
-                    <div> status : <h6>FINISHED</h6></div>
+                    <div> status : {getJobStatus(status)}</div>
             </div> 
 
 
         </div>
     )
+    else return <></>
 }

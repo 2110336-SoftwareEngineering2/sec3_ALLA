@@ -57,7 +57,7 @@ export default function Register() {
   const [student, setStudent] = useState(initStudent);
   const [employer, setEmployer] = useState(initEmployer);
   const [isStudent, setisStudent] = useState(true);
-
+  const [sid, setSid] = useState();
   async function sendUpdateProfile(e) {
     console.log('TOOOOKEKN', AuthState.token);
     e.preventDefault();
@@ -151,7 +151,7 @@ export default function Register() {
               </header>
             </div>
             <div class="form-group col-md-6 ">
-              <img src={student.img}></img>
+              <div className="imgPreview"><img src={student.profilePic ? student.profilePic.url : ''}></img></div>
               <ImageUpload />
             </div>
             <div class="form-row">
@@ -297,7 +297,7 @@ export default function Register() {
                   ></input>
                 </div>
               </div>
-              <FileUploadForm />
+              <FileUploadForm sid={student.sid}/>
             </div>
             <button type="submit" class="btn btn-success">
               Confirm Change
@@ -314,6 +314,11 @@ export default function Register() {
               <header className=" pb-2 font-editprofile">
                 <h1> Edit your profile </h1>
               </header>
+            </div>
+            
+            <div class="form-group col-md-6 ">
+              <img src={employer.profilePic ? employer.profilePic.url : ''} className="imgPreview"></img>
+              <ImageUpload />
             </div>
             <div class="form-row">
               <div class="form-group col-md-6 font-editprofile">

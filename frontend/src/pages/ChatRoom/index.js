@@ -126,10 +126,10 @@ export default function ChatRoom(props) {
     setInterval(() => {
       if (AuthState.id !== props.match.params.uid) {
         createChat(AuthState.id, props.match.params.uid)
-        getChatRoomByUid(props.match.params.uid)
+        getChatRoomByUid(AuthState.id)
       }
       else {
-        getChatRoomByUid(props.match.params.uid)
+        getChatRoomByUid(AuthState.id)
         console.log('the chat is blank')
       }
     }, 1000);
@@ -144,13 +144,30 @@ export default function ChatRoom(props) {
   const getMessageList = () => {
     let lastSeparator;
     let needSeparator = true;
+
+    let otherUser = null;
+    let currUser = null
+    if (currentChatRoom) {
+      if (currentChatRoom.members.length === 2) {
+        if (currentChatRoom.members[0].id.toString() !== AuthState.id && currentChatRoom.members[1].id.toString() === AuthState.id) {
+          otherUser = currentChatRoom.members[0]
+          currUser = currentChatRoom.members[1]
+        }
+        else if (currentChatRoom.members[1].id.toString() !== AuthState.id && currentChatRoom.members[0].id.toString() === AuthState.id) {
+          otherUser = currentChatRoom.members[1]
+          currUser = currentChatRoom.members[0]
+        }
+
+      }
+    }
+    // console.log(otherUser,currUser)
     return (
       <ChatContainer>
         <ConversationHeader>
           <ConversationHeader.Back />
-          <Avatar src={avatar1} name={"Zoe"} />
+          <Avatar src="https://picsum.photos/200" name={"Zoe"} />
           <ConversationHeader.Content
-            // userName={currentChatRoom.member[0]}
+            userName={otherUser?otherUser.firstName:''}
           />
         </ConversationHeader>
         <MessageList typingIndicator={input !== "" ? <TypingIndicator /> : <></>}>
@@ -174,7 +191,7 @@ export default function ChatRoom(props) {
                   direction: data.author.id == AuthState.id ? "outgoing" : "incoming",
                   position: "single"
                 }}>
-                  <Avatar src={avatar1} name="Zoe" />
+                  {/* <Avatar src={avatar1} name="Zoe" /> */}
                 </Message>
               </>
             )
@@ -217,21 +234,20 @@ export default function ChatRoom(props) {
           </ConversationHeader>
           <ConversationList>
             {(chatConvoList) ? chatConvoList.map((data, i) => {
+              let otherUser = null;
 
-              let otherUser;
-              if (data.members.length === 1)
-                otherUser = null
-              else {
-                if (data.members[0].id.toString() !== AuthState.id) otherUser = data.members[0]
-                else otherUser = data.members[1]
+              if (data.members.length === 2) {
+                if (data.members[0].id.toString() !== AuthState.id && data.members[1].id.toString() === AuthState.id) otherUser = data.members[0]
+                else if (data.members[1].id.toString() !== AuthState.id && data.members[0].id.toString() === AuthState.id) otherUser = data.members[1]
+                else otherUser = null
               }
               if (otherUser && data) return (<Conversation
                 name={`${otherUser.firstName} ${otherUser.lastName}`}
-                lastSenderName={data.message[data.message.length - 1].author.firstName}
-                info={data.message[data.message.length - 1].content}
+                lastSenderName={data.message.length !== 0 ? data.message[data.message.length - 1].author.firstName : ''}
+                info={data.message.length !== 0 ? data.message[data.message.length - 1].content : ''}
                 onClick={() => { history.push(`/chat/${otherUser.id}`) }}
               >
-                <Avatar src={avatar1} name="Lilly" status="available" />
+                <Avatar src="https://picsum.photos/200" name="Lilly" status="available" />
               </Conversation>
               )
             }) : <></>}

@@ -5,6 +5,7 @@ import ResponseCard from '../ResponseCard';
 import StudentCard from '../StudentCard';
 import './style.scss'
 import ContractCard from '../ContractCard';
+import ContractCard2 from '../ContractCard2';
 const JobPane = (props) => {
 
 
@@ -132,7 +133,7 @@ const JobPane = (props) => {
                 <div className=" mb-3" key={idx}>
                     <StudentCard
                         rid={job.rid}
-                        isOnprogresspage={false}
+                        isOnrequestpage={true}
                         jobObj={job.job}
                         studentObj={job.student}
                     />
@@ -163,8 +164,8 @@ const JobPane = (props) => {
         return jobArray
     }
 
-    const getDoneContractList = (contractList) => {
-        let jobArray = [];
+    const getDoneContractList = (contractList,list) => {
+        if(contractList){let jobArray = [];
         contractList.map((contract, idx) => {
             jobArray.push(
                 <div className=" mb-3" key={idx}>
@@ -182,7 +183,28 @@ const JobPane = (props) => {
                 </div>
             )
         })
+        list.map((contract, idx) => {
+            jobArray.push(
+                <div className=" mb-3" key={idx}>
+                    <ContractCard2
+                        cid={contract.cid}
+                        isinManagepage={false}
+                        jobObj={contract.job}
+                        studentObj={contract.student}
+                        finishDate={contract.finished_date}
+                        timeUsed={contract.time_used}
+                        fid={contract.fid}
+                        rating={contract.rate}
+                        startDate={contract.start_date}
+                        status={contract.status}
+                    />
+
+                </div>
+            )
+        })
         return jobArray
+        }
+        else return <></>
     }
 
     const getList = () => {
@@ -194,7 +216,7 @@ const JobPane = (props) => {
         else if (props.type == "EMPLOYER-REQUEST") return getRequestList(props.requestList);
         else if (props.type == "EMPLOYER-RESPONSE") return getResponseList(props.responseList);
         else if (props.type == "EMPLOYER-AVAILABLE") return getAvailableList(props.availableList);
-        else if (props.type == "STUDENT-FINISHED-CONTRACT") return getDoneContractList(props.contractList);
+        else if (props.type == "STUDENT-FINISHED-CONTRACT") return getDoneContractList(props.contractList,props.List);
         else return getJobList();
     }
     const list = getList()

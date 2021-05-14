@@ -75,6 +75,9 @@ const AuthReducer = (state = initialState, action) => {
         case 'SET_LOGIN_TYPE':
             localStorage.setItem('login_type', action.payload.type);
             return state
+        case 'SET_NOTIFICATION_SESSION':
+            localStorage.setItem('noti_session', action.payload.noti_session);
+            return state
         case 'GET_LOGIN_INFO':
             return {
                 ...state,
@@ -86,6 +89,7 @@ const AuthReducer = (state = initialState, action) => {
             localStorage.removeItem('uid');
             localStorage.removeItem('accessToken');
             localStorage.removeItem('login_type');
+            localStorage.removeItem('noti_session');
             return state
         default: return state
     }

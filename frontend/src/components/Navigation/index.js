@@ -47,7 +47,7 @@ export default function Navigation() {
         },
       })
       .then((response) => {
-        console.log("response for noti", response);
+        console.log("response for noti", response.data);
         setNotificationList(response.data);
         return response;
       })
@@ -56,17 +56,6 @@ export default function Navigation() {
         return error;
       });
   }
-
-  // const notificationList = [
-  //   {
-  //     addition:true,
-  //     student:{firstName:"KP", lastName:"CH"},
-  //     employer:{firstName:"Kuy", lastName:"Mac"},
-  //     state:8,
-  //     job:{jobTitle:"BB", campanyName:"Manu"},
-  //     timestamp:"2021/02/02t17:30"
-  //   }
-  // ]
 
   const notificationDisplay = () => {
     // console.log("function",notificationList); 
@@ -86,7 +75,6 @@ export default function Navigation() {
     }, 1000);
   }, [])
  
-
   return (
     <nav class="navbar navbar-dark  justify-content-space-between position-sticky nav-style">
       <div className="d-flex justify-content-between align-items-center nav-container ">

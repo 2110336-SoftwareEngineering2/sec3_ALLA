@@ -36,7 +36,7 @@ export default function NotificationCard(props) {
                             </div>
                             <div>
                                 <div className="message-container">
-                                    <text className="message-font">
+                                    <text className="message-font wordwrap">
                                         {props.student.firstName} {props.student.lastName} {" "} applied for {" "}
                                         {props.job.jobTitle} at {props.job.companyName}
                                     </text>
@@ -197,12 +197,8 @@ export default function NotificationCard(props) {
                                     "Accepted" : "Declined"} </h6>
                             </div>
                             <div>
-                                <div className="message-container">
-                                    <text className="message-font">
                                         Your resignation request for {props.job.jobTitle} at {props.job.companyName} is {props.addition === true ?
                                             "accepted" : "declined"}
-                                    </text>
-                                </div>
                             </div>
                         </div>
                         {showtime()}
@@ -291,8 +287,8 @@ export default function NotificationCard(props) {
                                         "Accepted" : "Declined"} </h6>
                                 </div>
                                 <div>
-                                    <div className="message-container">
-                                        <text className="message-font">
+                                    <div className="message-container wordwrap">
+                                        <text className="message-font wordwrap">
                                             Your resignation request for {props.job.jobTitle} at {props.job.companyName} is {props.addition === true ?
                                                 "accepted" : "declined"}
                                         </text>

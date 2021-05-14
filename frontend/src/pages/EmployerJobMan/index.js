@@ -163,7 +163,7 @@ export default function EmployerJobMan() {
       </ul>
       </div>
          
-      <div className="pane-area-container border border-solid"> {display()}</div>
+      <div className="pane-area-container pane-container border border-solid"> {display()}</div>
       
       
 
