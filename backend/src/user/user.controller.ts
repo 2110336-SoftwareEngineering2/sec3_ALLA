@@ -14,6 +14,9 @@ import { User } from 'src/entities/user.entity';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { OwnGuard } from 'src/guard/own.guard';
 import { UserService } from './user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 
 @Controller('user')
 @ApiBearerAuth('JWT')
@@ -58,6 +61,43 @@ export class UserController {
   @Get('jobManagement/:id')
   getAllJob(@Param('id', new ParseIntPipe()) id: number){
     return this.service.getUserJobManagementData(id);
+  }
+
+  @Get('chatRoom/:id')
+  getAllChatRoom(@Param('id', new ParseIntPipe()) id : number) {
+    return this.service.getUserChat(id);
+  }
+  @Post('upload/profile_pic/:uid')
+  @UseInterceptors(FileInterceptor('file'))
+  async upload_profile(
+      @Param('uid', new ParseIntPipe()) uid: number,
+      @UploadedFile() file: Express.Multer.File) : Promise<any>{
+        console.log(`user id : ${uid} is uploading profile pic`);
+        return this.service.addProfilePic(uid, file.buffer, file.originalname)
+  }
+
+  @Delete('delete/profile_pic/:uid')
+  async delete_profile_pic(
+    @Param('uid', new ParseIntPipe()) uid: number
+  ){
+    console.log(`user id : ${uid} is deleting profile pic`);
+    this.service.deleteProfilePic(uid);
+  }
+/*
+  @Post('upload/resume/:uid')
+  @UseInterceptors(FileInterceptor('file'))
+  async upload_resume(
+      @Param('uid', new ParseIntPipe()) uid: number,
+      @UploadedFile() file: Express.Multer.File) : Promise<any>{
+        console.log(`user id : ${uid} is uploading resume`);
+        return this.service.addAvatar(uid, file.buffer, file.originalname, 'resume')
+  }
+*/
+  @Get('profile_pic/:uid')
+  async get_profile_pic(
+    @Param('uid', new ParseIntPipe()) uid: number
+  ): Promise<string>{
+    return this.service.get_profileURL(uid);
   }
 
 }

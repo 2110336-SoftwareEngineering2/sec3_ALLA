@@ -87,7 +87,7 @@ export default function EmployerJobMan() {
             
                 {onProgressList.length!==0 ? 
                     <div className="w-100">
-                        <JobPane type="ONPROGRESS" onProgressList={onProgressList} />
+                        <JobPane type="EMPLOYER-ONPROGRESS" onProgressList={onProgressList} />
                     </div> 
                 :
                     <div>Nothing to show here..</div>
@@ -103,7 +103,7 @@ export default function EmployerJobMan() {
 
       <div className="d-flex justify-content-left">
         <header className=" pb-2">
-          <h2 className="font-login"> Job Management </h2>
+          <h2 className="font-editprofile"> Job Management </h2>
         </header>
         <div className="d-flex justify-content-left p-2">
         <button
@@ -123,7 +123,7 @@ export default function EmployerJobMan() {
         <li className="list-item ">
           <a
             className={`nav-link ${
-              currentTab == "Available" ? "active font-login" : "font-login"
+              currentTab == "Available" ? "active font-editprofile" : "font-editprofile"
             }`}
             onClick={(e) => setCurrentTab("Available")}
           >
@@ -133,7 +133,7 @@ export default function EmployerJobMan() {
         <li className="list-item ">
           <a
             className={`nav-link ${
-              currentTab == "Request" ? "active font-login" : "font-login"
+              currentTab == "Request" ? "active font-editprofile" : "font-editprofile"
             }`}
             onClick={(e) => setCurrentTab("Request")}
           >
@@ -143,7 +143,7 @@ export default function EmployerJobMan() {
         <li className="list-item ">
           <a
             className={`nav-link ${
-              currentTab == "Response" ? "active font-login" : "font-login"
+              currentTab == "Response" ? "active font-editprofile" : "font-editprofile"
             }`}
             onClick={(e) => setCurrentTab("Response")}
           >
@@ -153,7 +153,7 @@ export default function EmployerJobMan() {
         <li className="list-item ">
           <a
             className={`nav-link ${
-              currentTab == "On-progress" ? "active font-login" : "font-login"
+              currentTab == "On-progress" ? "active font-editprofile" : "font-editprofile"
             }`}
             onClick={(e) => setCurrentTab("On-progress")}
           >
@@ -163,7 +163,7 @@ export default function EmployerJobMan() {
       </ul>
       </div>
          
-      <div className="pane-area-container border border-solid"> {display()}</div>
+      <div className="pane-area-container pane-container border border-solid"> {display()}</div>
       
       
 

@@ -11,6 +11,8 @@ import axios from "axios";
 
 import "react-datepicker/dist/react-datepicker.css";
 import RequireAuth from "../../components/RequireAuth";
+import FileUploadForm from "../../components/FileUpload";
+import ImageUpload from "../../components/ImageUpload";
 
 export default function Register() {
   // const location = useLocation();
@@ -55,9 +57,9 @@ export default function Register() {
   const [student, setStudent] = useState(initStudent);
   const [employer, setEmployer] = useState(initEmployer);
   const [isStudent, setisStudent] = useState(true);
-
+  const [sid, setSid] = useState();
   async function sendUpdateProfile(e) {
-    console.log('TOOOOKEKN',AuthState.token);
+    console.log('TOOOOKEKN', AuthState.token);
     e.preventDefault();
     let differnt = {};
     if (isStudent) {
@@ -144,12 +146,17 @@ export default function Register() {
             onSubmit={sendUpdateProfile}
           >
             <div className="d-flex justify-content-left">
-              <header className=" pb-2 font-login">
+              <header className=" pb-2 font-editprofile">
                 <h1> Edit your profile </h1>
               </header>
             </div>
+            <div class="form-group col-md-6 ">
+              <div className="imgPreview"><img src={student.profilePic ? student.profilePic.url : ''}></img></div>
+              <ImageUpload />
+            </div>
             <div class="form-row">
-              <div class="form-group col-md-6 font-login">
+
+              <div class="form-group col-md-6 font-editprofile">
                 <label for="inputPassword4">First Name</label>
                 <input
                   type="text"
@@ -162,7 +169,7 @@ export default function Register() {
                 ></input>
               </div>
 
-              <div class="form-group col-md-6 font-login">
+              <div class="form-group col-md-6 font-editprofile">
                 <label for="inputAddress">Last Name</label>
                 <input
                   type="text"
@@ -177,10 +184,10 @@ export default function Register() {
             </div>
 
             <div class="form-group">
-              <label for="inputAddress" className="font-login">
+              <label for="inputAddress" className="font-editprofile">
                 Mobile Number
               </label>
-              <small className="font-login"> (Format: xxx-xxx-xxxx) </small>
+              <small className="font-editprofile"> (Format: xxx-xxx-xxxx) </small>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <div class="input-group-text">Tel</div>
@@ -203,7 +210,7 @@ export default function Register() {
             </div>
 
             <div class="form-group">
-              <label className="d-block" className="font-login">
+              <label className="d-block" className="font-editprofile">
                 Date of Birth
               </label>
               <div class="input-group">
@@ -222,7 +229,7 @@ export default function Register() {
             <div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label className="font-login">Degree</label>
+                  <label className="font-editprofile">Degree</label>
                   <input
                     type="text"
                     class="form-control"
@@ -235,7 +242,7 @@ export default function Register() {
                   ></input>
                 </div>
                 <div class="form-group col-md-6">
-                  <label className="font-login">University</label>
+                  <label className="font-editprofile">University</label>
                   <input
                     type="text"
                     class="form-control"
@@ -249,7 +256,7 @@ export default function Register() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label className="font-login">Faculty</label>
+                  <label className="font-editprofile">Faculty</label>
                   <input
                     type="text"
                     class="form-control"
@@ -263,7 +270,7 @@ export default function Register() {
                 </div>
 
                 <div class="form-group col-md-6">
-                  <label className="font-login">Department</label>
+                  <label className="font-editprofile">Department</label>
                   <input
                     type="text"
                     class="form-control"
@@ -278,7 +285,7 @@ export default function Register() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label className="font-login">Fields of work</label>
+                  <label className="font-editprofile">Fields of work</label>
                   <input
                     type="text"
                     class="form-control"
@@ -290,14 +297,7 @@ export default function Register() {
                   ></input>
                 </div>
               </div>
-              <div class="input-group mb-3">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input"></input>
-                  <label class="custom-file-label" for="inputGroupFile01">
-                    Edit Resume
-                  </label>
-                </div>
-              </div>
+              <FileUploadForm sid={student.sid}/>
             </div>
             <button type="submit" class="btn btn-success">
               Confirm Change
@@ -311,12 +311,17 @@ export default function Register() {
             onSubmit={sendUpdateProfile}
           >
             <div className="d-flex justify-content-left">
-              <header className=" pb-2 font-login">
+              <header className=" pb-2 font-editprofile">
                 <h1> Edit your profile </h1>
               </header>
             </div>
+            
+            <div class="form-group col-md-6 ">
+              <img src={employer.profilePic ? employer.profilePic.url : ''} className="imgPreview"></img>
+              <ImageUpload />
+            </div>
             <div class="form-row">
-              <div class="form-group col-md-6 font-login">
+              <div class="form-group col-md-6 font-editprofile">
                 <label for="inputPassword4">First Name</label>
                 <input
                   type="text"
@@ -329,7 +334,7 @@ export default function Register() {
                 ></input>
               </div>
 
-              <div class="form-group col-md-6 font-login">
+              <div class="form-group col-md-6 font-editprofile">
                 <label for="inputAddress">Last Name</label>
                 <input
                   type="text"
@@ -344,10 +349,10 @@ export default function Register() {
             </div>
 
             <div class="form-group">
-              <label for="inputAddress" className="font-login">
+              <label for="inputAddress" className="font-editprofile">
                 Mobile Number
               </label>
-              <small className="font-login"> (Format: xxx-xxx-xxxx) </small>
+              <small className="font-editprofile"> (Format: xxx-xxx-xxxx) </small>
               <div class="input-group">
                 <div class="input-group-prepend">
                   <div class="input-group-text">Tel</div>
@@ -370,7 +375,7 @@ export default function Register() {
             </div>
 
             <div class="form-group">
-              <label className="d-block" className="font-login">
+              <label className="d-block" className="font-editprofile">
                 Date of Birth
               </label>
               <div class="input-group">
@@ -389,7 +394,7 @@ export default function Register() {
             <div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label className="font-login">Company</label>
+                  <label className="font-editprofile">Company</label>
                   <input
                     type="text"
                     class="form-control"
@@ -401,7 +406,7 @@ export default function Register() {
                   ></input>
                 </div>
                 <div class="form-group col-md-6">
-                  <label className="font-login">Position</label>
+                  <label className="font-editprofile">Position</label>
                   <input
                     type="text"
                     class="form-control"
@@ -415,7 +420,7 @@ export default function Register() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label className="font-login">Fields of work</label>
+                  <label className="font-editprofile">Fields of work</label>
                   <input
                     type="text"
                     class="form-control"
@@ -437,6 +442,7 @@ export default function Register() {
           </form>
         </div>
       )}
+
     </div>
   );
 }

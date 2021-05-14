@@ -32,16 +32,18 @@ export default function Login() {
         console.log('response', response)
         if (response.status === 201) {
           console.log('Auth State', AuthState)
-          console.log('response data login',response.data)
+          console.log('response data login', response.data)
           //dispatch({ type: "LOGIN_SUCCESS", payload: { "id": response.data.id } })
           dispatch({ type: "SET_UID", payload: { "id": response.data.id } })
           dispatch({ type: "SET_ACCESS_TOKEN", payload: { "token": response.data.token } })
           dispatch({ type: "SET_LOGIN_TYPE", payload: { "type": response.data.type } })
+          dispatch({ type: "SET_NOTIFICATION_SESSION" ,payload: { "noti_session": new Date()} })
           history.push('/')
-        return response }
+          return response
+        }
       })
       .catch(error => {
-        if(error.response)alert(error.response.data.message)
+        if (error.response) alert(error.response.data.message)
         console.log(error.response)
         return error
       });
@@ -100,10 +102,10 @@ export default function Login() {
               </button>
             </div>
             <div class="d-flex justify-content-center pt-5 font-newhere">
-              
+
               New Here?
               <a href="/register" class="pl-2 font-signup">
-                
+
                 Sign Up
               </a>
             </div>

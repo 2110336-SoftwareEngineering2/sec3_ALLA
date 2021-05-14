@@ -28,6 +28,7 @@ const requiredJobAttr = [
   'status',
   'uid',
   'tagList',
+  'duration'
   //'createdDate',
 ];
 

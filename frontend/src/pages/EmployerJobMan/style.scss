@@ -6,13 +6,11 @@
   //background-image: linear-gradient(to right,#10344e, #0644a0, #0557ac);
   padding:20px 0px;
   .pane-area-container{
-    min-height: 330px;
+    height: 700px;
+    overflow-y: scroll;
   }
 }
 .list-item {
   border-radius: 5px 5px 0px 0px;
   border: 0.1em solid black;
-}
-.pane-container{
-  width: 100%
 }

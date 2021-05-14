@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotAcceptableException,
   NotFoundException,
@@ -15,6 +17,11 @@ import { EmployerService } from 'src/employer/employer.service';
 import { Job } from 'src/entities/job.entity';
 import { Contract } from 'src/entities/contract.entity';
 import { ApplicationRecord } from 'src/entities/applicationRecord.entity';
+import { Room } from 'src/entities/room.entity';
+import { FilesService } from 'src/files/files.service';
+import { RoomService } from 'src/room/room/room.service';
+import { Feedback } from 'src/entities/feedback.entity';
+
 
 const userprops = [
   'username',
@@ -41,6 +48,10 @@ export class UserService {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     private readonly studentService: StudentService,
     private readonly employerService: EmployerService,
+    private readonly fileService: FilesService,
+    @Inject(forwardRef(() => RoomService))
+    private readonly roomService: RoomService,
+    
   ) {}
 
   async validUsername(username: string): Promise<Boolean> {
@@ -66,6 +77,52 @@ export class UserService {
       ...subUser,
     };
   }
+
+  async deleteProfilePic(userId: number){
+    const person = await this.findById(userId);
+    await this.userRepo.update(userId,{profilePic:null});
+    this.fileService.deletePublicFile(person.profilePic.Fid);
+  }
+
+  async addProfilePic(userId: number, imageBuffer: Buffer, filename: string) {
+
+    const person = await this.findById(userId);
+
+    if(person.profilePic){
+      console.log('already has profile picture, deleting old one...');
+      this.deleteProfilePic(userId);
+      console.log('delete done');
+    }
+
+    console.log('upload...')
+    const avatar =  this.fileService.uploadPublicFile(imageBuffer, filename);
+    
+    await this.userRepo.update(userId, { profilePic: (await avatar)});
+    return avatar;
+    /*
+    if (mode == 'profile'){
+      await this.userRepo.update(userId, { profilePic: (await avatar)});
+      return avatar;
+    }
+    else if (mode == 'resume' && person.type == UserType.STUDENT){
+      await this.studentService.add_to_repo(person.sid, (await avatar));
+      return avatar
+    }*/
+  }
+
+  async get_profileURL(uid:number): Promise<string>{
+    /*
+    const person = await this.userRepo.findOne({id:uid})
+    if (person){
+      console.log(person.profilePic.url)
+      return person.profilePic.url
+    }
+    else{
+      throw new Error('User not found');
+    }*/
+    return (await this.userRepo.findOne({id:uid})).profilePic.url;
+  }
+
 
   async findByUsername(username: string): Promise<User> {
     const user = await this.userRepo.findOne({ username });
@@ -98,6 +155,11 @@ export class UserService {
         ...ret_student
       } = await this.studentService.create(student);
       const { ['username']: un, ['password']: pw, ...rest_user } = user;
+      await this.roomService.create({
+        members:[user.id],
+        privateFlag: true
+      }, true);
+      console.log('private room created');
       return {
         ...rest_user,
         ...ret_student,
@@ -110,6 +172,10 @@ export class UserService {
         ...ret_employer
       } = await this.employerService.create(employer);
       const { ['username']: un, ['password']: pw, ...rest_user } = user;
+      await this.roomService.create({
+        members:[user.id],
+      }, true);
+      console.log('private room created');
       return {
         ...rest_user,
         ...ret_employer,
@@ -174,14 +240,17 @@ export class UserService {
     return user;
   }
 
+  //--------------------------------------- QUERY PART ---------------------------------------
+
   async getUserJobManagementData(id: number) {
     const job = await this.getUserJob(id);
     const record = await this.getUserRecord(id);
     const contract = await this.getUserContract(id);
+    const feedback = await this.getUserFeedback(id);
     const user = await this.findById(id);
 
     return user.type == UserType.STUDENT ?
-      {record, contract} : {job, record, contract}
+      {record, contract, feedback} : {job, record, contract}
   }
 
   async getUserJob(id: number) {
@@ -194,6 +263,43 @@ export class UserService {
     return job;
   }
 
+  async getUserChat(id: number) {
+    const res = await getRepository(Room)
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.members', 'members')
+      .leftJoinAndSelect('room.message', 'message')
+      .leftJoinAndSelect('message.author', 'author')
+      .where((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('room2.id')
+          .from(Room, 'room2')
+          .innerJoin('room2.members', 'member')
+          .where('member.id = :id', {id: id})
+          .getQuery();
+
+        return ('room.id IN ' + subQuery);
+      })
+      .orderBy('message.timestamp', 'ASC')
+      .getMany();
+
+    return res;
+  }
+
+  async getUserChatRoom(id: number) {
+    //const room = await this.userRepo.findOne(id, {relations:['members']});
+    const room = await getRepository(Room)
+      .createQueryBuilder('room')
+      .leftJoinAndSelect('room.members', 'members')
+      .leftJoinAndSelect('room.message', 'message')
+      .where('members.id = :id')
+      .setParameter('id', id)
+      .select(['room.id'])
+      .getMany();
+
+    return room;
+  }
+
   async getUserContract(id: number) {
     const user = await this.findById(id);
     let contract: Contract[];
@@ -202,39 +308,104 @@ export class UserService {
         .createQueryBuilder('contract')
         .leftJoinAndSelect('contract.student', 'student')
         .leftJoinAndSelect('contract.employer', 'employer')
-        .leftJoinAndSelect('contract.job','job')
+        .leftJoinAndSelect('contract.job', 'job')
         .where('contract.student.id = :id')
-        /* .select([
+        
+        .select([
           'contract.cid',
           'contract.status',
           'employer.id',
           'employer.firstName',
           'employer.lastName',
-          'employer.phoneNumber',
-          'employer.email',
-        ]) */
+          'student.id',
+          'student.firstName',
+          'student.lastName',
+          'job.companyName',
+          'job.companyPicUrl',
+          'job.jid',
+          'job.jobTitle',
+          'job.location',
+          'job.duration',
+          'contract.start_date',
+          'contract.time_left'
+        ])
+        
         .setParameter('id', id)
+        .orderBy('contract.status')
         .getMany();
     } else if (user.type == UserType.EMPLOYER) {
       contract = await getRepository(Contract)
         .createQueryBuilder('contract')
         .leftJoinAndSelect('contract.student', 'student')
         .leftJoinAndSelect('contract.employer', 'employer')
-        .leftJoinAndSelect('contract.job','job')
+        .leftJoinAndSelect('contract.job', 'job')
         .where('contract.employer.id = :id')
-        /* .select([
+        
+        .select([
           'contract.cid',
           'contract.status',
+          'employer.id',
+          'employer.firstName',
+          'employer.lastName',
           'student.id',
           'student.firstName',
           'student.lastName',
-          'student.phoneNumber',
-          'student.email',
-        ]) */
+          'job.companyName',
+          'job.companyPicUrl',
+          'job.jid',
+          'job.jobTitle',
+          'job.location',
+          'job.duration',
+          'contract.start_date',
+          'contract.time_left'
+        ])
+        
         .setParameter('id', id)
+        .orderBy('contract.status')
         .getMany();
     }
     return contract;
+  }
+
+  async getUserFeedback(id: number){
+    const user = await this.findById(id);
+    if (user.type == UserType.STUDENT) {
+      const feedback = await getRepository(Feedback)
+        .createQueryBuilder('feedback')
+        .leftJoinAndSelect('feedback.student', 'student')
+        .leftJoinAndSelect('feedback.employer', 'employer')
+        .leftJoinAndSelect('feedback.job','job')
+        // .leftJoinAndSelect('feedback.contract', 'contract')
+        .where('feedback.student.id = :id')
+
+        .select([
+          'feedback.fid',
+          'feedback.finished_date',
+          'feedback.time_used',
+          'feedback.rate',
+          'feedback.comment',
+          // 'contract.cid',
+          // 'contract.status',
+          'employer.id',
+          'employer.firstName',
+          'employer.lastName',
+          'student.id',
+          'student.firstName',
+          'student.lastName',
+          'job.companyName',
+          'job.companyPicUrl',
+          'job.jid',
+          'job.jobTitle',
+          'job.location',
+          'job.duration',
+        ])
+        
+        .setParameter('id', id)
+        .orderBy('feedback.finished_date')
+        .getMany();
+
+        return feedback;
+    }
   }
 
   async getUserRecord(id: number) {

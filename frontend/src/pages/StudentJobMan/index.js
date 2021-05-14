@@ -76,7 +76,7 @@ export default function StudentJobMan() {
       
             {onProgressList.length!== 0 ?
               <div className="w-100 ">
-                <JobPane type="ONPROGRESS" onProgressList={onProgressList} />
+                <JobPane type="STUDENT-ONPROGRESS" onProgressList={onProgressList} />
               </div>
               :
               <div>Nothing to show here..</div>
@@ -93,14 +93,14 @@ export default function StudentJobMan() {
 
       <div className="d-flex justify-content-left">
         <header className=" pb-2">
-          <h2 className="font-login"> Job Management </h2>
+          <h2 className="font-editprofile"> Job Management </h2>
         </header>
       </div>
 
       <ul className="nav nav-pills mb-3">
         <li className="list-item">
           <a
-            className={`nav-link ${currentTab == "Pending" ? "active font-login" : "font-login"
+            className={`nav-link ${currentTab == "Pending" ? "active font-editprofile" : "font-editprofile"
               }`}
             onClick={(e) => { setCurrentTab("Pending"); getStudentJoblistHandler(); }}
           >
@@ -109,7 +109,7 @@ export default function StudentJobMan() {
         </li>
         <li className="list-item">
           <a
-            className={`nav-link ${currentTab == "Result" ? "active font-login" : "font-login"
+            className={`nav-link ${currentTab == "Result" ? "active font-editprofile" : "font-editprofile"
               }`}
             onClick={(e) => { setCurrentTab("Result"); getStudentJoblistHandler(); }}
           >
@@ -118,7 +118,7 @@ export default function StudentJobMan() {
         </li>
         <li className="list-item ">
           <a
-            className={`nav-link ${currentTab == "On-progress" ? "active font-login" : "font-login"
+            className={`nav-link ${currentTab == "On-progress" ? "active font-editprofile" : "font-editprofile"
               }`}
             onClick={(e) => { setCurrentTab("On-progress"); getStudentJoblistHandler(); }}
           >

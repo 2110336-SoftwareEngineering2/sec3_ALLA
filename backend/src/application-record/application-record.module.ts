@@ -7,9 +7,11 @@ import { ContractModule } from 'src/contract/contract.module';
 import { UserModule } from 'src/user/user.module';
 import { ApplicationRecordController } from './application-record.controller';
 import { ApplicationRecordService } from './application-record.service';
+import { EventLogModule } from 'src/event-log/event-log.module';
+import { RoomModule } from 'src/room/room/room.module';
 
 @Module({
-    imports : [TypeOrmModule.forFeature([ApplicationRecord]), UserModule, JobModule, ContractModule],
+    imports : [TypeOrmModule.forFeature([ApplicationRecord]), UserModule, JobModule, ContractModule, EventLogModule],
     controllers: [ApplicationRecordController],
     providers: [ApplicationRecordService],
     exports : [ApplicationRecordService]

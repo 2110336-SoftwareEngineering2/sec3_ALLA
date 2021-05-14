@@ -34,7 +34,13 @@ export default function JobCard(props) {
     }
     return (
         <div className="card-container d-flex p-2 justify-content-between" onClick={cardClickedHandler}>
-            <div><img src={jobObj.companyPic_url || `https://picsum.photos/${(200+(jobObj.jid %30)).toString()}`} className="rounded-circle job-card-pic p-2" ></img></div>
+            
+            <div>
+                {/* <a href={`/profile/${jobObj.employer.id}`}> */}
+                    <img src={jobObj.companyPic_url || `https://picsum.photos/${(200 + (jobObj.jid % 30)).toString()}`} className="rounded-circle job-card-pic p-2" >
+                    </img>
+                {/* </a> */}
+            </div>
             <div className="job-text-col ">
                 <div> <h6>{jobObj.companyName}</h6></div>
                 <div> <h4>{jobObj.jobTitle}</h4></div>
@@ -44,10 +50,17 @@ export default function JobCard(props) {
             <div className="job-text-col ">
                 <div >{jobObj.minimumEducation}</div>
                 <div> {jobObj.workingHours}</div>
+                <div> {jobObj.duration} days</div>
                 <div> THB {jobObj.salaryMin}-{jobObj.salaryMax}</div>
             </div>
 
-            <div className="job-text-col "><small >{jobObj.positionLeft} position(s)</small></div>
+            <div className="job-text-col ">
+                <small >{jobObj.positionLeft} position(s)</small>
+                {jobObj.positionLeft === 0 ?
+                    <div> status : CLOSE </div>
+                    : <div> status : OPEN </div>
+                }
+            </div>
 
             {isinManagepage ?
                 <div>

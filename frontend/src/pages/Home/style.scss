@@ -1,3 +1,10 @@
 .home-container{
     min-height:500px;
 }
+
+.pane-container{
+    height: 750px;
+    overflow-y: scroll;
+    border: 1px grey solid;
+    border-radius: 20px 20px 20px 20px;
+}

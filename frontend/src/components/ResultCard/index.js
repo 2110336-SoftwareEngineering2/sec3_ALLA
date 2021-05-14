@@ -77,7 +77,8 @@ export default function ResultCard(props) {
             <div className="job-text-col ">
                 <div>{jobObj.minimumEducation}</div>
                 <div> {jobObj.workingHours}</div>
-                <div> {jobObj.salaryMin}-{jobObj.salaryMax}</div>
+                <div> {jobObj.duration} days</div>
+                <div> THB {jobObj.salaryMin}-{jobObj.salaryMax}</div>
             </div>
 
             {isAccepted?

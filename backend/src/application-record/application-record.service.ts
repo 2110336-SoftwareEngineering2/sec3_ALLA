@@ -10,6 +10,9 @@ import { JobService } from 'src/job/job.service';
 import { ContractService } from 'src/contract/contract.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
+import { EventLogService } from 'src/event-log/event-log.service';
+import { EventNum } from 'src/entities/eventLog.entity';
+import { RoomService } from 'src/room/room/room.service';
 
 const recAttr = ['rid', 'jid', 'state', 'yesFlag', 'sid'];
 
@@ -21,6 +24,7 @@ export class ApplicationRecordService {
     private readonly userService: UserService,
     private readonly jobService: JobService,
     private readonly contractService: ContractService,
+    private readonly eventLogService: EventLogService,
   ) {}
 
   async create(dto: any): Promise<ApplicationRecord> {
@@ -43,7 +47,9 @@ export class ApplicationRecordService {
       employer,
       timestamp,
     };
-    return this.repo.save(rec);
+    const ret = await this.repo.save(rec);
+    await this.addEvent(ret.rid);
+    return ret;
   }
 
   async findById(rid: number): Promise<ApplicationRecord> {
@@ -115,7 +121,18 @@ export class ApplicationRecordService {
 
     //replicate in log
     console.log(dtoo);
-    this.update(rid, dtoo);
+    await this.update(rid, dtoo);
+    await this.addEvent(rid)
+  }
+
+  async addEvent(id: number) {
+    const record = await this.repo.findOne(id, {
+      relations: ['employer', 'student', 'job'],
+    });
+    if (record.state !== StateNum.FINISH) {
+      await this.eventLogService.create(record, record.state, record.yesFlag);
+      console.log('Event is logged');
+    }
   }
 
   async getAssociatedId(rid: number) {

@@ -15,7 +15,6 @@ export default function Home() {
     const [jobList, setJobList] = useState()
     const AuthState = useSelector((state) => state.Auth)
 
-
     const getParamObj = () => {
         const spilttedParam = location.search.slice(1).split("&")
         var retObj = {}
@@ -69,7 +68,7 @@ export default function Home() {
                 <div className="d-flex justify-content-center ">
                     <SearchFilter param={getParamObj()} />
                 </div>
-                <div className="d-flex justify-content-center ">
+                <div className="pane-container">
                     {getJobPane()}
                 </div>
             </div>

@@ -27,6 +27,7 @@ export default function AddJob() {
         responsibility : "",
         requirement : "",
         status:"OPEN",
+        duration:"",
         tagList:[]
     }
     
@@ -87,14 +88,14 @@ export default function AddJob() {
             <form classname="addJob-form-container" onSubmit={createJobHandler}>
 
                 <div className="d-flex justify-content-left">
-                    <header className=" pb-2 font-login">
+                    <header className=" pb-2 fontt-login">
                         <h1> Create a new job </h1>
                     </header>
                 </div>
 
                 <div class="form-group">
 
-                    <label className="d-block" className="font-login">Attach your logo</label>
+                    <label className="d-block" className="fontt-login">Attach your logo</label>
                     <div class="input-group">
                         <input
                             type="file"
@@ -107,7 +108,7 @@ export default function AddJob() {
                 </div>
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Company Name</label>
+                    <label className="d-block" className="fontt-login">Company Name</label>
                     <div class="input-group">
                         <input
                             type="text"
@@ -122,7 +123,7 @@ export default function AddJob() {
                 </div>
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Job Name</label>
+                    <label className="d-block" className="fontt-login">Job Name</label>
                     <div class="input-group">
                         <input
                             type="text"
@@ -137,7 +138,7 @@ export default function AddJob() {
                 </div>
                 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Province</label>
+                    <label className="d-block" className="fontt-login">Province</label>
                     <div>
                         <RegionDropdown
                             blankOptionLabel="Please select your province"
@@ -152,7 +153,7 @@ export default function AddJob() {
                 </div>
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Job Description</label>
+                    <label className="d-block" className="fontt-login">Job Description</label>
                     <div class="input-group">
                         <input
                             type="text"
@@ -167,7 +168,7 @@ export default function AddJob() {
                 </div>
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Responsibility</label>
+                    <label className="d-block" className="fontt-login">Responsibility</label>
                     <div class="input-group">
                         <input
                             type="text"
@@ -182,7 +183,7 @@ export default function AddJob() {
                 </div>
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Requirement</label>
+                    <label className="d-block" className="fontt-login">Requirement</label>
                     <div class="input-group">
                         <input
                             type="text"
@@ -198,7 +199,7 @@ export default function AddJob() {
 
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Education Requirement</label>
+                    <label className="d-block" className="fontt-login">Education Requirement</label>
                     <div className="filter-input select-dropdown">
                     <select
                         value={JobData.minimumEducation}
@@ -214,21 +215,28 @@ export default function AddJob() {
                 </div>
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Available Position(s)</label>
+                    <label className="d-block" className="fontt-login">Available Position(s)</label>
                     <div className="price-slider">
                         <input value={JobData.positionLeft} type="number" min="0" onChange={(e) => setJobData({...JobData, positionLeft: e.target.value})} ></input>
                     </div>
                 </div> 
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Time Period</label>
+                    <label className="d-block" className="fontt-login">Time Period</label>
                     <div className="price-slider">
                         <input value={JobData.workingHours} type="text" onChange={(e) => setJobData({...JobData, workingHours: e.target.value})} ></input>
                     </div>
-                </div>             
+                </div>  
 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Salary Range</label>
+                    <label className="d-block" className="fontt-login">Duration (days)</label>
+                    <div className="price-slider">
+                        <input value={JobData.duration} type="text" onChange={(e) => setJobData({...JobData, duration: e.target.value})} ></input>
+                    </div>
+                </div>              
+
+                <div class="form-group">
+                    <label className="d-block" className="fontt-login">Salary Range</label>
                     <div className="price-slider">
                         <input value={JobData.salaryMin} type="number" min="0" onChange={(e) => setJobData({...JobData, salaryMin: e.target.value})} placeholder="min"></input>
                         <input value={JobData.salaryMax} type="number" min={JobData.min} onChange={(e) => setJobData({...JobData, salaryMax: e.target.value})} placeholder="max"></input>
@@ -237,7 +245,7 @@ export default function AddJob() {
 
                 
                 <div class="form-group">
-                    <label className="d-block" className="font-login">Job Tag</label>
+                    <label className="d-block" className="fontt-login">Job Tag</label>
                     <div className="filter-input select-dropdown">
                     <select
                         value={JobData.tagList}
